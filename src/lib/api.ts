@@ -36,12 +36,34 @@ async function request<T = unknown>(
     headers,
   });
 
+  const tryMock = async () => {
+    try {
+      const cleanEndpoint = endpoint.split('?')[0];
+      const mockRes = await fetch(`${import.meta.env.BASE_URL}mock${cleanEndpoint}.json`);
+      if (mockRes.ok) return await mockRes.json();
+    } catch (e) {}
+    return null;
+  };
+
   if (!res.ok) {
+    const mockData = await tryMock();
+    if (mockData) return mockData;
     const data = await res.json().catch(() => ({}));
     throw new Error(data.error || `API Error ${res.status}`);
   }
 
-  return res.json();
+  try {
+    const text = await res.text();
+    try {
+      return JSON.parse(text);
+    } catch (e) {
+      const mockData = await tryMock();
+      if (mockData) return mockData;
+      throw new Error(`Invalid JSON response`);
+    }
+  } catch (err) {
+    throw err;
+  }
 }
 
 // ─── Auth ──────────────────────────────────────────────────
