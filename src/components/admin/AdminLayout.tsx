@@ -2,7 +2,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useEffect } from "react";
 import {
-  LayoutDashboard, Package, ShoppingCart, Users, MessageSquare, Settings, LogOut, ChevronLeft, Gem
+  LayoutDashboard, Package, ShoppingCart, Users, MessageSquare, Settings, LogOut, ChevronLeft, Gem, Play
 } from "lucide-react";
 
 const nav = [
@@ -13,6 +13,7 @@ const nav = [
   { to: "/admin/messages", icon: MessageSquare, label: "Messages" },
   { to: "/admin/reviews", icon: MessageSquare, label: "Reviews" },
   { to: "/admin/videos", icon: LayoutDashboard, label: "Videos" },
+  { to: "/admin/creator-reels", icon: Play, label: "Creator Reels" },
   { to: "/admin/settings", icon: Settings, label: "Settings" },
 ];
 

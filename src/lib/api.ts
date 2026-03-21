@@ -18,12 +18,12 @@ async function request<T = unknown>(
   options: RequestInit = {}
 ): Promise<T> {
   const token = getToken();
-  
+
   const headers = new Headers(options.headers);
   if (token) {
     headers.set("Authorization", `Bearer ${token}`);
   }
-  
+
   // Set json content type by default unless body is FormData
   if (options.body && !(options.body instanceof FormData) && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
@@ -56,6 +56,16 @@ export const api = {
       request<{ user: User; token: string }>("/auth/register", {
         method: "POST",
         body: JSON.stringify(data),
+      }),
+    sendWhatsappOtp: (phone: string) =>
+      request<{ success: boolean; message: string }>("/auth/whatsapp-otp/send", {
+        method: "POST",
+        body: JSON.stringify({ phone }),
+      }),
+    verifyWhatsappOtp: (phone: string, otp: string) =>
+      request<{ user: User; token: string }>("/auth/whatsapp-otp/verify", {
+        method: "POST",
+        body: JSON.stringify({ phone, otp }),
       }),
     me: () => request<{ user: User }>("/auth/me"),
     updateProfile: (data: Partial<User>) =>
@@ -123,6 +133,11 @@ export const api = {
       request("/reviews", { method: "POST", body: JSON.stringify(data) }),
   },
 
+  // ─── Creator Reels ───────────────────────────────────────
+  creatorReels: {
+    get: () => request<{ reels: CreatorReel[] }>("/creator-reels"),
+  },
+
   // ─── Gallery ─────────────────────────────────────────────
   gallery: {
     get: () => request<{ photos: GalleryPhoto[] }>("/gallery"),
@@ -161,20 +176,29 @@ export const api = {
     deleteMessage: (id: number) =>
       request(`/admin/messages/${id}`, { method: "DELETE" }),
     products: () => request<{ products: Product[] }>("/admin/products"),
-    
+
     // Admin Reviews
     reviews: () => request<{ reviews: Review[] }>("/admin/reviews"),
     updateReview: (id: number, status: string) =>
       request(`/admin/reviews/${id}`, { method: "PUT", body: JSON.stringify({ status }) }),
     deleteReview: (id: number) =>
       request(`/admin/reviews/${id}`, { method: "DELETE" }),
-      
+
     // Admin Videos
     createVideo: (data: Partial<FeedbackVideo>) =>
       request("/admin/videos", { method: "POST", body: JSON.stringify(data) }),
     deleteVideo: (id: number) =>
       request(`/admin/videos/${id}`, { method: "DELETE" }),
-      
+
+    // Admin Creator Reels
+    creatorReels: () => request<{ reels: CreatorReel[] }>("/admin/creator-reels"),
+    createCreatorReel: (data: Partial<CreatorReel>) =>
+      request("/admin/creator-reels", { method: "POST", body: JSON.stringify(data) }),
+    updateCreatorReel: (id: number, data: Partial<CreatorReel>) =>
+      request(`/admin/creator-reels/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+    deleteCreatorReel: (id: number) =>
+      request(`/admin/creator-reels/${id}`, { method: "DELETE" }),
+
     // Admin Gallery
     createGalleryPhoto: (data: Partial<GalleryPhoto>) =>
       request("/admin/gallery", { method: "POST", body: JSON.stringify(data) }),
@@ -216,6 +240,7 @@ export type Product = {
   bestSeller: number | boolean;
   newArrival: number | boolean;
   active: number | boolean;
+  attributes?: Record<string, string[]>;
   created_at?: string;
   updated_at?: string;
 };
@@ -333,6 +358,16 @@ export type FeedbackVideo = {
   thumbnailUrl: string;
   caption: string;
   displayOrder: number;
+  created_at: string;
+};
+
+export type CreatorReel = {
+  id: number;
+  videoUrl: string;
+  thumbnailUrl: string;
+  caption: string;
+  displayOrder: number;
+  active: number;
   created_at: string;
 };
 

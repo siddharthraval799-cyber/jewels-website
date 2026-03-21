@@ -10,6 +10,8 @@ require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 
 const db = require("./db");
 
+const otpStore = new Map(); // Store OTPs in memory for WhatsApp Login
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 const JWT_SECRET = process.env.JWT_SECRET || "aurum_jewels_secret_key_2025";
@@ -77,6 +79,61 @@ function generateOrderNumber() {
 // ═══════════════════════════════════════════════════════════
 // AUTH ROUTES
 // ═══════════════════════════════════════════════════════════
+
+app.post("/api/auth/whatsapp-otp/send", (req, res) => {
+  try {
+    const { phone } = req.body;
+    if (!phone) return res.status(400).json({ error: "Phone number required" });
+    
+    // Generate 6 digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    otpStore.set(phone, { otp, expiresAt: Date.now() + 10 * 60 * 1000 }); // 10 min
+
+    // Mock sending via WhatsApp API (can replace with Twilio or Meta API here)
+    console.log(`\n==========================================`);
+    console.log(`📲 MOCK WHATSAPP MESSAGE TO ${phone}`);
+    console.log(`Your Aurum Jewels login OTP is: ${otp}`);
+    console.log(`==========================================\n`);
+
+    res.json({ success: true, message: "OTP Sent successfully via WhatsApp" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to send OTP" });
+  }
+});
+
+app.post("/api/auth/whatsapp-otp/verify", (req, res) => {
+  try {
+    const { phone, otp } = req.body;
+    if (!phone || !otp) return res.status(400).json({ error: "Phone and OTP required" });
+
+    const record = otpStore.get(phone);
+    if (!record || record.otp !== otp || Date.now() > record.expiresAt) {
+      return res.status(401).json({ error: "Invalid or expired OTP" });
+    }
+
+    otpStore.delete(phone); // Burn OTP after use
+
+    let user = db.prepare("SELECT * FROM users WHERE phone = ?").get(phone);
+    if (!user) {
+      // Missing user: Register via WhatsApp
+      const id = crypto.randomUUID();
+      const placeholderEmail = `${phone}_${Date.now()}@whatsapp.user`;
+      const passwordHash = bcrypt.hashSync(crypto.randomUUID(), 10);
+      db.prepare(
+        "INSERT INTO users (id, name, email, phone, passwordHash, role) VALUES (?, ?, ?, ?, ?, ?)"
+      ).run(id, "WhatsApp User", placeholderEmail, phone, passwordHash, "customer");
+      user = db.prepare("SELECT * FROM users WHERE id = ?").get(id);
+    }
+
+    const token = generateToken(user);
+    res.json({
+      user: { id: user.id, name: user.name, email: user.email, phone: user.phone, role: user.role },
+      token,
+    });
+  } catch (err) {
+    res.status(500).json({ error: "OTP Verification failed" });
+  }
+});
 
 app.post("/api/auth/register", (req, res) => {
   try {
@@ -200,83 +257,98 @@ app.delete("/api/categories/:id", authMiddleware, adminMiddleware, (req, res) =>
 // PRODUCTS ROUTES
 // ═══════════════════════════════════════════════════════════
 
+// Public: Get all products with optional filters
 app.get("/api/products", (req, res) => {
-  const { category, search, featured, bestSeller, newArrival, limit, offset } = req.query;
-  let sql = "SELECT * FROM products WHERE active = 1";
-  const params = [];
+  try {
+    const { category, featured, bestSeller, newArrival, q } = req.query;
+    let query = "SELECT * FROM products WHERE active = 1";
+    let params = [];
 
-  if (category) { sql += " AND category = ?"; params.push(category); }
-  if (featured === "true") { sql += " AND featured = 1"; }
-  if (bestSeller === "true") { sql += " AND bestSeller = 1"; }
-  if (newArrival === "true") { sql += " AND newArrival = 1"; }
-  if (search) {
-    sql += " AND (name LIKE ? OR description LIKE ?)";
-    params.push(`%${search}%`, `%${search}%`);
+    if (category) {
+      query += " AND category = ?";
+      params.push(category);
+    }
+    if (featured === "true") query += " AND featured = 1";
+    if (bestSeller === "true") query += " AND bestSeller = 1";
+    if (newArrival === "true") query += " AND newArrival = 1";
+    if (q) {
+      query += " AND (name LIKE ? OR description LIKE ?)";
+      params.push(`%${q}%`, `%${q}%`);
+    }
+
+    query += " ORDER BY created_at DESC";
+
+    const products = db.prepare(query).all(...params);
+    products.forEach(p => {
+      p.images = JSON.parse(p.images);
+      try { p.attributes = JSON.parse(p.attributes || "{}"); } catch(e) { p.attributes = {}; }
+    });
+    
+    res.json({ products, total: products.length });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch products" });
   }
-
-  sql += " ORDER BY created_at DESC";
-  if (limit) { sql += " LIMIT ?"; params.push(Number(limit)); }
-  if (offset) { sql += " OFFSET ?"; params.push(Number(offset)); }
-
-  const products = db.prepare(sql).all(...params);
-  products.forEach(p => { p.images = JSON.parse(p.images || "[]"); });
-
-  const countSql = sql.replace(/SELECT \*/, "SELECT COUNT(*) as total").replace(/ LIMIT.*/, "");
-  const countParams = params.slice(0, params.length - (limit ? 1 : 0) - (offset ? 1 : 0));
-
-  res.json({ products, total: products.length });
 });
 
+// Public: Get single product
 app.get("/api/products/:id", (req, res) => {
-  const product = db.prepare("SELECT * FROM products WHERE id = ?").get(req.params.id);
-  if (!product) return res.status(404).json({ error: "Product not found" });
-  product.images = JSON.parse(product.images || "[]");
-  res.json({ product });
+  try {
+    const product = db.prepare("SELECT * FROM products WHERE id = ?").get(req.params.id);
+    if (!product) return res.status(404).json({ error: "Product not found" });
+    
+    product.images = JSON.parse(product.images);
+    try { product.attributes = JSON.parse(product.attributes || "{}"); } catch(e) { product.attributes = {}; }
+    
+    res.json({ product });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch product" });
+  }
 });
 
+// Admin: Create product
 app.post("/api/products", authMiddleware, adminMiddleware, (req, res) => {
   try {
-    const { name, category, weight, purity, makingCharges, description, images, featured, bestSeller, newArrival } = req.body;
-    if (!name || !category || !weight) {
-      return res.status(400).json({ error: "Name, category, and weight are required" });
-    }
-    const id = `prod-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-    db.prepare(
-      `INSERT INTO products (id, name, category, weight, purity, makingCharges, description, images, featured, bestSeller, newArrival)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
-    ).run(
-      id, name, category, weight, purity || "22K", makingCharges || 0,
-      description || "", JSON.stringify(images || []), featured ? 1 : 0, bestSeller ? 1 : 0, newArrival ? 1 : 0
+    const { name, category, weight, purity, makingCharges, description, images, featured, bestSeller, newArrival, active, attributes } = req.body;
+    const id = `prod-${Date.now()}`;
+    const stmt = db.prepare(`
+      INSERT INTO products (id, name, category, weight, purity, makingCharges, description, images, featured, bestSeller, newArrival, active, attributes)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+    
+    stmt.run(
+      id, name, category, weight, purity, makingCharges, description,
+      JSON.stringify(images || []),
+      featured ? 1 : 0, bestSeller ? 1 : 0, newArrival ? 1 : 0, active !== false ? 1 : 0,
+      JSON.stringify(attributes || {})
     );
-    res.status(201).json({ id, name });
+    
+    res.status(201).json({ success: true, id });
   } catch (err) {
-    console.error("Create product error:", err);
     res.status(500).json({ error: "Failed to create product" });
   }
 });
 
+// Admin: Update product
 app.put("/api/products/:id", authMiddleware, adminMiddleware, (req, res) => {
   try {
-    const { name, category, weight, purity, makingCharges, description, images, featured, bestSeller, newArrival, active } = req.body;
-    const sets = [];
-    const params = [];
-    if (name !== undefined) { sets.push("name = ?"); params.push(name); }
-    if (category !== undefined) { sets.push("category = ?"); params.push(category); }
-    if (weight !== undefined) { sets.push("weight = ?"); params.push(weight); }
-    if (purity !== undefined) { sets.push("purity = ?"); params.push(purity); }
-    if (makingCharges !== undefined) { sets.push("makingCharges = ?"); params.push(makingCharges); }
-    if (description !== undefined) { sets.push("description = ?"); params.push(description); }
-    if (images !== undefined) { sets.push("images = ?"); params.push(JSON.stringify(images)); }
-    if (featured !== undefined) { sets.push("featured = ?"); params.push(featured ? 1 : 0); }
-    if (bestSeller !== undefined) { sets.push("bestSeller = ?"); params.push(bestSeller ? 1 : 0); }
-    if (newArrival !== undefined) { sets.push("newArrival = ?"); params.push(newArrival ? 1 : 0); }
-    if (active !== undefined) { sets.push("active = ?"); params.push(active ? 1 : 0); }
-    sets.push("updated_at = datetime('now')");
-    params.push(req.params.id);
-    db.prepare(`UPDATE products SET ${sets.join(", ")} WHERE id = ?`).run(...params);
+    const { name, category, weight, purity, makingCharges, description, images, featured, bestSeller, newArrival, active, attributes } = req.body;
+    const stmt = db.prepare(`
+      UPDATE products 
+      SET name = ?, category = ?, weight = ?, purity = ?, makingCharges = ?, description = ?, images = ?, 
+          featured = ?, bestSeller = ?, newArrival = ?, active = ?, attributes = ?, updated_at = datetime('now')
+      WHERE id = ?
+    `);
+    
+    stmt.run(
+      name, category, weight, purity, makingCharges, description,
+      JSON.stringify(images || []),
+      featured ? 1 : 0, bestSeller ? 1 : 0, newArrival ? 1 : 0, active !== false ? 1 : 0,
+      JSON.stringify(attributes || {}),
+      req.params.id
+    );
+    
     res.json({ success: true });
   } catch (err) {
-    console.error("Update product error:", err);
     res.status(500).json({ error: "Failed to update product" });
   }
 });
@@ -516,6 +588,50 @@ app.delete("/api/admin/gallery/:id", authMiddleware, adminMiddleware, (req, res)
   res.json({ success: true });
 });
 
+// ═══════════════════════════════════════════════════════════
+// CREATOR REELS
+// ═══════════════════════════════════════════════════════════
+
+app.get("/api/creator-reels", (req, res) => {
+  const reels = db.prepare("SELECT * FROM creator_reels WHERE active = 1 ORDER BY displayOrder ASC, created_at DESC").all();
+  res.json({ reels });
+});
+
+// Admin Creator Reels
+app.get("/api/admin/creator-reels", authMiddleware, adminMiddleware, (req, res) => {
+  const reels = db.prepare("SELECT * FROM creator_reels ORDER BY displayOrder ASC, created_at DESC").all();
+  res.json({ reels });
+});
+
+app.post("/api/admin/creator-reels", authMiddleware, adminMiddleware, (req, res) => {
+  const { videoUrl, thumbnailUrl, caption, displayOrder, active } = req.body;
+  if (!videoUrl) return res.status(400).json({ error: "Video URL required" });
+  db.prepare("INSERT INTO creator_reels (videoUrl, thumbnailUrl, caption, displayOrder, active) VALUES (?, ?, ?, ?, ?)").run(
+    videoUrl, thumbnailUrl || "", caption || "", displayOrder || 0, active !== false ? 1 : 0
+  );
+  res.status(201).json({ success: true });
+});
+
+app.put("/api/admin/creator-reels/:id", authMiddleware, adminMiddleware, (req, res) => {
+  const { caption, displayOrder, active } = req.body;
+  const sets = [];
+  const params = [];
+  if (caption !== undefined) { sets.push("caption = ?"); params.push(caption); }
+  if (displayOrder !== undefined) { sets.push("displayOrder = ?"); params.push(displayOrder); }
+  if (active !== undefined) { sets.push("active = ?"); params.push(active ? 1 : 0); }
+  
+  if (sets.length > 0) {
+    params.push(req.params.id);
+    db.prepare(`UPDATE creator_reels SET ${sets.join(", ")} WHERE id = ?`).run(...params);
+  }
+  res.json({ success: true });
+});
+
+app.delete("/api/admin/creator-reels/:id", authMiddleware, adminMiddleware, (req, res) => {
+  db.prepare("DELETE FROM creator_reels WHERE id = ?").run(req.params.id);
+  res.json({ success: true });
+});
+
 app.get("/api/admin/dashboard", authMiddleware, adminMiddleware, (req, res) => {
   try {
     const totalProducts = db.prepare("SELECT COUNT(*) as count FROM products WHERE active = 1").get().count;
@@ -600,11 +716,18 @@ app.delete("/api/admin/messages/:id", authMiddleware, adminMiddleware, (req, res
   res.json({ success: true });
 });
 
-// Admin products (includes inactive)
+// Admin: Get all products
 app.get("/api/admin/products", authMiddleware, adminMiddleware, (req, res) => {
-  const products = db.prepare("SELECT * FROM products ORDER BY created_at DESC").all();
-  products.forEach(p => { p.images = JSON.parse(p.images || "[]"); });
-  res.json({ products });
+  try {
+    const products = db.prepare("SELECT * FROM products ORDER BY created_at DESC").all();
+    products.forEach(p => {
+      p.images = JSON.parse(p.images);
+      try { p.attributes = JSON.parse(p.attributes || "{}"); } catch(e) { p.attributes = {}; }
+    });
+    res.json({ products });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to fetch products" });
+  }
 });
 
 // ═══════════════════════════════════════════════════════════

@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { ShoppingBag, Eye } from "lucide-react";
+import { ShoppingBag, Eye, Heart, Video, Sprout, BrainCircuit } from "lucide-react";
 import { Product, calculatePrice } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useGoldRates } from "@/contexts/GoldRateContext";
 import { motion } from "framer-motion";
 
-const ProductCard = ({ product, index = 0 }: { product: Product; index?: number }) => {
+const ProductCard = ({ product, index = 0, onExplore }: { product: Product; index?: number; onExplore?: (product: Product) => void }) => {
   const { addToCart } = useCart();
   const { rates } = useGoldRates();
   const price = calculatePrice(product.weight, product.makingCharges, rates.gold22k);
@@ -36,7 +36,7 @@ const ProductCard = ({ product, index = 0 }: { product: Product; index?: number 
           </div>
 
           {/* Badges */}
-          <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+          <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
             {product.newArrival && (
               <span className="bg-primary text-primary-foreground text-[9px] tracking-wider uppercase px-2.5 py-1 font-body font-semibold">
                 New
@@ -47,6 +47,33 @@ const ProductCard = ({ product, index = 0 }: { product: Product; index?: number 
                 Bestseller
               </span>
             )}
+          </div>
+
+          {/* Floating Icons (Explore, Wishlist, Video) */}
+          <div className="absolute top-3 left-3 flex flex-col gap-2.5 z-10 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+            {onExplore && (
+              <button 
+                onClick={(e) => { e.preventDefault(); onExplore(product); }}
+                className="w-8 h-8 rounded-md bg-[#18181b] text-white flex items-center justify-center hover:bg-black transition-colors shadow-lg"
+                title="Explore similar designs"
+              >
+                <BrainCircuit className="w-4 h-4" />
+              </button>
+            )}
+            <button 
+              onClick={(e) => { e.preventDefault(); }}
+              className="w-8 h-8 rounded-full bg-white/90 text-rose-500 flex items-center justify-center hover:bg-rose-50 shadow-md backdrop-blur-sm"
+              title="Add to Wishlist"
+            >
+              <Heart className="w-4 h-4 fill-rose-100/50" />
+            </button>
+            <button 
+              onClick={(e) => { e.preventDefault(); }}
+              className="w-8 h-8 rounded-full bg-white/90 text-green-600 flex items-center justify-center hover:bg-green-50 shadow-md backdrop-blur-sm"
+              title="Watch Video"
+            >
+              <Video className="w-4 h-4" />
+            </button>
           </div>
 
           {/* Hover Actions */}

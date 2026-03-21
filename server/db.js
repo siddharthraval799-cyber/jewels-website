@@ -34,6 +34,7 @@ db.exec(`
     bestSeller INTEGER DEFAULT 0,
     newArrival INTEGER DEFAULT 0,
     active INTEGER DEFAULT 1,
+    attributes TEXT DEFAULT '{}',
     created_at TEXT DEFAULT (datetime('now')),
     updated_at TEXT DEFAULT (datetime('now')),
     FOREIGN KEY (category) REFERENCES categories(id)
@@ -125,7 +126,24 @@ db.exec(`
     displayOrder INTEGER DEFAULT 0,
     created_at TEXT DEFAULT (datetime('now'))
   );
+
+  CREATE TABLE IF NOT EXISTS creator_reels (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    videoUrl TEXT NOT NULL,
+    thumbnailUrl TEXT DEFAULT '',
+    caption TEXT DEFAULT '',
+    displayOrder INTEGER DEFAULT 0,
+    active INTEGER DEFAULT 1,
+    created_at TEXT DEFAULT (datetime('now'))
+  );
 `);
+
+// Safely attempt to add the new attributes column for existing users
+try {
+  db.exec("ALTER TABLE products ADD COLUMN attributes TEXT DEFAULT '{}'");
+} catch(e) {
+  // Column already exists or error ignored
+}
 
 // ═══════════════════════════════════════════════════════════
 // SEED DATA — runs only if tables are empty
@@ -145,6 +163,12 @@ if (categoryCount === 0) {
   ];
   const insertCat = db.prepare("INSERT INTO categories (id, name, slug, icon, displayOrder) VALUES (?, ?, ?, ?, ?)");
   cats.forEach(c => insertCat.run(c.id, c.name, c.slug, c.icon, c.order));
+} else {
+  // Ensure mangalsutra is there
+  const msCount = db.prepare("SELECT COUNT(*) as c FROM categories WHERE id = 'mangalsutra'").get().c;
+  if(msCount === 0) {
+    db.prepare("INSERT INTO categories (id, name, slug, icon, displayOrder) VALUES (?, ?, ?, ?, ?)").run("mangalsutra", "Mangalsutra", "mangalsutra", "📿", 8);
+  }
 }
 
 const userCount = db.prepare("SELECT COUNT(*) as c FROM users").get().c;
@@ -181,8 +205,8 @@ if (productCount === 0) {
   ];
 
   const insertProduct = db.prepare(
-    `INSERT INTO products (id, name, category, weight, purity, makingCharges, description, images, featured, bestSeller, newArrival)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    `INSERT INTO products (id, name, category, weight, purity, makingCharges, description, images, featured, bestSeller, newArrival, attributes)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   );
 
   let id = 1;
@@ -212,12 +236,70 @@ if (productCount === 0) {
         JSON.stringify(["/placeholder.svg"]),
         i < 2 ? 1 : 0,
         i >= 2 && i < 4 ? 1 : 0,
-        i >= 4 && i < 6 ? 1 : 0
+        i >= 4 && i < 6 ? 1 : 0,
+        JSON.stringify({})
       );
     });
   });
 
   console.log(`🌱 Seeded ${id - 1} products`);
+}
+
+// Ensure 50 mangalsutra items
+const mangalsutraCount = db.prepare("SELECT COUNT(*) as c FROM products WHERE category = 'mangalsutra'").get().c;
+if (mangalsutraCount < 50) {
+  console.log("🌱 Seeding 50 Mangalsutras with attributes...");
+  const designTypes = ["Light Weight", "Heart", "Antique", "Heritage", "Premium Elite"];
+  const collections = ["Bridal Dreams", "Heart Harmony", "Mother of Pearl", "Antique Parampara", "Premium Elite"];
+  const occasions = ["Anniversary", "Wedding", "Birthday", "Desk to Dinner", "Daily Wear"];
+  const shopFor = ["Women"];
+  const gifts = ["Anniversary", "Birthday", "Gifts for Wife"];
+  const metals = ["22 Karat", "18 Karat"];
+  const colors = ["Yellow", "White", "Rose"];
+  
+  const insertProduct = db.prepare(
+    `INSERT INTO products (id, name, category, weight, purity, makingCharges, description, images, featured, bestSeller, newArrival, attributes)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+  );
+  
+  for (let i = 0; i < 50; i++) {
+     const pickRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+     const pickMultiple = (arr) => {
+        const num = Math.floor(Math.random() * 2) + 1;
+        const shuffled = [...arr].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, num);
+     };
+
+     const attributes = {
+        "Design Types": pickMultiple(designTypes),
+        "Collection": pickMultiple(collections),
+        "Occasion": pickMultiple(occasions),
+        "Shop For": ["Women"], // Default to Women
+        "Gifts": pickMultiple(gifts),
+        "Metal": [pickRandom(metals)],
+        "Color": [pickRandom(colors)]
+     };
+
+     const namePrefixes = ["Pranava", "Aanvika", "Kanak", "Svarnasut", "Parampara", "Ishira", "Dudhira", "Kanika"];
+     const nameSuffixes = ["Vayujyoti", "Latticeline", "Rahasya", "Taraashta", "Vedika", "Vaidurya", "Kalyani", "Vilas"];
+     const name = `${pickRandom(namePrefixes)} ${pickRandom(nameSuffixes)} Mangalsutra ${attributes.Metal[0].split(' ')[0]}KT`;
+
+     insertProduct.run(
+        `prod-ms-${Date.now()}-${i}`,
+        name,
+        "mangalsutra",
+        parseFloat((5 + Math.random() * 45).toFixed(2)), // 5gm - 50gm
+        attributes.Metal[0],
+        Math.round((1000 + Math.random() * 5000) / 100) * 100, // randomized making charges
+        "Elegant mangalsutra meticulously crafted to celebrate your eternal bond.",
+        JSON.stringify(["https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80"]),
+        Math.random() > 0.8 ? 1 : 0,
+        Math.random() > 0.8 ? 1 : 0,
+        Math.random() > 0.8 ? 1 : 0,
+        JSON.stringify(attributes)
+     );
+  }
+  console.log("🌱 Successfully seeded mangalsutras!");
 }
 
 // Seed default settings
@@ -256,6 +338,18 @@ if (videosCount === 0) {
   insertVideo.run(sampleVideo, "/placeholder.svg", "CRAFTED FOR MOMENTS THAT LAST FOREVER.", 1);
   insertVideo.run(sampleVideo, "/placeholder.svg", "CELEBRATED DAYS, CLASSIC WAYS.", 2);
   insertVideo.run(sampleVideo, "/placeholder.svg", "CAPTURE THE GLOW.", 3);
+}
+
+const reelsCount = db.prepare("SELECT COUNT(*) as c FROM creator_reels").get().c;
+if (reelsCount === 0) {
+  console.log("🌱 Seeding creator reels...");
+  const insertReel = db.prepare("INSERT INTO creator_reels (videoUrl, thumbnailUrl, caption, displayOrder) VALUES (?, ?, ?, ?)");
+  const sampleVideo = "https://www.w3schools.com/html/mov_bbb.mp4";
+  insertReel.run(sampleVideo, "https://images.unsplash.com/photo-1595950653106-6c0ebd41b994?auto=format&fit=crop&q=80", "Stunning Bride in Kundan", 1);
+  insertReel.run(sampleVideo, "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80", "Heritage Gold Collection", 2);
+  insertReel.run(sampleVideo, "https://images.unsplash.com/photo-1543294001-f7cd5d7fb516?auto=format&fit=crop&q=80", "Modern Minimalist Rings", 3);
+  insertReel.run(sampleVideo, "https://images.unsplash.com/photo-1599643478524-fb5244dc1c97?auto=format&fit=crop&q=80", "Festive Bangles", 4);
+  insertReel.run(sampleVideo, "https://images.unsplash.com/photo-1629224316810-9d8805b95e76?auto=format&fit=crop&q=80", "Bridal Glow", 5);
 }
 
 module.exports = db;

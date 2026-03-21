@@ -7,18 +7,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { api } from "@/lib/api";
 import type { Product } from "@/lib/api";
 import { motion, AnimatePresence } from "framer-motion";
-
-const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "Rings", href: "/products?category=rings" },
-  { label: "Earrings", href: "/products?category=earrings" },
-  { label: "Necklaces", href: "/products?category=necklaces" },
-  { label: "Bangles", href: "/products?category=bangles" },
-  { label: "Bracelets", href: "/products?category=bracelets" },
-  { label: "Chains", href: "/products?category=chains" },
-  { label: "Pendants", href: "/products?category=pendants" },
-  { label: "Gallery", href: "/gallery" },
-];
+import { navigationData } from "@/data/navigation";
+import DesktopNav from "./DesktopNav";
 
 const Header = () => {
   const { totalItems, setIsCartOpen } = useCart();
@@ -230,17 +220,7 @@ const Header = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center justify-center border-t border-muted-foreground/10 py-2.5 gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                to={link.href}
-                className={`px-4 py-1.5 text-xs tracking-[0.15em] uppercase hover:text-primary transition-colors duration-300 font-body font-medium ${isScrolled ? "text-foreground/80" : "text-secondary-foreground/80"}`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
+          <DesktopNav isScrolled={isScrolled} />
         </div>
       </header>
 
@@ -300,7 +280,7 @@ const Header = () => {
               )}
 
               <nav className="flex flex-col gap-1">
-                {navLinks.map((link) => (
+                {navigationData.map((link) => (
                   <Link
                     key={link.label}
                     to={link.href}

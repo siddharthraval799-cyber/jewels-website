@@ -7,6 +7,7 @@ type AuthContextType = {
   isLoading: boolean;
   isAdmin: boolean;
   login: (email: string, password: string) => Promise<void>;
+  whatsappLogin: (phone: string, otp: string) => Promise<void>;
   register: (data: { name: string; email: string; password: string; phone?: string }) => Promise<void>;
   logout: () => void;
   updateProfile: (data: Partial<User>) => Promise<void>;
@@ -39,6 +40,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(user);
   }, []);
 
+  const whatsappLogin = useCallback(async (phone: string, otp: string) => {
+    const { user, token } = await api.auth.verifyWhatsappOtp(phone, otp);
+    setToken(token);
+    setUser(user);
+  }, []);
+
   const register = useCallback(async (data: { name: string; email: string; password: string; phone?: string }) => {
     const { user, token } = await api.auth.register(data);
     setToken(token);
@@ -58,7 +65,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const isAdmin = user?.role === "admin";
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, isAdmin, login, register, logout, updateProfile }}>
+    <AuthContext.Provider value={{ user, isLoading, isAdmin, login, whatsappLogin, register, logout, updateProfile }}>
       {children}
     </AuthContext.Provider>
   );

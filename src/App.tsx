@@ -6,6 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { CartProvider } from "@/contexts/CartContext";
 import { GoldRateProvider } from "@/contexts/GoldRateContext";
 import { AuthProvider } from "@/contexts/AuthContext";
+import Preloader from "@/components/Preloader";
+import LoginPopup from "@/components/LoginPopup";
 
 // Customer pages
 import Index from "./pages/Index";
@@ -30,6 +32,7 @@ import AdminCustomers from "./pages/admin/AdminCustomers";
 import AdminMessages from "./pages/admin/AdminMessages";
 import AdminReviews from "./pages/admin/AdminReviews";
 import AdminVideos from "./pages/admin/AdminVideos";
+import AdminCreatorReels from "./pages/admin/AdminCreatorReels";
 import AdminSettings from "./pages/admin/AdminSettings";
 
 const queryClient = new QueryClient();
@@ -40,9 +43,11 @@ const App = () => (
       <GoldRateProvider>
         <AuthProvider>
           <CartProvider>
+            <Preloader />
+            <LoginPopup />
             <Toaster />
             <Sonner />
-            <BrowserRouter>
+            <BrowserRouter basename={import.meta.env.BASE_URL}>
               <Routes>
                 {/* Customer routes */}
                 <Route path="/" element={<Index />} />
@@ -66,6 +71,7 @@ const App = () => (
                   <Route path="messages" element={<AdminMessages />} />
                   <Route path="reviews" element={<AdminReviews />} />
                   <Route path="videos" element={<AdminVideos />} />
+                  <Route path="creator-reels" element={<AdminCreatorReels />} />
                   <Route path="settings" element={<AdminSettings />} />
                 </Route>
 
