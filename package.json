@@ -9,7 +9,7 @@
     "dev:ui": "vite",
     "server": "node server/server.js",
     "dev:full": "concurrently \"vite\" \"node server/server.js\"",
-    "build": "vite build",
+    "build": "vite build && node scripts/fix-spa.mjs",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
