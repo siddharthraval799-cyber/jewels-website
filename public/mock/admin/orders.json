@@ -1,0 +1,18 @@
+{
+  "orders": [
+    {
+      "id": "1",
+      "orderNumber": "AU230301",
+      "userId": "mock-user",
+      "items": [],
+      "subtotal": 5000,
+      "shipping": 0,
+      "tax": 150,
+      "total": 5150,
+      "status": "delivered",
+      "shippingAddress": {},
+      "contactInfo": { "name": "Demo User", "phone": "1234567890" },
+      "created_at": "2026-03-01T10:00:00Z"
+    }
+  ]
+}

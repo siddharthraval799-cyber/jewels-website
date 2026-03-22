@@ -40,8 +40,22 @@ async function request<T = unknown>(
 
   const tryMock = async () => {
     try {
-      const cleanEndpoint = endpoint.split('?')[0];
-      // On static hosts, the mock folder is at the root or relative to BASE_URL
+      let cleanEndpoint = endpoint.split('?')[0];
+
+      // Mapping Admin routes to common mock files if specific one doesn't exist
+      if (cleanEndpoint.startsWith("/admin/")) {
+         if (cleanEndpoint === "/admin/products") cleanEndpoint = "/products";
+         if (cleanEndpoint === "/admin/categories") cleanEndpoint = "/categories";
+         if (cleanEndpoint === "/admin/creator-reels") cleanEndpoint = "/creator-reels";
+         if (cleanEndpoint === "/admin/reviews") cleanEndpoint = "/testimonials"; // reviews list is actually different but we can fall back
+         if (cleanEndpoint === "/admin/dashboard") {
+            return {
+               stats: { totalProducts: 124, totalOrders: 42, totalCustomers: 18, totalRevenue: 125000, pendingOrders: 5, unreadMessages: 3 },
+               recentOrders: []
+            };
+         }
+      }
+
       const baseUrl = import.meta.env.BASE_URL || "/";
       const mockRes = await fetch(`${baseUrl}mock${cleanEndpoint}.json`);
       if (mockRes.ok) return await mockRes.json();
