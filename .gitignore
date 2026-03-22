@@ -25,4 +25,4 @@ dist-ssr
 
 # Database and Uploads
 server/*.sqlite
-uploads/
+server/uploads/
