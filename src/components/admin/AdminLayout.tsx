@@ -76,6 +76,19 @@ const AdminLayout = () => {
 
       {/* Main content */}
       <main className="flex-1 ml-64">
+        {/* Environment Banner */}
+        {typeof window !== "undefined" && (window.location.hostname.endsWith("github.io") || window.location.hostname.includes("stackblitz")) && (
+          <div className="bg-amber-50 border-b border-amber-200 px-8 py-2 flex items-center gap-3">
+             <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+             <p className="text-[11px] font-body text-amber-800 uppercase tracking-widest font-semibold flex-1">
+                <span className="font-bold">Static Demo Mode:</span> Changes made here are not permanent (GitHub Pages is read-only).
+             </p>
+             <div className="text-[10px] text-amber-600 font-body">
+                Use local development to save changes.
+             </div>
+          </div>
+        )}
+
         <header className="bg-background border-b border-border px-8 py-4 flex items-center justify-between sticky top-0 z-30">
           <div /> {/* spacer */}
           <div className="flex items-center gap-3">
