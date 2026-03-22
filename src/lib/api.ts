@@ -58,7 +58,23 @@ async function request<T = unknown>(
 
       const baseUrl = import.meta.env.BASE_URL || "/";
       const mockRes = await fetch(`${baseUrl}mock${cleanEndpoint}.json`);
-      if (mockRes.ok) return await mockRes.json();
+      if (mockRes.ok) {
+         let data = await mockRes.json();
+         // Recursively prepend baseUrl to any string starting with /uploads/
+         const fixUrls = (obj: any): any => {
+            if (typeof obj === "string" && obj.startsWith("/uploads/")) {
+               return `${baseUrl}${obj.slice(1)}`;
+            }
+            if (Array.isArray(obj)) return obj.map(fixUrls);
+            if (obj && typeof obj === "object") {
+               const newObj: any = {};
+               for (const key in obj) newObj[key] = fixUrls(obj[key]);
+               return newObj;
+            }
+            return obj;
+         };
+         return fixUrls(data);
+      }
     } catch (e) {}
     return null;
   };
