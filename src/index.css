@@ -165,6 +165,24 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  @keyframes scroll-up {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(calc(-50% - 1rem)); } /* -1rem accounts for the gap */
+  }
+
+  @keyframes scroll-down {
+    0% { transform: translateY(calc(-50% - 1rem)); }
+    100% { transform: translateY(0); }
+  }
+
+  .animate-scroll-up {
+    animation: scroll-up 20s linear infinite;
+  }
+  
+  .animate-scroll-down {
+    animation: scroll-down 20s linear infinite;
+  }
 }
 
 /* Custom scrollbar */
