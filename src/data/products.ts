@@ -92,6 +92,42 @@ const generateProducts = (): Product[] => {
     pendants: "This pendant is a miniature work of art, featuring detailed craftsmanship that carries deep symbolic meaning.",
   };
 
+  const categoryImages: Record<string, string[]> = {
+    rings: [
+      "https://api.rushabhjewel.com/img/2026/1/1/7/1767252568609-daily-wear.jpg",
+      "https://api.rushabhjewel.com/img/2026/1/1/7/1767252664187-cocktail.jpg",
+      "https://api.rushabhjewel.com/img/2026/1/1/7/1767252592142-heritage.jpg",
+      "https://api.rushabhjewel.com/img/2026/1/1/8/1767268593414-ring.jpg"
+    ],
+    earrings: [
+      "https://api.rushabhjewel.com/img/2026/1/1/8/1767257724851-studs.jpg",
+      "https://api.rushabhjewel.com/img/2026/1/1/8/1767257806131-polki.jpg",
+      "https://api.rushabhjewel.com/img/2026/1/1/8/1767257707173-real-diamond.jpg"
+    ],
+    necklaces: [
+      "https://api.rushabhjewel.com/img/2026/1/1/8/1767263529329-polki.jpg",
+      "https://api.rushabhjewel.com/img/2026/1/1/8/1767263540092-victorian.jpg",
+      "https://api.rushabhjewel.com/img/2026/1/1/8/1767263550417-real-diamond.jpg"
+    ],
+    bangles: [
+      "https://api.rushabhjewel.com/img/2026/1/1/7/1767252836991-antique-bangles.jpg",
+      "https://api.rushabhjewel.com/img/2026/1/22/1/1769066362195-bn18-13-1.jpg"
+    ],
+    bracelets: [
+      "https://api.rushabhjewel.com/img/2026/1/1/8/1767268605175-bracelet-and-bangle.jpg"
+    ],
+    chains: [
+      "https://api.rushabhjewel.com/img/2026/1/1/8/1767268615392-chains.jpg",
+      "https://api.rushabhjewel.com/img/2026/1/1/8/1767257440258-antique-chain-with-p.set.jpg",
+      "https://api.rushabhjewel.com/img/2026/1/1/8/1767257479337-italian.jpg"
+    ],
+    pendants: [
+      "https://api.rushabhjewel.com/img/2026/1/1/8/1767261944933-antique.jpg",
+      "https://api.rushabhjewel.com/img/2026/1/1/8/1767261955406-heritage.jpg",
+      "https://api.rushabhjewel.com/img/2026/1/1/8/1767261966549-monzonaite.jpg"
+    ]
+  };
+
   allItems.forEach(({ names, category }) => {
     names.forEach((name, i) => {
       const weight = category === "necklaces" ? 15 + Math.random() * 40 :
@@ -100,6 +136,14 @@ const generateProducts = (): Product[] => {
         category === "bracelets" ? 6 + Math.random() * 15 :
         2 + Math.random() * 12;
 
+      const imgsForCat = categoryImages[category] || ["/placeholder.svg"];
+      let img = imgsForCat[i % imgsForCat.length];
+
+      // Custom images for the first 4 chains
+      if (category === "chains" && i < 4) {
+        img = `/images/chain${i + 1}.jpg`; // Maps to chain1.jpg, chain2.jpg, etc.
+      }
+
       products.push({
         id: `prod-${id++}`,
         name,
@@ -107,7 +151,7 @@ const generateProducts = (): Product[] => {
         weight: parseFloat(weight.toFixed(2)),
         makingCharges: Math.round((500 + Math.random() * 4500) / 100) * 100,
         description: descriptions[category],
-        images: [`/placeholder.svg`],
+        images: [img],
         featured: i < 2,
         bestSeller: i >= 2 && i < 4,
         newArrival: i >= 4 && i < 6,

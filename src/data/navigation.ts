@@ -17,7 +17,7 @@ export interface MegaMenuData {
   prices?: NavItem[];
   karats?: NavItem[];
   shopFor?: NavItem[];
-  exclusiveDesigns: ExclusiveDesign[];
+  exclusiveDesigns?: ExclusiveDesign[]; // Make this optional since Collections won't have it
 }
 
 export interface MainNavItem extends NavItem {
@@ -73,9 +73,9 @@ export const navigationData: MainNavItem[] = [
         { label: "Couple", href: productLink("rings", "for", "couple") },
       ],
       exclusiveDesigns: [
-        { label: "Daily Wear", image: "https://images.unsplash.com/photo-1605100804763-247f66121411?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("rings", "collection", "daily-wear") },
-        { label: "Cocktail", image: "https://images.unsplash.com/photo-1599643478514-4a4e03164917?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("rings", "collection", "cocktail") },
-        { label: "Heritage", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("rings", "collection", "heritage") },
+        { label: "Daily Wear", image: "https://api.rushabhjewel.com/img/2026/1/1/7/1767252568609-daily-wear.jpg", href: productLink("rings", "collection", "daily-wear") },
+        { label: "Cocktail", image: "https://api.rushabhjewel.com/img/2026/1/1/7/1767252664187-cocktail.jpg", href: productLink("rings", "collection", "cocktail") },
+        { label: "Heritage", image: "https://api.rushabhjewel.com/img/2026/1/1/7/1767252592142-heritage.jpg", href: productLink("rings", "collection", "heritage") },
       ]
     }
   },
@@ -109,9 +109,9 @@ export const navigationData: MainNavItem[] = [
         { label: "Kids", href: productLink("earrings", "for", "kids") },
       ],
       exclusiveDesigns: [
-        { label: "Office Wear", image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("earrings", "collection", "office-wear") },
-        { label: "Bridal", image: "https://images.unsplash.com/photo-1599643478514-4a4e03164917?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("earrings", "collection", "bridal") },
-        { label: "Party Wear", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("earrings", "collection", "party-wear") },
+        { label: "Studs", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257724851-studs.jpg", href: productLink("earrings", "collection", "studs") },
+        { label: "Polki", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257806131-polki.jpg", href: productLink("earrings", "collection", "polki") },
+        { label: "Real Diamond", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257707173-real-diamond.jpg", href: productLink("earrings", "collection", "real-diamond") },
       ]
     }
   },
@@ -137,8 +137,8 @@ export const navigationData: MainNavItem[] = [
         { label: "Women", href: productLink("bangles", "for", "women") },
       ],
       exclusiveDesigns: [
-        { label: "Antique", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("bangles", "collection", "antique") },
-        { label: "Light Weight", image: "https://images.unsplash.com/photo-1599643478514-4a4e03164917?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("bangles", "collection", "light-weight") },
+        { label: "Antique", image: "https://api.rushabhjewel.com/img/2026/1/1/7/1767252836991-antique-bangles.jpg", href: productLink("bangles", "collection", "antique") },
+        { label: "Light Weight", image: "https://api.rushabhjewel.com/img/2026/1/22/1/1769066362195-bn18-13-1.jpg", href: productLink("bangles", "collection", "light-weight") },
       ]
     }
   },
@@ -177,9 +177,9 @@ export const navigationData: MainNavItem[] = [
         { label: "Women", href: productLink("pendant-set", "for", "women") },
       ],
       exclusiveDesigns: [
-        { label: "Light Weight", image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("pendant-set", "collection", "light-weight") },
-        { label: "Solitaire", image: "https://images.unsplash.com/photo-1605100804763-247f66121411?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("pendant-set", "collection", "solitaire") },
-        { label: "Premium Elite", image: "https://images.unsplash.com/photo-1599643478514-4a4e03164917?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("pendant-set", "collection", "premium-elite") },
+        { label: "Antique", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767261944933-antique.jpg", href: productLink("pendant-set", "collection", "antique") },
+        { label: "Heritage", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767261955406-heritage.jpg", href: productLink("pendant-set", "collection", "heritage") },
+        { label: "Monzonaite", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767261966549-monzonaite.jpg", href: productLink("pendant-set", "collection", "monzonaite") },
       ]
     }
   },
@@ -219,9 +219,9 @@ export const navigationData: MainNavItem[] = [
         { label: "Women", href: productLink("mangalsutra", "for", "women") },
       ],
       exclusiveDesigns: [
-        { label: "Tanmaniya or charms", image: "https://images.unsplash.com/photo-1599643478514-4a4e03164917?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("mangalsutra", "collection", "tanmaniya") },
-        { label: "Antique chain with P.Set", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("mangalsutra", "collection", "antique") },
-        { label: "Italian", image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("mangalsutra", "collection", "italian") },
+        { label: "Tanmaniya or charms", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257347559-tanmaniya-or-charms.jpg", href: productLink("mangalsutra", "collection", "tanmaniya") },
+        { label: "Antique chain with P.Set", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257440258-antique-chain-with-p.set.jpg", href: productLink("mangalsutra", "collection", "antique") },
+        { label: "Italian", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257479337-italian.jpg", href: productLink("mangalsutra", "collection", "italian") },
       ]
     }
   },
@@ -254,26 +254,63 @@ export const navigationData: MainNavItem[] = [
         { label: "18 Karat", href: productLink("necklace", "karat", "18") },
       ],
       exclusiveDesigns: [
-        { label: "Light Weight", image: "https://images.unsplash.com/photo-1599643478514-4a4e03164917?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("necklace", "collection", "light-weight") },
-        { label: "Short", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("necklace", "collection", "short") },
-        { label: "Monzonaite", image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("necklace", "collection", "monzonaite") },
+        { label: "Polki", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767263529329-polki.jpg", href: productLink("necklace", "collection", "polki") },
+        { label: "Victorian", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767263540092-victorian.jpg", href: productLink("necklace", "collection", "victorian") },
+        { label: "Real Diamond", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767263550417-real-diamond.jpg", href: productLink("necklace", "collection", "real-diamond") },
       ]
     }
   },
-  { label: "Chains", href: "/products?category=chains" },
+  { 
+    label: "Chains", 
+    href: "/products?category=chains",
+    megaMenu: {
+      styles: [
+        { label: "Daily Wear", href: productLink("chains", "style", "daily-wear") },
+        { label: "Monzonaite Chain Set", href: productLink("chains", "style", "monzonaite-chain-set") },
+        { label: "Omega", href: productLink("chains", "style", "omega") },
+        { label: "Plain", href: productLink("chains", "style", "plain") },
+        { label: "Mala", href: productLink("chains", "style", "mala") },
+        { label: "Chain Pendent Set", href: productLink("chains", "style", "chain-pendent-set") },
+        { label: "Layered", href: productLink("chains", "style", "layered") },
+        { label: "Chain With Pendent", href: productLink("chains", "style", "chain-with-pendent") },
+        { label: "Pearl", href: productLink("chains", "style", "pearl") },
+        { label: "Evil Eye", href: productLink("chains", "style", "evil-eye") },
+        { label: "Premium Elite", href: productLink("chains", "style", "premium-elite") },
+      ],
+      prices: [
+        { label: "₹25,001 - ₹50,000", href: productLink("chains", "price", "25001-50000") },
+        { label: "₹50,001 - ₹75,000", href: productLink("chains", "price", "50001-75000") },
+        { label: "₹75,001 - ₹1,00,000", href: productLink("chains", "price", "75001-100000") },
+        { label: "₹1,00,001 - ₹1,50,000", href: productLink("chains", "price", "100001-150000") },
+        { label: "₹1,50,001 - ₹2,00,000", href: productLink("chains", "price", "150001-200000") },
+        { label: "₹2,00,001 - ₹3,00,000", href: productLink("chains", "price", "200001-300000") },
+        { label: "₹3,00,001 - ₹5,00,000", href: productLink("chains", "price", "300001-500000") },
+        { label: "Above ₹5,00,000", href: productLink("chains", "price", "above-500000") },
+      ],
+      karats: [
+        { label: "22 Karat", href: productLink("chains", "karat", "22") },
+        { label: "18 Karat", href: productLink("chains", "karat", "18") },
+      ],
+      shopFor: [
+        { label: "Men", href: productLink("chains", "for", "men") },
+        { label: "Women", href: productLink("chains", "for", "women") },
+      ],
+      exclusiveDesigns: [
+        { label: "Tanmaniya or charms", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257347559-tanmaniya-or-charms.jpg", href: productLink("chains", "collection", "tanmaniya") },
+        { label: "Antique chain with P.Set", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257440258-antique-chain-with-p.set.jpg", href: productLink("chains", "collection", "antique") },
+        { label: "Italian", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257479337-italian.jpg", href: productLink("chains", "collection", "italian") },
+      ]
+    }
+  },
   { 
     label: "Kids Collections", 
     href: "/products?category=kids-collections",
     megaMenu: {
        // Only cards here!
        exclusiveDesigns: [
-         { label: "Baby Nazariya", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("kids-collections", "type", "nazariya") },
-         { label: "Baby Kadli", image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("kids-collections", "type", "kadli") },
-         { label: "Baby Pendent", image: "https://images.unsplash.com/photo-1599643478514-4a4e03164917?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("kids-collections", "type", "pendent") },
-         { label: "Baby Rings", image: "https://images.unsplash.com/photo-1605100804763-247f66121411?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("kids-collections", "type", "rings") },
-         { label: "Baby Earrings", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("kids-collections", "type", "earrings") },
-         { label: "Baby Bracelet", image: "https://images.unsplash.com/photo-1599643478514-4a4e03164917?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("kids-collections", "type", "bracelet") },
-         { label: "Baby Pendent Set", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("kids-collections", "type", "pendent-set") },
+         { label: "Baby Nazariya", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767267151042-baby-nazariya.jpg", href: productLink("kids-collections", "type", "nazariya") },
+         { label: "Baby Kadli", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767267160912-baby-kadli.jpg", href: productLink("kids-collections", "type", "kadli") },
+         { label: "Baby Pendent", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767267171887-baby-pendent.jpg", href: productLink("kids-collections", "type", "pendent") },
        ]
     }
   },
@@ -292,10 +329,9 @@ export const navigationData: MainNavItem[] = [
          { label: "Real Diamond", href: productLink("mens-jewellery", "style", "real-diamond") },
        ],
        exclusiveDesigns: [
-         { label: "Pendants", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("mens-jewellery", "type", "pendants") },
-         { label: "Bracelets", image: "https://images.unsplash.com/photo-1599643478514-4a4e03164917?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("mens-jewellery", "type", "bracelets") },
-         { label: "Chains", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("mens-jewellery", "type", "chains") },
-         { label: "Watch", image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=300&h=300", href: productLink("mens-jewellery", "type", "watch") },
+         { label: "Rings", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767268593414-ring.jpg", href: productLink("mens-jewellery", "type", "rings") },
+         { label: "Bracelets & Bangles", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767268605175-bracelet-and-bangle.jpg", href: productLink("mens-jewellery", "type", "bracelets") },
+         { label: "Chains", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767268615392-chains.jpg", href: productLink("mens-jewellery", "type", "chains") },
        ]
     }
   },
@@ -303,21 +339,47 @@ export const navigationData: MainNavItem[] = [
     label: "Collections", 
     href: "/products?category=collections",
     megaMenu: {
-      stylesTitle: "By Popular Style",
       styles: [
-        { label: "Hath Panja", icon: "https://images.unsplash.com/photo-1605100804763-247f66121411?auto=format&fit=crop&q=80&w=50&h=50", href: productLink("collections", "style", "hath-panja") },
-        { label: "Mang Tika", icon: "https://images.unsplash.com/photo-1599643478514-4a4e03164917?auto=format&fit=crop&q=80&w=50&h=50", href: productLink("collections", "style", "mang-tika") },
-        { label: "Watch", icon: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=50&h=50", href: productLink("collections", "style", "watch") },
-        { label: "Pendants", icon: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=50&h=50", href: productLink("collections", "style", "pendants") },
-        { label: "Kada", icon: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=50&h=50", href: productLink("collections", "style", "kada") },
-        { label: "Gajara", icon: "https://images.unsplash.com/photo-1599643478514-4a4e03164917?auto=format&fit=crop&q=80&w=50&h=50", href: productLink("collections", "style", "gajara") },
-        { label: "Kanser", icon: "https://images.unsplash.com/photo-1605100804763-247f66121411?auto=format&fit=crop&q=80&w=50&h=50", href: productLink("collections", "style", "kanser") },
-        { label: "Letter Pendant", icon: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=50&h=50", href: productLink("collections", "style", "letter-pendant") },
-      ],
-      exclusiveDesigns: [
-         { label: "EXPLORE ALL", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=600&h=400", href: "/products?category=collections", large: true },
+        { label: "Heritage Virasat", href: productLink("collections", "sub", "heritage-virasat") },
+        { label: "Bridal Dreams", href: productLink("collections", "sub", "bridal-dreams") },
+        { label: "Heart Harmony", href: productLink("collections", "sub", "heart-harmony") },
+        { label: "Pearl Prestige", href: productLink("collections", "sub", "pearl-prestige") },
+        { label: "Mother of Pearl Essence", href: productLink("collections", "sub", "mother-of-pearl-essence") },
+        { label: "Enamel Imperial", href: productLink("collections", "sub", "enamel-imperial") },
+        { label: "Antique Parampara", href: productLink("collections", "sub", "antique-parampara") },
+        { label: "Premium Elite", href: productLink("collections", "sub", "premium-elite") },
+        { label: "Italian Era", href: productLink("collections", "sub", "italian-era") },
+        { label: "Monzonaite Shine", href: productLink("collections", "sub", "monzonaite-shine") },
+        { label: "Baby Bloom", href: productLink("collections", "sub", "baby-bloom") },
+        { label: "Victorian Majesty", href: productLink("collections", "sub", "victorian-majesty") },
+        { label: "Peacock Jewel", href: productLink("collections", "sub", "peacock-jewel") },
+        { label: "Limited Luxe", href: productLink("collections", "sub", "limited-luxe") },
+        { label: "Gemstone Radiance", href: productLink("collections", "sub", "gemstone-radiance") },
+        { label: "Real Diamond Signature", href: productLink("collections", "sub", "real-diamond-signature") },
+        { label: "Real Polki Riyasat", href: productLink("collections", "sub", "real-polki-riyasat") },
+        { label: "Light Weight Charm", href: productLink("collections", "sub", "light-weight-charm") },
+        { label: "Everyday Gleam", href: productLink("collections", "sub", "everyday-gleam") }
       ]
     }
   },
-  { label: "More Jewellery", href: "/products?category=more-jewellery" },
+  { 
+    label: "More Jewellery", 
+    href: "/products?category=more-jewellery",
+    megaMenu: {
+      stylesTitle: "",
+      styles: [
+        { label: "Hath Panja", icon: "https://images.unsplash.com/photo-1605100804763-247f66121411?auto=format&fit=crop&q=80&w=50&h=50", href: productLink("more-jewellery", "style", "hath-panja") },
+        { label: "Mang Tika", icon: "https://images.unsplash.com/photo-1599643478514-4a4e03164917?auto=format&fit=crop&q=80&w=50&h=50", href: productLink("more-jewellery", "style", "mang-tika") },
+        { label: "Watch", icon: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=50&h=50", href: productLink("more-jewellery", "style", "watch") },
+        { label: "Pendants", icon: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=50&h=50", href: productLink("more-jewellery", "style", "pendants") },
+        { label: "Kada", icon: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&q=80&w=50&h=50", href: productLink("more-jewellery", "style", "kada") },
+        { label: "Gajara", icon: "https://images.unsplash.com/photo-1599643478514-4a4e03164917?auto=format&fit=crop&q=80&w=50&h=50", href: productLink("more-jewellery", "style", "gajara") },
+        { label: "Kanser", icon: "https://images.unsplash.com/photo-1605100804763-247f66121411?auto=format&fit=crop&q=80&w=50&h=50", href: productLink("more-jewellery", "style", "kanser") },
+        { label: "Letter Pendant", icon: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=50&h=50", href: productLink("more-jewellery", "style", "letter-pendant") },
+      ],
+      exclusiveDesigns: [
+         { label: "EXPLORE ALL", image: "https://www.rushabhjewel.com/_next/image?url=%2Fsiteassets%2Fimages%2Fbanner%2Fmorejewellery.png&w=3840&q=75", href: "/products?category=more-jewellery", large: true },
+      ]
+    }
+  },
 ];

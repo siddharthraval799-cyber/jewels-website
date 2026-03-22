@@ -23,7 +23,9 @@ const DesktopNav = ({ isScrolled }: DesktopNavProps) => {
         {navigationData.map((link) => {
           const hasMegaMenu = !!link.megaMenu;
           const isKids = link.label === "Kids Collections";
-          const isMensOrCollections = !link.megaMenu?.prices && link.megaMenu?.styles;
+          const isCollectionsList = link.label === "Collections";
+          const isMoreJewellery = link.label === "More Jewellery";
+          const isMensOrCollections = !link.megaMenu?.prices && link.megaMenu?.styles && !isKids && !isCollectionsList && !isMoreJewellery;
 
           return (
             <div
@@ -130,8 +132,59 @@ const DesktopNav = ({ isScrolled }: DesktopNavProps) => {
                         </>
                       )}
 
+                      {/* LAYOUT 4: COLLECTIONS (4-column raw list) */}
+                      {isCollectionsList && (
+                        <div className="col-span-12 px-2">
+                           <div className="columns-2 md:columns-3 lg:columns-4 gap-x-8 gap-y-4">
+                             {link.megaMenu!.styles?.map((item) => (
+                               <Link key={item.label} to={item.href} className="flex items-center gap-2 group/item text-[13px] text-foreground/80 hover:text-primary transition-colors font-body mb-4 break-inside-avoid max-w-fit">
+                                 <svg viewBox="0 0 24 24" fill="none" className="w-[14px] h-[14px] text-muted-foreground/40 group-hover/item:text-primary transition-colors shrink-0" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                                 <span className="group-hover/item:translate-x-1 transition-transform">{item.label}</span>
+                               </Link>
+                             ))}
+                           </div>
+                        </div>
+                      )}
+
+                      {/* LAYOUT 5: MORE JEWELLERY (Icons Left, Image Right) */}
+                      {isMoreJewellery && (
+                        <>
+                          <div className="col-span-12 md:col-span-7 lg:col-span-8 pr-6">
+                            <ul className="grid grid-cols-2 gap-y-6 gap-x-4">
+                              {link.megaMenu!.styles?.map((item) => (
+                                <li key={item.label}>
+                                  <Link to={item.href} className="flex items-center gap-5 group/item max-w-fit">
+                                    {item.icon && (
+                                       <div className="w-[52px] h-[52px] rounded-full overflow-hidden border border-border group-hover/item:border-primary transition-colors bg-white shrink-0 p-1">
+                                         <div className="w-full h-full rounded-full overflow-hidden">
+                                            <img src={item.icon} alt={item.label} className="w-full h-full object-cover" />
+                                         </div>
+                                       </div>
+                                    )}
+                                    <span className={`${liClass} group-hover/item:text-primary font-medium text-[13px]`}>
+                                      {item.label}
+                                    </span>
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          
+                          <div className="col-span-12 md:col-span-5 lg:col-span-4 pl-6 border-l border-border/40">
+                            {link.megaMenu!.exclusiveDesigns?.[0] && (
+                               <Link to={link.megaMenu!.exclusiveDesigns[0].href} className="w-full h-[300px] rounded-md overflow-hidden relative group cursor-pointer shadow-sm block">
+                                  <img src={link.megaMenu!.exclusiveDesigns[0].image} alt="Explore" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#4a2e1b]/90 via-[#4a2e1b]/40 to-transparent flex items-end justify-center pb-8 pt-20">
+                                    <span className="text-[#f5ecd5] font-display text-[22px] tracking-[0.15em] font-light uppercase opacity-95 group-hover:opacity-100 group-hover:scale-[1.03] transition-all">{link.megaMenu!.exclusiveDesigns[0].label}</span>
+                                  </div>
+                               </Link>
+                            )}
+                          </div>
+                        </>
+                      )}
+
                       {/* LAYOUT 3: DEFAULT (Rings, Earrings, Bangles, Necklaces, etc) */}
-                      {!isKids && !isMensOrCollections && (
+                      {!isKids && !isMensOrCollections && !isCollectionsList && !isMoreJewellery && (
                         <>
                           <div className="col-span-12 md:col-span-7 lg:col-span-7 xl:col-span-8 flex justify-between pr-4 xl:pr-8">
                             {/* Column 1 & 2: By Popular Style */}

@@ -8,6 +8,13 @@ import ProductCard from "@/components/ProductCard";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // Static definitions
 const sortOptions = [
@@ -347,15 +354,19 @@ const Products = () => {
 
                 <div className="flex items-center gap-3 min-w-max self-end md:self-auto">
                    <span className="text-xs text-muted-foreground font-medium hidden lg:inline">Sort By :</span>
-                   <div className="relative">
-                      <select 
-                        value={sort} 
-                        onChange={e => setSort(e.target.value)}
-                        className="appearance-none bg-transparent border-none pr-6 outline-none text-sm font-medium font-body text-secondary-foreground cursor-pointer"
-                      >
-                         {sortOptions.map(opt => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                      </select>
-                      <ChevronDown className="w-4 h-4 absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none" />
+                   <div className="w-[180px]">
+                      <Select value={sort} onValueChange={setSort}>
+                        <SelectTrigger className="border-border/50 bg-white shadow-sm h-9 text-xs md:text-sm font-medium font-body focus:ring-1 focus:ring-primary/20">
+                          <SelectValue placeholder="Sort By" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white">
+                           {sortOptions.map(opt => (
+                              <SelectItem key={opt.value} value={opt.value} className="text-sm font-body cursor-pointer">
+                                {opt.label}
+                              </SelectItem>
+                           ))}
+                        </SelectContent>
+                      </Select>
                    </div>
                 </div>
             </div>

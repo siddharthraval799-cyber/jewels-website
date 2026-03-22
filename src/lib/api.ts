@@ -1,4 +1,11 @@
 // ─── Centralized API Client ────────────────────────────────
+const IS_STATIC_HOST = 
+  typeof window !== "undefined" && 
+  (window.location.hostname.endsWith("github.io") || 
+   window.location.hostname.includes("stackblitz") || 
+   window.location.hostname.includes("netlify") ||
+   window.location.hostname.includes("vercel.app"));
+
 const API_BASE = "/api";
 
 function getToken(): string | null {
@@ -31,28 +38,59 @@ async function request<T = unknown>(
     headers.set("Content-Type", "application/json");
   }
 
-  const res = await fetch(`${API_BASE}${endpoint}`, {
-    ...options,
-    headers,
-  });
-
   const tryMock = async () => {
     try {
       const cleanEndpoint = endpoint.split('?')[0];
-      const mockRes = await fetch(`${import.meta.env.BASE_URL}mock${cleanEndpoint}.json`);
+      // On static hosts, the mock folder is at the root or relative to BASE_URL
+      const baseUrl = import.meta.env.BASE_URL || "/";
+      const mockRes = await fetch(`${baseUrl}mock${cleanEndpoint}.json`);
       if (mockRes.ok) return await mockRes.json();
     } catch (e) {}
     return null;
   };
 
-  if (!res.ok) {
+  // If on a static host and it's a POST/PUT/DELETE, return a mock success
+  if (IS_STATIC_HOST && options.method && options.method !== "GET") {
+     console.log(`[Static Mode] Mocking ${options.method} request to ${endpoint}`);
+     
+     // Mock Auth Success
+     if (endpoint.includes("/auth/login") || endpoint.includes("/auth/whatsapp-otp/verify") || endpoint.includes("/auth/register")) {
+        return { 
+          user: { id: "mock-user", name: "Demo User", email: "demo@example.com", phone: "1234567890", role: "admin" },
+          token: "mock-token-" + Date.now()
+        } as unknown as T;
+     }
+     
+     if (endpoint.includes("/auth/whatsapp-otp/send")) {
+        return { success: true, message: "OTP Sent (Demo Mode)" } as unknown as T;
+     }
+
+     if (endpoint.includes("/orders")) {
+        return { id: "mock-order-id", orderNumber: "AU" + Date.now().toString().slice(-6) } as unknown as T;
+     }
+
+     return { success: true } as unknown as T;
+  }
+
+  // If on static host and it's a GET, try mock first to avoid 404/405
+  if (IS_STATIC_HOST && (!options.method || options.method === "GET")) {
     const mockData = await tryMock();
     if (mockData) return mockData;
-    const data = await res.json().catch(() => ({}));
-    throw new Error(data.error || `API Error ${res.status}`);
   }
 
   try {
+    const res = await fetch(`${API_BASE}${endpoint}`, {
+      ...options,
+      headers,
+    });
+
+    if (!res.ok) {
+      const mockData = await tryMock();
+      if (mockData) return mockData;
+      const data = await res.json().catch(() => ({}));
+      throw new Error(data.error || `API Error ${res.status}`);
+    }
+
     const text = await res.text();
     try {
       return JSON.parse(text);
@@ -61,7 +99,10 @@ async function request<T = unknown>(
       if (mockData) return mockData;
       throw new Error(`Invalid JSON response`);
     }
-  } catch (err) {
+  } catch (err: any) {
+    // If fetch fails entirely (e.g. server down), try mock as last resort
+    const mockData = await tryMock();
+    if (mockData) return mockData;
     throw err;
   }
 }
