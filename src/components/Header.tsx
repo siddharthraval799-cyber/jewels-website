@@ -9,6 +9,7 @@ import type { Product } from "@/lib/api";
 import { motion, AnimatePresence } from "framer-motion";
 import { navigationData } from "@/data/navigation";
 import DesktopNav from "./DesktopNav";
+import { NavIcon } from "./NavIcon";
 
 const Header = () => {
   const { totalItems, setIsCartOpen } = useCart();
@@ -285,8 +286,9 @@ const Header = () => {
                     key={link.label}
                     to={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="px-3 py-3 text-sm tracking-widest uppercase text-secondary-foreground/80 hover:text-primary hover:bg-noir-light/50 transition-colors font-body border-b border-muted-foreground/10"
+                    className="px-3 py-3 text-sm tracking-widest uppercase text-secondary-foreground/80 hover:text-primary hover:bg-noir-light/50 transition-colors font-body border-b border-muted-foreground/10 flex items-center gap-2"
                   >
+                    <NavIcon label={link.label} className="w-4 h-4 opacity-80" />
                     {link.label}
                   </Link>
                 ))}

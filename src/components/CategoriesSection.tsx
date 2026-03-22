@@ -3,13 +3,13 @@ import { motion } from "framer-motion";
 import { categories } from "@/data/products";
 
 const categoryImages: Record<string, string> = {
-  rings: "💍",
-  earrings: "✨",
-  necklaces: "📿",
-  bangles: "⭕",
-  bracelets: "🔗",
-  chains: "⛓️",
-  pendants: "💎",
+  rings: "https://images.unsplash.com/photo-1605100804763-247f6615b3c5?auto=format&fit=crop&q=80",
+  earrings: "https://images.unsplash.com/photo-1535632066927-ab0c9ab60908?auto=format&fit=crop&q=80",
+  necklaces: "https://images.unsplash.com/photo-1599643478524-fb52445c711a?auto=format&fit=crop&q=80",
+  bangles: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80",
+  bracelets: "https://images.unsplash.com/photo-1573408301145-3f3652de9e5d?auto=format&fit=crop&q=80",
+  chains: "https://images.unsplash.com/photo-1611085583191-a3b181a88401?auto=format&fit=crop&q=80",
+  pendants: "https://images.unsplash.com/photo-1515562141207-7a8efd331af1?auto=format&fit=crop&q=80",
 };
 
 const CategoriesSection = () => {
@@ -39,8 +39,8 @@ const CategoriesSection = () => {
                 to={`/products?category=${cat.id}`}
                 className="group flex flex-col items-center text-center"
               >
-                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-cream border border-border flex items-center justify-center text-3xl md:text-4xl group-hover:border-primary group-hover:shadow-[var(--shadow-gold)] transition-all duration-500">
-                  {categoryImages[cat.id]}
+                <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-cream border border-border flex items-center justify-center group-hover:border-primary group-hover:shadow-[var(--shadow-gold)] transition-all duration-500 overflow-hidden">
+                  <img src={categoryImages[cat.id]} alt={cat.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                 </div>
                 <span className="mt-3 text-xs tracking-[0.15em] uppercase font-body font-medium text-foreground/80 group-hover:text-primary transition-colors">
                   {cat.name}

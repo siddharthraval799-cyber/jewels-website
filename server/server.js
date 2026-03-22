@@ -19,7 +19,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "aurum_jewels_secret_key_2025";
 // ─── Middleware ────────────────────────────────────────────
 app.use(cors());
 app.use(express.json({ limit: "50mb" })); // Increased for potential base64 images
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
 
 const multer = require("multer");
 const fs = require("fs");
@@ -34,7 +34,7 @@ const upload = multer({ storage, limits: { fileSize: 50 * 1024 * 1024 } }); // 5
 
 app.post("/api/upload", upload.single("file"), (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
-  res.json({ url: `/uploads/${req.file.filename}` });
+  res.json({ url: `/api/uploads/${req.file.filename}` });
 });
 
 // ─── Auth Helpers ──────────────────────────────────────────

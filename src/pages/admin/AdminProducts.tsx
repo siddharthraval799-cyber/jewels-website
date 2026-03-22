@@ -191,6 +191,41 @@ const AdminProducts = () => {
                  </div>
               </div>
               
+              {/* Product Images (Moved to top for visibility) */}
+              <div className="bg-muted/10 p-4 border border-border border-dashed mt-4 rounded">
+                <label className="text-xs font-body uppercase tracking-wider text-muted-foreground mb-3 flex items-center justify-between">
+                  <span>Product Photos{form.images.length === 0 ? " (Required)" : ""}</span>
+                  <span className="text-[10px] normal-case bg-primary/10 text-primary px-2 py-0.5 rounded-full">{form.images.length} added</span>
+                </label>
+                
+                <div className="grid grid-cols-4 md:grid-cols-5 gap-3">
+                  {form.images.map((img, i) => (
+                    <div key={i} className="relative aspect-square border border-border rounded overflow-hidden group shadow-sm bg-white">
+                      <img src={img} alt={`Product ${i}`} className="w-full h-full object-cover" />
+                      <button 
+                        onClick={() => removeImage(i)}
+                        className="absolute top-1.5 right-1.5 bg-red-500/90 hover:bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-all shadow-md scale-90 hover:scale-100"
+                        title="Remove Image"
+                      >
+                        <XCircle className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                  <label className="aspect-square border-2 border-dashed border-border/80 bg-white flex flex-col items-center justify-center cursor-pointer hover:bg-primary/5 hover:border-primary/50 transition-colors text-muted-foreground rounded group">
+                    {isUploading ? (
+                      <Loader2 className="w-5 h-5 animate-spin text-primary" />
+                    ) : (
+                      <>
+                        <Upload className="w-5 h-5 mb-1.5 text-muted-foreground group-hover:text-primary transition-colors" />
+                        <span className="text-[10px] uppercase font-body font-medium group-hover:text-primary transition-colors">Add Photos</span>
+                      </>
+                    )}
+                    <input type="file" accept="image/*" multiple className="hidden" onChange={handleFileUpload} disabled={isUploading} />
+                  </label>
+                </div>
+                {form.images.length === 0 && <p className="text-[10px] text-muted-foreground mt-2 text-center w-full">Upload multiple high-quality photos to showcase this product.</p>}
+              </div>
+              
               {/* Dynamic Filter Attributes (JSON) */}
               <div className="bg-muted/30 p-4 border border-border mt-4">
                  <h3 className="text-sm font-semibold mb-2">Filter Attributes (Dynamic)</h3>
@@ -223,34 +258,7 @@ const AdminProducts = () => {
                  </div>
               </div>
               
-              <div>
-                <label className="text-xs font-body uppercase tracking-wider text-muted-foreground mb-2 block mt-4">Product Images</label>
-                <div className="grid grid-cols-4 md:grid-cols-5 gap-3 mb-3">
-                  {form.images.map((img, i) => (
-                    <div key={i} className="relative aspect-square border border-border rounded overflow-hidden group">
-                      <img src={img} alt={`Product ${i}`} className="w-full h-full object-cover" />
-                      <button 
-                        onClick={() => removeImage(i)}
-                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                        title="Remove Image"
-                      >
-                        <XCircle className="w-3 h-3" />
-                      </button>
-                    </div>
-                  ))}
-                  <label className="aspect-square border-2 border-dashed border-border flex flex-col items-center justify-center cursor-pointer hover:bg-muted/30 transition-colors text-muted-foreground">
-                    {isUploading ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                      <>
-                        <Upload className="w-5 h-5 mb-1 text-primary/70" />
-                        <span className="text-[10px] uppercase font-body">Upload</span>
-                      </>
-                    )}
-                    <input type="file" accept="image/*" multiple className="hidden" onChange={handleFileUpload} disabled={isUploading} />
-                  </label>
-                </div>
-              </div>
+              {/* The image component was moved above the dynamic attributes block */}
 
               <div>
                 <label className="text-xs font-body uppercase tracking-wider text-muted-foreground mb-1 block">Description</label>
