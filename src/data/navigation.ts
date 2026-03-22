@@ -73,7 +73,7 @@ export const navigationData: MainNavItem[] = [
         { label: "Couple", href: productLink("rings", "for", "couple") },
       ],
       exclusiveDesigns: [
-        { label: "Daily Wear", image: "https://api.rushabhjewel.com/img/2026/1/1/7/1767252568609-daily-wear.jpg", href: productLink("rings", "collection", "daily-wear") },
+        { label: "Daily Wear", image: "/category-images/1767252568609-daily-wear.jpg", href: productLink("rings", "collection", "daily-wear") },
         { label: "Cocktail", image: "https://api.rushabhjewel.com/img/2026/1/1/7/1767252664187-cocktail.jpg", href: productLink("rings", "collection", "cocktail") },
         { label: "Heritage", image: "https://api.rushabhjewel.com/img/2026/1/1/7/1767252592142-heritage.jpg", href: productLink("rings", "collection", "heritage") },
       ]
@@ -115,8 +115,8 @@ export const navigationData: MainNavItem[] = [
       ]
     }
   },
-  { 
-    label: "Bangles", 
+  {
+    label: "Bangles",
     href: "/products?category=bangles",
     megaMenu: {
       styles: [
@@ -142,8 +142,8 @@ export const navigationData: MainNavItem[] = [
       ]
     }
   },
-  { 
-    label: "Pendant Set", 
+  {
+    label: "Pendant Set",
     href: "/products?category=pendant-set",
     megaMenu: {
       styles: [
@@ -183,8 +183,8 @@ export const navigationData: MainNavItem[] = [
       ]
     }
   },
-  { 
-    label: "Mangalsutra", 
+  {
+    label: "Mangalsutra",
     href: "/products?category=mangalsutra",
     megaMenu: {
       styles: [
@@ -225,8 +225,8 @@ export const navigationData: MainNavItem[] = [
       ]
     }
   },
-  { 
-    label: "Necklace", 
+  {
+    label: "Necklace",
     href: "/products?category=necklace",
     megaMenu: {
       styles: [
@@ -254,14 +254,14 @@ export const navigationData: MainNavItem[] = [
         { label: "18 Karat", href: productLink("necklace", "karat", "18") },
       ],
       exclusiveDesigns: [
-        { label: "Polki", image: "/category-images/necklace-polki.png", href: productLink("necklace", "collection", "polki") },
-        { label: "Victorian", image: "/category-images/necklace-victorian.png", href: productLink("necklace", "collection", "victorian") },
-        { label: "Real Diamond", image: "/category-images/necklace-diamond.png", href: productLink("necklace", "collection", "real-diamond") },
+        { label: "Polki", image: "https://api.rushabhjewel.com/img/2025/10/18/15/1760782642206-nksn18-8619-1.jpg", href: productLink("necklace", "collection", "polki") },
+        { label: "Victorian", image: "https://api.rushabhjewel.com/img/2025/10/7/15/1759829748518-an22-275-1.jpg", href: productLink("necklace", "collection", "victorian") },
+        { label: "Real Diamond", image: "https://api.rushabhjewel.com/img/2025/10/18/15/1760782874703-nksn22-11770-1.jpg", href: productLink("necklace", "collection", "real-diamond") },
       ]
     }
   },
-  { 
-    label: "Chains", 
+  {
+    label: "Chains",
     href: "/products?category=chains",
     megaMenu: {
       styles: [
@@ -302,41 +302,41 @@ export const navigationData: MainNavItem[] = [
       ]
     }
   },
-  { 
-    label: "Kids Collections", 
+  {
+    label: "Kids Collections",
     href: "/products?category=kids-collections",
     megaMenu: {
-       // Only cards here!
-       exclusiveDesigns: [
-         { label: "Baby Nazariya", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767267151042-baby-nazariya.jpg", href: productLink("kids-collections", "type", "nazariya") },
-         { label: "Baby Kadli", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767267160912-baby-kadli.jpg", href: productLink("kids-collections", "type", "kadli") },
-         { label: "Baby Pendent", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767267171887-baby-pendent.jpg", href: productLink("kids-collections", "type", "pendent") },
-       ]
+      // Only cards here!
+      exclusiveDesigns: [
+        { label: "Baby Nazariya", image: "/category-images/1760872944293-tp18-42608-1.jpg", href: productLink("kids-collections", "type", "nazariya") },
+        { label: "Baby Kadli", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767267160912-baby-kadli.jpg", href: productLink("kids-collections", "type", "kadli") },
+        { label: "Baby Pendent", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767267171887-baby-pendent.jpg", href: productLink("kids-collections", "type", "pendent") },
+      ]
     }
   },
-  { 
-    label: "Mens Jewellery", 
+  {
+    label: "Mens Jewellery",
     href: "/products?category=mens-jewellery",
     megaMenu: {
-       stylesTitle: "Shop For Men",
-       styles: [
-         { label: "Leather Kada", href: productLink("mens-jewellery", "style", "leather-kada") },
-         { label: "Punjabi Kada", href: productLink("mens-jewellery", "style", "punjabi-kada") },
-         { label: "Solitaire", href: productLink("mens-jewellery", "style", "solitaire") },
-         { label: "Premium Elite", href: productLink("mens-jewellery", "style", "premium-elite") },
-         { label: "Bands", href: productLink("mens-jewellery", "style", "bands") },
-         { label: "Rings", href: productLink("mens-jewellery", "style", "rings") },
-         { label: "Real Diamond", href: productLink("mens-jewellery", "style", "real-diamond") },
-       ],
-       exclusiveDesigns: [
-         { label: "Rings", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767268593414-ring.jpg", href: productLink("mens-jewellery", "type", "rings") },
-         { label: "Bracelets & Bangles", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767268605175-bracelet-and-bangle.jpg", href: productLink("mens-jewellery", "type", "bracelets") },
-         { label: "Chains", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767268615392-chains.jpg", href: productLink("mens-jewellery", "type", "chains") },
-       ]
+      stylesTitle: "Shop For Men",
+      styles: [
+        { label: "Leather Kada", href: productLink("mens-jewellery", "style", "leather-kada") },
+        { label: "Punjabi Kada", href: productLink("mens-jewellery", "style", "punjabi-kada") },
+        { label: "Solitaire", href: productLink("mens-jewellery", "style", "solitaire") },
+        { label: "Premium Elite", href: productLink("mens-jewellery", "style", "premium-elite") },
+        { label: "Bands", href: productLink("mens-jewellery", "style", "bands") },
+        { label: "Rings", href: productLink("mens-jewellery", "style", "rings") },
+        { label: "Real Diamond", href: productLink("mens-jewellery", "style", "real-diamond") },
+      ],
+      exclusiveDesigns: [
+        { label: "Rings", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767268593414-ring.jpg", href: productLink("mens-jewellery", "type", "rings") },
+        { label: "Bracelets & Bangles", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767268605175-bracelet-and-bangle.jpg", href: productLink("mens-jewellery", "type", "bracelets") },
+        { label: "Chains", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767268615392-chains.jpg", href: productLink("mens-jewellery", "type", "chains") },
+      ]
     }
   },
-  { 
-    label: "Collections", 
+  {
+    label: "Collections",
     href: "/products?category=collections",
     megaMenu: {
       styles: [
@@ -362,8 +362,8 @@ export const navigationData: MainNavItem[] = [
       ]
     }
   },
-  { 
-    label: "More Jewellery", 
+  {
+    label: "More Jewellery",
     href: "/products?category=more-jewellery",
     megaMenu: {
       stylesTitle: "",
@@ -378,7 +378,7 @@ export const navigationData: MainNavItem[] = [
         { label: "Letter Pendant", icon: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=50&h=50", href: productLink("more-jewellery", "style", "letter-pendant") },
       ],
       exclusiveDesigns: [
-         { label: "EXPLORE ALL", image: "https://www.rushabhjewel.com/_next/image?url=%2Fsiteassets%2Fimages%2Fbanner%2Fmorejewellery.png&w=3840&q=75", href: "/products?category=more-jewellery", large: true },
+        { label: "EXPLORE ALL", image: "https://www.rushabhjewel.com/_next/image?url=%2Fsiteassets%2Fimages%2Fbanner%2Fmorejewellery.png&w=3840&q=75", href: "/products?category=more-jewellery", large: true },
       ]
     }
   },
