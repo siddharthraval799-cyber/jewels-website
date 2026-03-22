@@ -163,9 +163,15 @@ export default function AdminCreatorReels() {
             <button 
               type="submit" 
               disabled={isUploading}
-              className="mt-2 w-full bg-primary text-primary-foreground py-2 text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-primary/90 disabled:opacity-50"
+              className={`mt-2 w-full text-white py-2 text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 disabled:opacity-50 ${typeof window !== "undefined" && window.location.hostname.endsWith("github.io") ? "bg-amber-600 hover:bg-amber-700" : "bg-primary hover:bg-primary/90"}`}
             >
-              {isUploading ? <><Loader2 className="w-4 h-4 animate-spin"/> Uploading...</> : <><Upload className="w-4 h-4"/> Save Reel</>}
+              {isUploading ? (
+                <><Loader2 className="w-4 h-4 animate-spin"/> Uploading...</>
+              ) : typeof window !== "undefined" && window.location.hostname.endsWith("github.io") ? (
+                <><Upload className="w-4 h-4"/> Save (Demo Only)</>
+              ) : (
+                <><Upload className="w-4 h-4"/> Save Reel</>
+              )}
             </button>
           </div>
         </form>
