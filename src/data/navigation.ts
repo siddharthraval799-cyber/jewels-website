@@ -73,9 +73,9 @@ export const navigationData: MainNavItem[] = [
         { label: "Couple", href: productLink("rings", "for", "couple") },
       ],
       exclusiveDesigns: [
-        { label: "Daily Wear", image: "/category-images/1767252568609-daily-wear.jpg", href: productLink("rings", "collection", "daily-wear") },
-        { label: "Cocktail", image: "/category-images/1767252664187-cocktail.jpg", href: productLink("rings", "collection", "cocktail") },
-        { label: "Heritage", image: "/category-images/1767252592142-heritage.jpg", href: productLink("rings", "collection", "heritage") },
+        { label: "Daily Wear", image: "https://api.rushabhjewel.com/img/2026/1/1/7/1767252568609-daily-wear.jpg", href: productLink("rings", "collection", "daily-wear") },
+        { label: "Cocktail", image: "https://api.rushabhjewel.com/img/2026/1/1/7/1767252664187-cocktail.jpg", href: productLink("rings", "collection", "cocktail") },
+        { label: "Heritage", image: "https://api.rushabhjewel.com/img/2026/1/1/7/1767252592142-heritage.jpg", href: productLink("rings", "collection", "heritage") },
       ]
     }
   },
@@ -109,9 +109,9 @@ export const navigationData: MainNavItem[] = [
         { label: "Kids", href: productLink("earrings", "for", "kids") },
       ],
       exclusiveDesigns: [
-        { label: "Studs", image: "/category-images/1767257724851-studs.jpg", href: productLink("earrings", "collection", "studs") },
-        { label: "Polki", image: "/category-images/1767257806131-polki.jpg", href: productLink("earrings", "collection", "polki") },
-        { label: "Real Diamond", image: "/category-images/1767257707173-real-diamond.jpg", href: productLink("earrings", "collection", "real-diamond") },
+        { label: "Studs", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257724851-studs.jpg", href: productLink("earrings", "collection", "studs") },
+        { label: "Polki", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257806131-polki.jpg", href: productLink("earrings", "collection", "polki") },
+        { label: "Real Diamond", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257707173-real-diamond.jpg", href: productLink("earrings", "collection", "real-diamond") },
       ]
     }
   },
@@ -137,8 +137,8 @@ export const navigationData: MainNavItem[] = [
         { label: "Women", href: productLink("bangles", "for", "women") },
       ],
       exclusiveDesigns: [
-        { label: "Antique", image: "/category-images/1767252836991-antique-bangles.jpg", href: productLink("bangles", "collection", "antique") },
-        { label: "Light Weight", image: "/category-images/1769066362195-bn18-13-1.jpg", href: productLink("bangles", "collection", "light-weight") },
+        { label: "Antique", image: "https://api.rushabhjewel.com/img/2026/1/1/7/1767252836991-antique-bangles.jpg", href: productLink("bangles", "collection", "antique") },
+        { label: "Light Weight", image: "https://api.rushabhjewel.com/img/2026/1/22/1/1769066362195-bn18-13-1.jpg", href: productLink("bangles", "collection", "light-weight") },
       ]
     }
   },
@@ -177,9 +177,9 @@ export const navigationData: MainNavItem[] = [
         { label: "Women", href: productLink("pendant-set", "for", "women") },
       ],
       exclusiveDesigns: [
-        { label: "Antique", image: "/category-images/pendant-antique.png", href: productLink("pendant-set", "collection", "antique") },
-        { label: "Heritage", image: "/category-images/pendant-antique.png", href: productLink("pendant-set", "collection", "heritage") },
-        { label: "Monzonaite", image: "/category-images/pendant-monzonaite.png", href: productLink("pendant-set", "collection", "monzonaite") },
+        { label: "Antique", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767261944933-antique.jpg", href: productLink("pendant-set", "collection", "antique") },
+        { label: "Heritage", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767261955406-heritage.jpg", href: productLink("pendant-set", "collection", "heritage") },
+        { label: "Monzonaite", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767261966549-monzonaite.jpg", href: productLink("pendant-set", "collection", "monzonaite") },
       ]
     }
   },
@@ -219,9 +219,9 @@ export const navigationData: MainNavItem[] = [
         { label: "Women", href: productLink("mangalsutra", "for", "women") },
       ],
       exclusiveDesigns: [
-        { label: "Tanmaniya or charms", image: "/category-images/1767257347559-tanmaniya-or-charms.jpg", href: productLink("mangalsutra", "collection", "tanmaniya") },
-        { label: "Antique chain with P.Set", image: "/category-images/1767257440258-antique-chain-with-p.set.jpg", href: productLink("mangalsutra", "collection", "antique") },
-        { label: "Italian", image: "/category-images/1767257479337-italian.jpg", href: productLink("mangalsutra", "collection", "italian") },
+        { label: "Tanmaniya or charms", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257347559-tanmaniya-or-charms.jpg", href: productLink("mangalsutra", "collection", "tanmaniya") },
+        { label: "Antique chain with P.Set", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257440258-antique-chain-with-p.set.jpg", href: productLink("mangalsutra", "collection", "antique") },
+        { label: "Italian", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257479337-italian.jpg", href: productLink("mangalsutra", "collection", "italian") },
       ]
     }
   },
@@ -296,9 +296,9 @@ export const navigationData: MainNavItem[] = [
         { label: "Women", href: productLink("chains", "for", "women") },
       ],
       exclusiveDesigns: [
-        { label: "Tanmaniya or charms", image: "/category-images/1767257347559-tanmaniya-or-charms.jpg", href: productLink("chains", "collection", "tanmaniya") },
-        { label: "Antique chain with P.Set", image: "/category-images/1767257440258-antique-chain-with-p.set.jpg", href: productLink("chains", "collection", "antique") },
-        { label: "Italian", image: "/category-images/1767257479337-italian.jpg", href: productLink("chains", "collection", "italian") },
+        { label: "Tanmaniya or charms", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257347559-tanmaniya-or-charms.jpg", href: productLink("chains", "collection", "tanmaniya") },
+        { label: "Antique chain with P.Set", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257440258-antique-chain-with-p.set.jpg", href: productLink("chains", "collection", "antique") },
+        { label: "Italian", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767257479337-italian.jpg", href: productLink("chains", "collection", "italian") },
       ]
     }
   },
@@ -308,9 +308,9 @@ export const navigationData: MainNavItem[] = [
     megaMenu: {
        // Only cards here!
        exclusiveDesigns: [
-         { label: "Baby Nazariya", image: "/category-images/kids-nazariya.png", href: productLink("kids-collections", "type", "nazariya") },
-         { label: "Baby Kadli", image: "/category-images/kids-kadli.png", href: productLink("kids-collections", "type", "kadli") },
-         { label: "Baby Pendent", image: "/category-images/pendant-monzonaite.png", href: productLink("kids-collections", "type", "pendent") },
+         { label: "Baby Nazariya", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767267151042-baby-nazariya.jpg", href: productLink("kids-collections", "type", "nazariya") },
+         { label: "Baby Kadli", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767267160912-baby-kadli.jpg", href: productLink("kids-collections", "type", "kadli") },
+         { label: "Baby Pendent", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767267171887-baby-pendent.jpg", href: productLink("kids-collections", "type", "pendent") },
        ]
     }
   },
@@ -329,9 +329,9 @@ export const navigationData: MainNavItem[] = [
          { label: "Real Diamond", href: productLink("mens-jewellery", "style", "real-diamond") },
        ],
        exclusiveDesigns: [
-         { label: "Rings", image: "/category-images/mens-ring.png", href: productLink("mens-jewellery", "type", "rings") },
-         { label: "Bracelets & Bangles", image: "/category-images/mens-bracelet.png", href: productLink("mens-jewellery", "type", "bracelets") },
-         { label: "Chains", image: "/category-images/1767257440258-antique-chain-with-p.set.jpg", href: productLink("mens-jewellery", "type", "chains") },
+         { label: "Rings", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767268593414-ring.jpg", href: productLink("mens-jewellery", "type", "rings") },
+         { label: "Bracelets & Bangles", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767268605175-bracelet-and-bangle.jpg", href: productLink("mens-jewellery", "type", "bracelets") },
+         { label: "Chains", image: "https://api.rushabhjewel.com/img/2026/1/1/8/1767268615392-chains.jpg", href: productLink("mens-jewellery", "type", "chains") },
        ]
     }
   },
