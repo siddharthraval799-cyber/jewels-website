@@ -103,7 +103,7 @@ const CuratedCollection = () => {
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
               />
               <div className="absolute inset-x-0 bottom-4 flex justify-center">
-                <span className="bg-white/90 backdrop-blur-sm text-xs md:text-sm font-semibold uppercase tracking-widest px-4 md:px-6 py-2 rounded-full shadow-md text-secondary-foreground whitespace-nowrap">
+                <span className="bg-white/95 backdrop-blur-sm text-xs md:text-sm font-bold uppercase tracking-widest px-5 md:px-6 py-2 rounded-full shadow-md text-gray-900 whitespace-nowrap">
                   {item.title}
                 </span>
               </div>
