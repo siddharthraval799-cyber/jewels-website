@@ -1,20 +1,23 @@
 import { useRef, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import ProductCard from "./ProductCard";
+import type { Product } from "@/data/products";
 
-// Mock the Mangalsutra data matching the 4th image (warm brown/beige colors)
-const inDemandProducts = [
-  { id: 1, name: "Ishira Vaidurya Mangalsutra 22KT", price: "₹5,05,184", weight: "30.12 gm", karat: "22KT", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80" },
-  { id: 2, name: "Pradyumna Padmashree Mangalsutra", price: "₹7,37,677", weight: "43.21 gm", karat: "22KT", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80" },
-  { id: 3, name: "Aarvika Shringar Mangalsutra 22KT", price: "₹3,21,269", weight: "19.04 gm", karat: "22KT", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80" },
-  { id: 4, name: "Parampara Vedika Mangalsutra", price: "₹4,49,633", weight: "25.3 gm", karat: "22KT", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80" },
-  { id: 5, name: "Aarvika Sovereign Mangalsutra", price: "₹3,09,423", weight: "18.24 gm", karat: "22KT", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80" },
-  { id: 6, name: "Kanika Vilas Mangalsutra 22KT", price: "₹4,85,085", weight: "28.55 gm", karat: "22KT", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80" },
+// Convert mock data to fit standard Product type so we can use the main ProductCard
+const inDemandProducts: Product[] = [
+  { id: "p1", name: "Ishira Vaidurya Mangalsutra 22KT", weight: 30.12, makingCharges: 15000, category: "mangalsutra", images: ["https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80"], description: "" },
+  { id: "p2", name: "Pradyumna Padmashree Mangalsutra", weight: 43.21, makingCharges: 20000, category: "mangalsutra", images: ["https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80"], description: "" },
+  { id: "p3", name: "Aarvika Shringar Mangalsutra 22KT", weight: 19.04, makingCharges: 12000, category: "mangalsutra", images: ["https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80"], description: "" },
+  { id: "p4", name: "Parampara Vedika Mangalsutra", weight: 25.30, makingCharges: 18000, category: "mangalsutra", images: ["https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80"], description: "" },
+  { id: "p5", name: "Aarvika Sovereign Mangalsutra", weight: 18.24, makingCharges: 11000, category: "mangalsutra", images: ["https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80"], description: "" },
+  { id: "p6", name: "Kanika Vilas Mangalsutra 22KT", weight: 28.55, makingCharges: 14000, category: "mangalsutra", images: ["https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80"], description: "" },
 ];
 
 const ProductCarousel = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
@@ -40,78 +43,98 @@ const ProductCarousel = () => {
     }
   };
 
-  return (
-    <section className="py-20 bg-background relative border-t border-border/40">
-      <div className="container mx-auto px-4">
-        
-        {/* Top Controls Container matching the image structure */}
-        {/* We place the "IN-DEMAND FAVORITES" block inside a banner or on the side depending on layout. 
-            The photo shows the items sliding over a subtle background banner.
-         */}
-        <div className="bg-[#FAF6F2] py-16 px-8 rounded-[40px] relative">
-           
-           <div className="absolute bottom-0 left-0 w-full h-[150px] bg-[#D6C1A9] rounded-b-[40px] flex items-center px-16 z-0" />
-           
-           <div className="relative z-10 flex flex-col md:flex-row gap-12 justify-between items-end mb-10 w-full px-4">
-              {/* If we look at photo 4, the title is inside the banner itself at the bottom left alongside the products sliding. 
-                  Let's inject title text into the banner. */}
-           </div>
+  const exploreAll = () => {
+    navigate("/products");
+  };
 
-           <div className="relative z-20">
+  return (
+    <section className="py-24 bg-background relative">
+      <div className="container mx-auto px-4 max-w-[1400px]">
+        
+        {/* Banner container designed mapping Image 1 */}
+        <div className="relative w-full rounded-[40px] bg-[#DBCAC0]/40 overflow-visible pt-16 pb-20 md:pb-8">
+           
+           <div className="flex flex-col xl:flex-row gap-8 xl:gap-0">
              
-             {/* Slider Navigation */}
-             <div className="flex justify-between items-center mb-6">
-                <div className="opacity-0 w-1"></div> {/* Spacer */}
-                <div className="flex gap-2 justify-end w-full px-4">
+             {/* Left Banner Text Section */}
+             <div className="xl:w-1/3 px-8 md:px-12 flex flex-col justify-end pb-4 xl:pb-12 z-20">
+                <motion.h2 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="font-display text-4xl md:text-5xl font-black tracking-widest uppercase text-[#1a1a1a] mb-4"
+                >
+                  In-Demand<br/>Favorites
+                </motion.h2>
+                <motion.p 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 }}
+                  className="font-body text-base font-semibold text-[#1a1a1a]/80"
+                >
+                  Loved by many, made for you.<br/>
+                  Find out what's trending today.
+                </motion.p>
+
+                {/* Desktop Explore Button - aligned visually within the banner area */}
+                <motion.button 
+                   whileHover={{ scale: 1.05 }} 
+                   whileTap={{ scale: 0.95 }}
+                   onClick={exploreAll}
+                   className="hidden xl:inline-flex mt-12 bg-[#B5A18C] hover:bg-[#A38F7A] text-white px-8 py-3.5 rounded-full font-body text-sm font-semibold tracking-wider uppercase transition-colors shadow-md w-max"
+                >
+                   Explore All Designs
+                </motion.button>
+             </div>
+
+             {/* Right Section: Overlapping Carousel */}
+             <div className="xl:w-2/3 xl:-mt-24 xl:pr-12 z-20">
+                
+                {/* Carousel Controls */}
+                <div className="flex justify-end gap-3 mb-6 px-8 xl:px-0">
                   <button 
                     onClick={() => scroll("left")} 
                     disabled={!canScrollLeft}
-                    className="w-10 h-10 rounded-full border border-secondary-foreground/20 flex items-center justify-center bg-white/50 backdrop-blur disabled:opacity-30 transition-all hover:bg-white text-secondary-foreground"
+                    className="w-10 h-10 rounded-full border border-secondary-foreground/20 flex items-center justify-center bg-white/80 backdrop-blur disabled:opacity-40 transition-all hover:bg-white text-secondary-foreground shadow-sm"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
                   <button 
                     onClick={() => scroll("right")} 
                     disabled={!canScrollRight}
-                    className="w-10 h-10 rounded-full border border-secondary-foreground/20 flex items-center justify-center bg-white/50 backdrop-blur disabled:opacity-30 transition-all hover:bg-white text-secondary-foreground"
+                    className="w-10 h-10 rounded-full border border-secondary-foreground/20 flex items-center justify-center bg-white/80 backdrop-blur disabled:opacity-40 transition-all hover:bg-white text-secondary-foreground shadow-sm"
                   >
                     <ChevronRight className="w-5 h-5" />
                   </button>
-                  <Link to="/products?category=mangalsutra" className="ml-4 bg-[#B5A18C]/30 hover:bg-[#B5A18C]/50 px-6 py-2 rounded-full font-body text-sm font-medium transition-colors border border-border/50 text-secondary-foreground shadow-sm">
-                    Explore All Designs
-                  </Link>
                 </div>
-             </div>
 
-             {/* The Actual Track of Items */}
-             <div 
-               ref={scrollRef}
-               onScroll={checkScroll}
-               className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-8 px-4"
-             >
-                {inDemandProducts.map((product) => (
-                  <div key={product.id} className="snap-start shrink-0 w-[240px] md:w-[280px] bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow border border-border/30">
-                    <Link to={`/products/${product.id}`} className="block relative aspect-[4/5] bg-cream/30 p-4">
-                      <img src={product.image} alt={product.name} className="w-full h-full object-contain mix-blend-multiply" />
-                    </Link>
-                    <div className="p-4 bg-white z-10 relative">
-                       <h4 className="font-display font-semibold text-lg text-secondary-foreground mb-1">{product.price}</h4>
-                       <p className="font-body text-xs text-secondary-foreground opacity-80 mb-3 truncate">{product.name}</p>
-                       <div className="flex gap-4 text-[10px] text-muted-foreground font-body">
-                          <span className="flex items-center gap-1">📐 {product.weight}</span>
-                          <span className="flex items-center gap-1">✨ {product.karat}</span>
-                       </div>
-                    </div>
-                  </div>
-                ))}
-             </div>
+                {/* Carousel Track containing perfectly matched Product Cards */}
+                <div 
+                  ref={scrollRef}
+                  onScroll={checkScroll}
+                  className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-8 px-8 xl:px-0"
+                >
+                   {inDemandProducts.map((product, index) => (
+                     <div key={product.id} className="snap-start shrink-0 w-[260px] md:w-[300px]">
+                        <ProductCard product={product} index={index} />
+                     </div>
+                   ))}
+                </div>
 
-             {/* Banner Title Overlay on bottom left */}
-             <div className="absolute -bottom-[3.5rem] left-8 pointer-events-none text-secondary-foreground z-30">
-                <h2 className="font-display text-3xl md:text-4xl font-bold uppercase tracking-widest mb-2">In-Demand Favorites</h2>
-                <p className="font-body text-sm tracking-wide font-medium">Loved by many, made for you.<br/>Find out what's trending today.</p>
-             </div>
+                {/* Mobile/Tablet Explore Button - right aligned below carousel */}
+                <div className="xl:hidden flex justify-end px-8 mt-4">
+                  <motion.button 
+                     whileHover={{ scale: 1.05 }} 
+                     whileTap={{ scale: 0.95 }}
+                     onClick={exploreAll}
+                     className="bg-[#B5A18C] hover:bg-[#A38F7A] text-white px-8 py-3.5 rounded-full font-body text-sm font-semibold tracking-wider uppercase transition-colors shadow-md"
+                  >
+                     Explore All Designs
+                  </motion.button>
+                </div>
 
+             </div>
            </div>
         </div>
 

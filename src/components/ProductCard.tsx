@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ShoppingBag, Eye, Heart, Video, Sprout, BrainCircuit } from "lucide-react";
+import { ShoppingBag, Heart, Video, BrainCircuit } from "lucide-react";
 import { Product, calculatePrice } from "@/data/products";
 import { useCart } from "@/contexts/CartContext";
 import { useGoldRates } from "@/contexts/GoldRateContext";
@@ -16,45 +16,23 @@ const ProductCard = ({ product, index = 0, onExplore }: { product: Product; inde
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.05, duration: 0.5 }}
-      className="group"
+      className="group h-full"
     >
-      <div className="luxury-card overflow-hidden">
-        {/* Image */}
-        <div className="relative aspect-[3/4] bg-cream overflow-hidden">
-          <div className="absolute inset-0 flex items-center justify-center p-8">
-            <div className="w-full h-full gold-gradient rounded-sm opacity-10" />
-          </div>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-6xl opacity-30">
-              {product.category === "rings" ? "💍" :
-               product.category === "earrings" ? "✨" :
-               product.category === "necklaces" ? "📿" :
-               product.category === "bangles" ? "⭕" :
-               product.category === "bracelets" ? "🔗" :
-               product.category === "chains" ? "⛓️" : "💎"}
-            </span>
-          </div>
+      <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all border border-border/40 h-full flex flex-col">
+        {/* Image Region */}
+        <Link to={`/product/${product.id}`} className="relative aspect-[4/5] bg-[#FAF6F2] overflow-hidden block">
+          <img 
+            src={product.images?.[0] || "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80"} 
+            alt={product.name} 
+            className="w-full h-full object-contain mix-blend-multiply group-hover:scale-105 transition-transform duration-700" 
+          />
 
-          {/* Badges */}
-          <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
-            {product.newArrival && (
-              <span className="bg-primary text-primary-foreground text-[9px] tracking-wider uppercase px-2.5 py-1 font-body font-semibold">
-                New
-              </span>
-            )}
-            {product.bestSeller && (
-              <span className="bg-secondary text-secondary-foreground text-[9px] tracking-wider uppercase px-2.5 py-1 font-body font-semibold">
-                Bestseller
-              </span>
-            )}
-          </div>
-
-          {/* Floating Icons (Explore, Wishlist, Video) */}
-          <div className="absolute top-3 left-3 flex flex-col gap-2.5 z-10 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+          {/* Floating Action Icons */}
+          <div className="absolute bottom-3 left-3 flex flex-col gap-2 z-10 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
             {onExplore && (
               <button 
                 onClick={(e) => { e.preventDefault(); onExplore(product); }}
-                className="w-8 h-8 rounded-md bg-[#18181b] text-white flex items-center justify-center hover:bg-black transition-colors shadow-lg"
+                className="w-8 h-8 rounded-md bg-[#1f2937] text-white flex items-center justify-center hover:bg-black transition-colors shadow-lg"
                 title="Explore similar designs"
               >
                 <BrainCircuit className="w-4 h-4" />
@@ -62,54 +40,53 @@ const ProductCard = ({ product, index = 0, onExplore }: { product: Product; inde
             )}
             <button 
               onClick={(e) => { e.preventDefault(); }}
-              className="w-8 h-8 rounded-full bg-white/90 text-rose-500 flex items-center justify-center hover:bg-rose-50 shadow-md backdrop-blur-sm"
+              className="w-8 h-8 rounded-full bg-white text-rose-500 flex items-center justify-center hover:bg-rose-50 shadow-md backdrop-blur-sm transition-colors"
               title="Add to Wishlist"
             >
-              <Heart className="w-4 h-4 fill-rose-100/50" />
+              <Heart className="w-4 h-4 fill-rose-100/50 text-rose-400" />
             </button>
             <button 
               onClick={(e) => { e.preventDefault(); }}
-              className="w-8 h-8 rounded-full bg-white/90 text-green-600 flex items-center justify-center hover:bg-green-50 shadow-md backdrop-blur-sm"
+              className="w-8 h-8 rounded-full bg-white flex items-center justify-center hover:bg-emerald-50 shadow-md backdrop-blur-sm transition-colors"
               title="Watch Video"
             >
-              <Video className="w-4 h-4" />
+              <Video className="w-4 h-4 text-emerald-500" />
             </button>
           </div>
-
-          {/* Hover Actions */}
-          <div className="absolute inset-x-0 bottom-0 flex gap-1 p-3 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+          
+          {/* Add to cart hover overlay */}
+          <div className="absolute inset-x-0 top-0 flex gap-1 p-3 -translate-y-full group-hover:translate-y-0 transition-transform duration-500 opacity-0 group-hover:opacity-100">
             <button
               onClick={(e) => { e.preventDefault(); addToCart(product); }}
-              className="flex-1 bg-secondary text-secondary-foreground py-2.5 text-[10px] tracking-wider uppercase font-body font-medium flex items-center justify-center gap-1.5 hover:bg-primary hover:text-primary-foreground transition-colors"
+              className="flex-1 bg-white/90 backdrop-blur-md text-secondary-foreground py-2 text-[10px] tracking-wider uppercase font-body font-bold flex items-center justify-center gap-1.5 hover:bg-primary hover:text-primary-foreground transition-colors rounded-full shadow-sm"
             >
               <ShoppingBag className="w-3.5 h-3.5" /> Add to Cart
             </button>
-            <Link
-              to={`/product/${product.id}`}
-              className="bg-secondary text-secondary-foreground p-2.5 hover:bg-primary hover:text-primary-foreground transition-colors flex items-center justify-center"
-            >
-              <Eye className="w-3.5 h-3.5" />
-            </Link>
           </div>
-        </div>
+        </Link>
 
-        {/* Info */}
-        <div className="p-4">
-          <p className="text-[10px] tracking-[0.15em] uppercase text-primary font-body font-medium mb-1">
-            {product.category}
-          </p>
+        {/* Info Region */}
+        <div className="p-4 md:p-5 flex flex-col flex-1 bg-white">
           <Link to={`/product/${product.id}`}>
-            <h3 className="font-display text-sm md:text-base text-foreground group-hover:text-primary transition-colors line-clamp-2 leading-snug">
+            <span className="font-body font-bold text-secondary-foreground text-sm md:text-[15px] block mb-1">
+              ₹{price.total.toLocaleString("en-IN")}
+            </span>
+            <h3 className="font-body text-xs md:text-sm text-muted-foreground group-hover:text-primary transition-colors line-clamp-1 mb-3">
               {product.name}
             </h3>
           </Link>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className="font-body font-semibold text-foreground text-sm">
-              ₹{price.total.toLocaleString("en-IN")}
-            </span>
-            <span className="text-muted-foreground text-[10px] font-body">
-              {product.weight}g
-            </span>
+          
+          {/* Attributes */}
+          <div className="mt-auto flex items-center justify-start gap-4 border-t border-border/30 pt-3">
+            <div className="flex items-center gap-1.5 text-muted-foreground/80">
+              <span className="text-xs">📐</span>
+              <span className="text-[11px] font-body text-muted-foreground font-medium">{product.weight} gm</span>
+            </div>
+            
+            <div className="flex items-center gap-1.5 text-muted-foreground/80">
+              <span className="text-xs text-primary/80">✨</span>
+              <span className="text-[11px] font-body text-muted-foreground font-medium">22KT</span>
+            </div>
           </div>
         </div>
       </div>

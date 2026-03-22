@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import { ChevronDown, ChevronRight, X, Loader2, Filter, Sparkles } from "lucide-react";
+import { ChevronDown, ChevronRight, X, Loader2, Filter, Sparkles, Check } from "lucide-react";
 import { api } from "@/lib/api";
 import type { Product } from "@/lib/api";
 import { useGoldRates } from "@/contexts/GoldRateContext";
@@ -241,10 +241,10 @@ const Products = () => {
              
              <div className="flex items-center justify-between mb-8">
                  <h2 className="font-display text-lg tracking-widest font-semibold flex items-center gap-2">
-                    FILTERS <span className="bg-muted px-2 py-0.5 rounded-full text-xs text-muted-foreground">{activeTags.length}</span>
+                    FILTERS <span className="bg-muted px-2.5 py-0.5 rounded-sm text-[10px] font-bold text-muted-foreground">{activeTags.length}</span>
                  </h2>
                  {activeTags.length > 0 && (
-                     <button onClick={clearAll} className="text-primary text-xs font-bold hover:underline tracking-wider uppercase">
+                     <button onClick={clearAll} className="text-red-600 text-[11px] font-extrabold hover:underline tracking-widest uppercase">
                          CLEAR ALL
                      </button>
                  )}
@@ -259,22 +259,22 @@ const Products = () => {
                           {spec.name.toUpperCase()}
                        </h3>
                        <div className="space-y-3 max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-border">
-                          {spec.options.map((opt) => (
-                             <label key={opt.label} className="flex items-center gap-3 cursor-pointer group">
-                                <div className="relative flex items-center justify-center">
-                                   <input 
-                                     type="checkbox" 
-                                     checked={selectedAttributes[spec.name]?.includes(opt.label) || false}
-                                     onChange={() => toggleAttribute(spec.name, opt.label)}
-                                     className="appearance-none w-4 h-4 rounded-sm border border-muted-foreground/40 checked:bg-primary checked:border-primary transition-colors peer cursor-pointer"
-                                   />
-                                   <ChevronDown className="w-3 h-3 text-white absolute opacity-0 peer-checked:opacity-100 pointer-events-none" />
-                                </div>
-                                <span className={`text-sm font-body ${selectedAttributes[spec.name]?.includes(opt.label) ? 'text-secondary-foreground font-medium' : 'text-muted-foreground'} group-hover:text-secondary-foreground transition-colors`}>
-                                   {opt.label} <span className="text-[10px] text-muted-foreground/60 ml-1">({opt.count})</span>
-                                </span>
-                             </label>
-                          ))}
+                           {spec.options.map((opt) => (
+                              <label key={opt.label} className="flex items-center gap-3 cursor-pointer group">
+                                 <div className="relative flex items-center justify-center">
+                                    <input 
+                                      type="checkbox" 
+                                      checked={selectedAttributes[spec.name]?.includes(opt.label) || false}
+                                      onChange={() => toggleAttribute(spec.name, opt.label)}
+                                      className="appearance-none w-4 h-4 rounded-[3px] border-[1.5px] border-muted-foreground/30 checked:bg-[#967C6A] checked:border-[#967C6A] transition-colors peer cursor-pointer"
+                                    />
+                                    <Check strokeWidth={3} className="w-[10px] h-[10px] text-white absolute opacity-0 peer-checked:opacity-100 pointer-events-none" />
+                                 </div>
+                                 <span className={`text-[13px] font-body flex-1 truncate ${selectedAttributes[spec.name]?.includes(opt.label) ? 'text-secondary-foreground font-semibold' : 'text-muted-foreground font-medium'} group-hover:text-secondary-foreground transition-colors`}>
+                                    {opt.label} <span className="text-[11px] text-muted-foreground/50 ml-1 font-normal">({opt.count})</span>
+                                 </span>
+                              </label>
+                           ))}
                        </div>
                    </div>
                 ))}
@@ -290,11 +290,11 @@ const Products = () => {
                                   type="checkbox" 
                                   checked={selectedPrices.includes(range.label)}
                                   onChange={() => togglePrice(range.label)}
-                                  className="appearance-none w-4 h-4 rounded-sm border border-muted-foreground/40 checked:bg-primary checked:border-primary transition-colors peer cursor-pointer"
+                                  className="appearance-none w-4 h-4 rounded-[3px] border-[1.5px] border-muted-foreground/30 checked:bg-[#967C6A] checked:border-[#967C6A] transition-colors peer cursor-pointer"
                                 />
-                                <ChevronDown className="w-3 h-3 text-white absolute opacity-0 peer-checked:opacity-100 pointer-events-none" />
+                                <Check strokeWidth={3} className="w-[10px] h-[10px] text-white absolute opacity-0 peer-checked:opacity-100 pointer-events-none" />
                              </div>
-                             <span className="text-sm font-body text-muted-foreground group-hover:text-secondary-foreground transition-colors">
+                             <span className={`text-[13px] font-body flex-1 truncate ${selectedPrices.includes(range.label) ? 'text-secondary-foreground font-semibold' : 'text-muted-foreground font-medium'} group-hover:text-secondary-foreground transition-colors`}>
                                 {range.label}
                              </span>
                           </label>
@@ -313,11 +313,11 @@ const Products = () => {
                                   type="checkbox" 
                                   checked={selectedWeights.includes(range.label)}
                                   onChange={() => toggleWeight(range.label)}
-                                  className="appearance-none w-4 h-4 rounded-sm border border-muted-foreground/40 checked:bg-primary checked:border-primary transition-colors peer cursor-pointer"
+                                  className="appearance-none w-4 h-4 rounded-[3px] border-[1.5px] border-muted-foreground/30 checked:bg-[#967C6A] checked:border-[#967C6A] transition-colors peer cursor-pointer"
                                 />
-                                <ChevronDown className="w-3 h-3 text-white absolute opacity-0 peer-checked:opacity-100 pointer-events-none" />
+                                <Check strokeWidth={3} className="w-[10px] h-[10px] text-white absolute opacity-0 peer-checked:opacity-100 pointer-events-none" />
                              </div>
-                             <span className="text-sm font-body text-muted-foreground group-hover:text-secondary-foreground transition-colors">
+                             <span className={`text-[13px] font-body flex-1 truncate ${selectedWeights.includes(range.label) ? 'text-secondary-foreground font-semibold' : 'text-muted-foreground font-medium'} group-hover:text-secondary-foreground transition-colors`}>
                                 {range.label}
                              </span>
                           </label>
