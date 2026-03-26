@@ -818,6 +818,20 @@ if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "productio
 }
 
 // ─── Start Server ──────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`✅ Aurum Jewels API running on http://localhost:${PORT}`);
+console.log("📡 Attempting to bind to PORT:", PORT);
+
+const server = app.listen(PORT, "0.0.0.0", () => {
+  console.log(`✅ Aurum Jewels API is LIVE and listening on 0.0.0.0:${PORT}`);
+});
+
+server.on('error', (err) => {
+  console.error("❌ SERVER BINDING ERROR:", err);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error("❌ UNCAUGHT EXCEPTION:", err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error("❌ UNHANDLED REJECTION at:", promise, "reason:", reason);
 });
