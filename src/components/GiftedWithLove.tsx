@@ -3,38 +3,55 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Gift } from "lucide-react";
 
 const giftingCategories = [
-  { id: 1, title: "For Kids", image: "https://cdn.rushabhjewel.com/img/2025/12/12/12/1766127480273-for-kids.jpg", link: "/products?category=kids-collections" },
-  { id: 2, title: "For Anniversary", image: "https://cdn.rushabhjewel.com/img/2025/12/10/13/for-anniversary.jpg", link: "/products?occasion=anniversary" },
-  { id: 3, title: "Birthday", image: "https://cdn.rushabhjewel.com/img/2025/12/10/13/birthday.jpg", link: "/products?occasion=birthday" },
-  { id: 4, title: "Wedding Gifting", image: "https://cdn.rushabhjewel.com/img/2025/12/10/13/wedding-gifting.jpg", link: "/products?occasion=wedding" },
-  { id: 5, title: "Engagement", image: "https://cdn.rushabhjewel.com/img/2025/12/10/13/engagement.jpg", link: "/products?occasion=engagement" },
+  { id: 1, title: "For Wife", image: "https://cdn.rushabhjewel.com/img/2026/3/23/1/1774251641908-for-wife.jpg", link: "/products?occasion=wife" },
+  { id: 2, title: "For Daughter", image: "https://cdn.rushabhjewel.com/img/2026/3/23/1/1774251629712-for-daughter.jpg", link: "/products?occasion=daughter" },
+  { id: 3, title: "For Mother", image: "https://cdn.rushabhjewel.com/img/2026/3/23/1/1774251616751-for-mother.jpg", link: "/products?occasion=mother" },
+  { id: 4, title: "For Kids", image: "https://cdn.rushabhjewel.com/img/2026/3/23/1/1774251588391-for-kids.jpg", link: "/products?category=kids-collections" },
+  { id: 5, title: "Wedding Gift", image: "https://cdn.rushabhjewel.com/img/2026/3/23/1/1774251677994-fow-wedding-gift.jpg", link: "/products?occasion=wedding" },
 ];
 
 const GiftedWithLove = () => {
   return (
-    <section className="py-24 bg-background border-t border-border/40 relative">
+    <section className="py-16 bg-background border-t border-border/40 relative">
       <div className="container mx-auto px-4 text-center">
         
         {/* Header with Gift Icon */}
-        <div className="mb-14 flex flex-col items-center">
-           <div className="mb-4">
-             {/* Exact style from reference image: simple brown icon without the circle bg */}
-             <Gift className="w-8 h-8 text-[#A68A6A] stroke-[1.5]" />
-           </div>
-           <motion.h2 
-             initial={{ opacity: 0, y: 15 }}
-             whileInView={{ opacity: 1, y: 0 }}
+        <div className="mb-10 flex flex-col items-center">
+           <motion.div 
+             initial={{ opacity: 0, scale: 0.8 }}
+             whileInView={{ opacity: 1, scale: 1 }}
              viewport={{ once: true }}
-             className="text-3xl md:text-[32px] font-display font-bold text-[#1a1a1a] mb-2 tracking-wide"
+             className="mb-3"
            >
-             Gifted with Love
-           </motion.h2>
+             <Gift className="w-7 h-7 text-[#A68A6A] stroke-[1.5]" />
+           </motion.div>
+           
+           <h2 className="text-2xl md:text-[28px] font-display font-medium text-[#1a1a1a] mb-1.5 tracking-wide flex flex-wrap justify-center overflow-hidden">
+             {"Gifted with Love".split("").map((char, index) => (
+               <motion.span
+                 key={index}
+                 initial={{ y: "100%", opacity: 0 }}
+                 whileInView={{ y: 0, opacity: 1 }}
+                 viewport={{ once: true }}
+                 transition={{ 
+                   duration: 0.5, 
+                   delay: index * 0.03,
+                   ease: [0.33, 1, 0.68, 1]
+                 }}
+                 className="inline-block"
+                 style={{ whiteSpace: char === " " ? "pre" : "normal" }}
+               >
+                 {char}
+               </motion.span>
+             ))}
+           </h2>
+           
            <motion.p 
              initial={{ opacity: 0, y: 15 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
-             transition={{ delay: 0.1 }}
-             className="text-[#666666] font-body text-[15px] tracking-wide"
+             transition={{ duration: 0.6, delay: 0.5 }}
+             className="text-[#666666] font-body text-sm tracking-wide"
            >
              Thoughtful treasures, wrapped in elegance.
            </motion.p>

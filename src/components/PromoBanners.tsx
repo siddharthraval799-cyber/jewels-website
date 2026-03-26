@@ -1,7 +1,11 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import VideoCallModal from "./VideoCallModal";
 
 const PromoBanners = () => {
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+
   return (
     <section className="py-12 bg-background">
       <div className="container mx-auto px-4">
@@ -14,20 +18,24 @@ const PromoBanners = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <Link to="/custom-jewellery" className="group block relative overflow-hidden h-64 md:h-[350px] rounded-xl shadow-inner">
+            <Link to="/custom-jewellery" className="group block relative overflow-hidden h-56 md:h-[300px] rounded-[24px] shadow-sm">
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                style={{ backgroundImage: `url('https://images.unsplash.com/photo-1599643478514-4a4e03164917?auto=format&fit=crop&q=80')` }}
+                style={{ backgroundImage: `url('https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2024%2F1%2F12%2F5%2F1715494295325-sketch-to-sparkle.jpg&w=1200&q=75')` }}
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#5a4834]/90 via-[#735A3F]/60 to-transparent" />
-              <div className="relative z-10 h-full flex flex-col justify-center text-left p-8 md:p-12 w-3/4">
-                <span className="text-white/80 text-sm tracking-wide font-body mb-2">
+              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-colors duration-300" />
+              <div className="relative z-10 h-full flex flex-col justify-center p-6 md:p-10">
+                <span className="text-white text-base md:text-lg font-body mb-3 drop-shadow-md">
                   Make it Your Custom Jewellery
                 </span>
-                <span className="bg-white text-[#5a4834] text-xs font-semibold px-3 py-1 rounded inline-block w-max mb-3 shadow-sm">
-                  Snap → Sketch → Shine
-                </span>
-                <h3 className="font-display text-3xl md:text-4xl text-white font-semibold">
+                <div className="bg-white/95 backdrop-blur-sm text-[#333] text-[10px] md:text-xs font-semibold px-4 py-1.5 rounded-full w-max mb-4 shadow-md flex items-center gap-1.5">
+                  <span>Snap</span>
+                  <span className="text-gray-400">→</span>
+                  <span>Sketch</span>
+                  <span className="text-gray-400">→</span>
+                  <span>Shine</span>
+                </div>
+                <h3 className="font-display text-3xl md:text-4xl text-white font-bold drop-shadow-lg">
                   Sketch to Sparkle
                 </h3>
               </div>
@@ -41,28 +49,40 @@ const PromoBanners = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <Link to="/video-call" className="group block relative overflow-hidden h-64 md:h-[350px] rounded-xl shadow-inner">
+            <button 
+              onClick={() => setIsVideoModalOpen(true)}
+              className="w-full text-left group block relative overflow-hidden h-56 md:h-[300px] rounded-[24px] shadow-sm outline-none"
+            >
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                style={{ backgroundImage: `url('https://images.unsplash.com/photo-1605100804763-247f66121411?auto=format&fit=crop&q=80')` }}
+                style={{ backgroundImage: `url('https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2024%2F1%2F22%2F11%2F1715492429415-live-video-call-v1.jpg&w=1200&q=75')` }}
               />
-              <div className="absolute inset-x-0 inset-y-0 bg-gradient-to-l from-black/40 to-transparent md:hidden" />
-              <div className="relative z-10 h-full flex flex-col justify-center items-end text-right p-8 md:p-12">
-                <span className="bg-white/80 backdrop-blur-sm text-secondary-foreground text-[10px] tracking-widest px-3 py-1 rounded-full inline-block mb-3 border border-white/50 shadow-sm">
-                  Join Call → Select Jewellery → Get Delivery
-                </span>
-                <h3 className="font-display text-4xl md:text-5xl text-white font-bold drop-shadow-lg uppercase tracking-tight">
+              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-colors duration-300" />
+              <div className="relative z-10 h-full flex flex-col justify-center items-end text-right p-6 md:p-10">
+                <div className="bg-white/95 backdrop-blur-sm text-[#333] text-[10px] md:text-xs font-bold tracking-wider px-4 py-1.5 rounded-full mb-4 shadow-md flex items-center gap-1.5">
+                  <span>Join Call</span>
+                  <span className="text-gray-400">→</span>
+                  <span>Select Jewellery</span>
+                  <span className="text-gray-400">→</span>
+                  <span>Get Delivery</span>
+                </div>
+                <h3 className="font-display text-4xl md:text-5xl text-white font-black drop-shadow-lg uppercase tracking-tight italic">
                   LIVE VIDEO CALL
                 </h3>
-                <span className="mt-2 text-white/90 text-xs md:text-sm tracking-wide font-body max-w-[200px] drop-shadow-md">
+                <span className="mt-3 text-white font-body text-xs md:text-sm tracking-wide drop-shadow-md bg-black/10 px-3 py-0.5 rounded-md backdrop-blur-[1px]">
                   Connect instantly. Book your session now.
                 </span>
               </div>
-            </Link>
+            </button>
           </motion.div>
 
         </div>
       </div>
+
+      <VideoCallModal 
+        isOpen={isVideoModalOpen} 
+        onClose={() => setIsVideoModalOpen(false)} 
+      />
     </section>
   );
 };

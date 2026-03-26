@@ -4,71 +4,71 @@ import { motion } from "framer-motion";
 
 const collections = [
   { 
-    id: "necklace",
-    title: "Necklace", 
-    image: "https://cdn.rushabhjewel.com/img/2025/12/10/14/1765359947302-vertical-layout-800-_-1281-1.jpg", 
+    id: "mangalsutra",
+    title: "Mangalsutra", 
+    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F8%2F1767257972124-stylish-black-beaded-chain.jpg&w=1200&q=75", 
+    className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-4" 
+  },
+  { 
+    id: "bangles",
+    title: "Bangles", 
+    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F7%2F1767252836991-antique-bangles.jpg&w=1200&q=75", 
+    className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-5" 
+  },
+  { 
+    id: "pendants",
+    title: "Pendants", 
+    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F8%2F1767256652580-pendant.jpg&w=1200&q=75", 
     className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-4" 
   },
   { 
     id: "earrings",
     title: "Earrings", 
-    image: "https://cdn.rushabhjewel.com/img/2025/12/10/14/1765359792703-horizontal-layout-1200-_-452-1.jpg", 
+    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F8%2F1767257724851-studs.jpg&w=1200&q=75", 
     className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-5" 
   },
   { 
     id: "bracelet",
     title: "Bracelet", 
-    image: "https://cdn.rushabhjewel.com/img/2025/12/10/14/1765359853435-horizontal-layout-1200-_-452-1.jpg", 
-    className: "col-span-2 aspect-[2/1] lg:aspect-auto lg:col-span-2 lg:row-span-5" 
+    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F8%2F1767256672137-bracelet.jpg&w=1200&q=75", 
+    className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-5" 
   },
   { 
     id: "chains",
     title: "Chains", 
-    image: "https://cdn.rushabhjewel.com/img/2025/12/10/14/1765359604363-square-layout-800-_-619-1.jpg", 
-    className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-5" 
-  },
-  { 
-    id: "bangles",
-    title: "Bangles", 
-    image: "https://cdn.rushabhjewel.com/img/2025/12/10/14/1765360044811-square-layout-800-_-619-2.jpg", 
-    className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-6" 
-  },
-  { 
-    id: "pendants",
-    title: "Pendants", 
-    image: "https://cdn.rushabhjewel.com/img/2025/12/10/14/1765359878295-big-square-layout-1200-_-934-1.jpg", 
-    className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-5" 
+    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F8%2F1767256683316-chain.jpg&w=1200&q=75", 
+    className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-4" 
   },
   { 
     id: "kada",
     title: "Kada", 
-    image: "https://cdn.rushabhjewel.com/img/2025/12/10/14/1765359823783-vertical-layout-800-_-1281-1.jpg", 
-    className: "col-span-1 aspect-square md:aspect-[1/2] lg:aspect-auto lg:col-span-1 lg:row-span-9" 
+    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F11%2F1767268733396-kada.jpg&w=1200&q=75", 
+    className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-4" 
   },
   { 
-    id: "pendant-set",
-    title: "Pendant Set", 
-    image: "https://cdn.rushabhjewel.com/img/2025/12/10/14/1765359913436-vertical-layout-800-_-1281-1.jpg", 
-    className: "col-span-2 aspect-[2/1] lg:aspect-auto lg:col-span-2 lg:row-span-5" 
-  },
-  { 
-    id: "mangalsutra",
-    title: "Mangalsutra", 
-    image: "https://cdn.rushabhjewel.com/img/2025/12/10/14/1765359757823-square-layout-800-_-619-1.jpg", 
-    className: "col-span-2 aspect-[2/1] lg:aspect-auto lg:col-span-2 lg:row-span-4" 
+    id: "necklace",
+    title: "Necklace", 
+    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F7%2F1767252592142-heritage.jpg&w=1200&q=75", 
+    className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-5" 
   },
   { 
     id: "rings",
     title: "Rings", 
-    image: "https://cdn.rushabhjewel.com/img/2026/1/19/1/1768807038822-square-layout-800_619-1.jpg", 
-    className: "col-span-2 aspect-[2/1] lg:aspect-auto lg:col-span-2 lg:row-span-4" 
+    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F8%2F1767257130048-solitaire.jpg&w=1200&q=75", 
+    className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-4" 
+  },
+  { 
+    id: "pendant-set",
+    title: "Pendant Set", 
+    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F8%2F1767257963820-pendants-with-earrings.jpg&w=1200&q=75", 
+    className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-5" 
   }
 ];
 
 const CuratedCollection = () => {
   return (
     <section className="py-20 bg-background overflow-hidden relative">
-      <div className="container mx-auto px-4 max-w-7xl">
+      <div className="mx-auto px-4 md:px-10 lg:px-14 max-w-[1750px]">
         <div className="text-center mb-12">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}

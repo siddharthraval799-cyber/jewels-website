@@ -3,16 +3,21 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { api } from "@/lib/api";
 import { toast } from "sonner";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { Loader2, MessageSquare, Phone } from "lucide-react";
 
 const Login = () => {
-  const [mode, setMode] = useState<"login" | "register">("login");
+  const [step, setStep] = useState<"phone" | "otp">("phone");
+  const [method, setMethod] = useState<"whatsapp" | "email">("whatsapp");
   const [loading, setLoading] = useState(false);
-  const { login, register, user } = useAuth();
+  const { login, whatsappLogin, user } = useAuth();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({ name: "", email: "", password: "", phone: "" });
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [otp, setOtp] = useState("");
+  const [emailForm, setEmailForm] = useState({ email: "", password: "" });
 
   // If already logged in, redirect
   if (user) {
@@ -20,47 +25,58 @@ const Login = () => {
     return null;
   }
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.email || !form.password) {
+    if (phoneNumber.length < 10) {
+      toast.error("Please enter a valid 10-digit number");
+      return;
+    }
+    setLoading(true);
+    try {
+      await api.auth.sendWhatsappOtp(phoneNumber);
+      setStep("otp");
+      toast.success("OTP sent to your WhatsApp!");
+    } catch (err: any) {
+      toast.error(err.message || "Failed to send OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (otp.length < 6) return;
+    setLoading(true);
+    try {
+      await whatsappLogin(phoneNumber, otp);
+      toast.success("Welcome to Aurum Jewels!");
+      navigate("/");
+    } catch (err: any) {
+      toast.error(err.message || "Invalid OTP");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEmailLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!emailForm.email || !emailForm.password) {
       toast.error("Please enter email and password");
       return;
     }
     setLoading(true);
     try {
-      await login(form.email, form.password);
-      toast.success("Welcome back!");
+      await login(emailForm.email, emailForm.password);
+      toast.success("Logged in successfully");
       navigate("/");
-    } catch (err: unknown) {
+    } catch (err: any) {
       toast.error(err instanceof Error ? err.message : "Login failed");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.name || !form.email || !form.password) {
-      toast.error("Please fill all required fields");
-      return;
-    }
-    if (form.password.length < 6) {
-      toast.error("Password must be at least 6 characters");
-      return;
-    }
-    setLoading(true);
-    try {
-      await register({ name: form.name, email: form.email, password: form.password, phone: form.phone });
-      toast.success("Account created! Welcome to Aurum Jewels.");
-      navigate("/");
-    } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : "Registration failed");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const inputClass = "w-full border border-border bg-background px-4 py-3 text-sm font-body focus:border-primary focus:outline-none transition-colors";
+  const inputClass = "w-full border border-border bg-background px-4 py-3 text-sm font-body focus:border-primary focus:outline-none transition-colors rounded-lg";
 
   return (
     <div className="min-h-screen bg-background">
@@ -73,74 +89,133 @@ const Login = () => {
         >
           <div className="text-center mb-8">
             <h1 className="font-display text-2xl text-foreground">
-              {mode === "login" ? "Welcome Back" : "Create Account"}
+              {method === "whatsapp" ? "Secure WhatsApp Login" : "Admin / Email Login"}
             </h1>
             <p className="text-muted-foreground text-sm font-body mt-2">
-              {mode === "login" ? "Sign in to your Aurum Jewels account" : "Join the Aurum Jewels family"}
+              {method === "whatsapp" 
+                ? "Fastest way to shop and track your orders" 
+                : "Standard login for administrators and existing accounts"}
             </p>
           </div>
 
-          {/* Tab Switcher */}
-          <div className="flex mb-6 border border-border">
-            <button
-              onClick={() => setMode("login")}
-              className={`flex-1 py-3 text-xs tracking-[0.15em] uppercase font-body font-semibold transition-colors ${
-                mode === "login" ? "bg-primary text-primary-foreground" : "text-foreground/60 hover:text-foreground"
-              }`}
-            >
-              Login
-            </button>
-            <button
-              onClick={() => setMode("register")}
-              className={`flex-1 py-3 text-xs tracking-[0.15em] uppercase font-body font-semibold transition-colors ${
-                mode === "register" ? "bg-primary text-primary-foreground" : "text-foreground/60 hover:text-foreground"
-              }`}
-            >
-              Register
-            </button>
+          <div className="bg-white border border-border rounded-xl shadow-xl overflow-hidden p-8">
+            <AnimatePresence mode="wait">
+              {method === "whatsapp" ? (
+                <motion.div
+                  key="whatsapp-flow"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 10 }}
+                >
+                  {step === "phone" ? (
+                    <form onSubmit={handleSendOtp} className="space-y-6">
+                      <div className="text-left">
+                        <label className="block text-sm font-medium font-body mb-2 text-[#8B6E4E]">
+                          WhatsApp Number
+                        </label>
+                        <div className="flex border border-border rounded-lg overflow-hidden focus-within:ring-1 focus-within:ring-primary focus-within:border-primary">
+                          <div className="bg-muted px-4 py-3 flex items-center gap-1 border-r border-border font-body text-sm">
+                            <span>🇮🇳</span>
+                            <span>+91</span>
+                          </div>
+                          <input
+                            type="tel"
+                            className="w-full px-4 py-3 text-sm font-body outline-none"
+                            placeholder="99999 99999"
+                            maxLength={10}
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, ''))}
+                            required
+                          />
+                        </div>
+                      </div>
+                      <button 
+                        type="submit" 
+                        disabled={loading} 
+                        className="w-full bg-[#8B6E4E] hover:bg-[#735A3F] text-white py-3.5 rounded-full text-sm font-body tracking-wider transition-colors shadow-sm flex justify-center items-center gap-2"
+                      >
+                        {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <><MessageSquare className="w-4 h-4" /> Continue with WhatsApp</>}
+                      </button>
+                    </form>
+                  ) : (
+                    <form onSubmit={handleVerifyOtp} className="space-y-6">
+                      <div className="text-center">
+                        <label className="block text-sm font-medium font-body mb-2 text-[#8B6E4E]">
+                          Verification Code
+                        </label>
+                        <p className="text-[11px] text-muted-foreground mb-4">
+                          Sent to +91 {phoneNumber} · <button type="button" onClick={() => setStep("phone")} className="text-primary hover:underline">Change</button>
+                        </p>
+                        <input
+                          type="text"
+                          className="w-full border border-border rounded-lg px-4 py-3 text-center text-xl tracking-[0.5em] font-body outline-none focus:border-primary"
+                          placeholder="------"
+                          maxLength={6}
+                          value={otp}
+                          onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
+                          required
+                          autoFocus
+                        />
+                      </div>
+                      <button 
+                        type="submit" 
+                        disabled={loading || otp.length < 6} 
+                        className="w-full bg-[#8B6E4E] hover:bg-[#735A3F] text-white py-3.5 rounded-full text-sm font-body tracking-wider transition-colors shadow-sm flex justify-center items-center gap-2"
+                      >
+                        {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Verify & Login"}
+                      </button>
+                    </form>
+                  )}
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="email-flow"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                >
+                  <form onSubmit={handleEmailLogin} className="space-y-5">
+                    <div>
+                      <label className="text-xs font-body uppercase tracking-wider text-muted-foreground mb-1.5 block font-semibold">Email</label>
+                      <input 
+                        type="email" 
+                        className={inputClass} 
+                        value={emailForm.email} 
+                        onChange={(e) => setEmailForm({ ...emailForm, email: e.target.value })} 
+                        placeholder="your@email.com" 
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="text-xs font-body uppercase tracking-wider text-muted-foreground mb-1.5 block font-semibold">Password</label>
+                      <input 
+                        type="password" 
+                        className={inputClass} 
+                        value={emailForm.password} 
+                        onChange={(e) => setEmailForm({ ...emailForm, password: e.target.value })} 
+                        placeholder="••••••••" 
+                        required
+                      />
+                    </div>
+                    <button type="submit" disabled={loading} className="w-full bg-secondary text-secondary-foreground py-3.5 rounded-lg text-xs tracking-[0.2em] uppercase font-body font-semibold hover:bg-muted transition-colors disabled:opacity-50">
+                      {loading ? "Signing in..." : "Sign In"}
+                    </button>
+                  </form>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <div className="mt-8 pt-6 border-t border-border">
+              <button 
+                onClick={() => { setMethod(method === "whatsapp" ? "email" : "whatsapp"); setStep("phone"); }} 
+                className="w-full text-xs font-body text-muted-foreground hover:text-primary transition-colors flex items-center justify-center gap-2"
+              >
+                {method === "whatsapp" ? "Login with Email / Admin Credentials" : "Back to WhatsApp Login"}
+              </button>
+            </div>
           </div>
 
-          <div className="border border-border p-8">
-            {mode === "login" ? (
-              <form onSubmit={handleLogin} className="space-y-5">
-                <div>
-                  <label className="text-xs font-body uppercase tracking-wider text-foreground/70 mb-1.5 block">Email</label>
-                  <input type="email" className={inputClass} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="your@email.com" />
-                </div>
-                <div>
-                  <label className="text-xs font-body uppercase tracking-wider text-foreground/70 mb-1.5 block">Password</label>
-                  <input type="password" className={inputClass} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder="••••••••" />
-                </div>
-                <button type="submit" disabled={loading} className="w-full bg-primary text-primary-foreground py-3.5 text-xs tracking-[0.2em] uppercase font-body font-semibold hover:bg-gold-dark transition-colors disabled:opacity-50">
-                  {loading ? "Signing in..." : "Sign In"}
-                </button>
-              </form>
-            ) : (
-              <form onSubmit={handleRegister} className="space-y-4">
-                <div>
-                  <label className="text-xs font-body uppercase tracking-wider text-foreground/70 mb-1.5 block">Full Name *</label>
-                  <input className={inputClass} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Your full name" />
-                </div>
-                <div>
-                  <label className="text-xs font-body uppercase tracking-wider text-foreground/70 mb-1.5 block">Email *</label>
-                  <input type="email" className={inputClass} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="your@email.com" />
-                </div>
-                <div>
-                  <label className="text-xs font-body uppercase tracking-wider text-foreground/70 mb-1.5 block">Phone</label>
-                  <input className={inputClass} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+91 99999 99999" />
-                </div>
-                <div>
-                  <label className="text-xs font-body uppercase tracking-wider text-foreground/70 mb-1.5 block">Password *</label>
-                  <input type="password" className={inputClass} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder="Minimum 6 characters" />
-                </div>
-                <button type="submit" disabled={loading} className="w-full bg-primary text-primary-foreground py-3.5 text-xs tracking-[0.2em] uppercase font-body font-semibold hover:bg-gold-dark transition-colors disabled:opacity-50">
-                  {loading ? "Creating Account..." : "Create Account"}
-                </button>
-              </form>
-            )}
-          </div>
-
-          <p className="text-center text-xs text-muted-foreground font-body mt-6">
+          <p className="text-center text-[10px] text-muted-foreground font-body mt-8 uppercase tracking-widest">
             By continuing, you agree to our{" "}
             <Link to="/policies/terms" className="text-primary hover:underline">Terms</Link> &{" "}
             <Link to="/policies/privacy" className="text-primary hover:underline">Privacy Policy</Link>

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -37,20 +38,32 @@ import AdminSettings from "./pages/admin/AdminSettings";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <GoldRateProvider>
-        <AuthProvider>
-          <CartProvider>
-            <Preloader />
-            <LoginPopup />
-            <Toaster />
-            <Sonner />
-            <BrowserRouter basename={import.meta.env.BASE_URL}>
-              <Routes>
-                {/* Customer routes */}
-                <Route path="/" element={<Index />} />
+const App = () => {
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+
+  useEffect(() => {
+    // Auto-show popup if not logged in and not seen in session
+    const hasSeenPopup = sessionStorage.getItem("hasSeenLoginPopup");
+    const token = localStorage.getItem("aurum_token");
+    if (!hasSeenPopup && !token) {
+      const timer = setTimeout(() => setIsLoginOpen(true), 6000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <GoldRateProvider>
+          <AuthProvider>
+            <CartProvider>
+              <Preloader />
+              <LoginPopup isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+              <Toaster />
+              <Sonner />
+              <BrowserRouter basename={import.meta.env.BASE_URL}>
+                <Routes>
+                  <Route path="/" element={<Index onOpenLogin={() => setIsLoginOpen(true)} />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/product/:id" element={<ProductDetail />} />
                 <Route path="/cart" element={<Cart />} />
@@ -82,7 +95,8 @@ const App = () => (
         </AuthProvider>
       </GoldRateProvider>
     </TooltipProvider>
-  </QueryClientProvider>
-);
+    </QueryClientProvider>
+  );
+};
 
 export default App;

@@ -11,7 +11,11 @@ import { navigationData } from "@/data/navigation";
 import DesktopNav from "./DesktopNav";
 import { NavIcon } from "./NavIcon";
 
-const Header = () => {
+interface HeaderProps {
+  onOpenLogin?: () => void;
+}
+
+export default function Header({ onOpenLogin }: HeaderProps) {
   const { totalItems, setIsCartOpen } = useCart();
   const { rates, refreshRates } = useGoldRates();
   const { user, isAdmin, logout } = useAuth();
@@ -22,8 +26,27 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [searchPlaceholder, setSearchPlaceholder] = useState("Search jewelry...");
   const searchRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
+
+  const placeholders = [
+    "Search Jewelry...",
+    "Search Rings...",
+    "Search Earrings...",
+    "Search Mangalsutra...",
+    "Search Bracelets...",
+    "Search Necklaces..."
+  ];
+
+  useEffect(() => {
+    let i = 0;
+    const interval = setInterval(() => {
+      i = (i + 1) % placeholders.length;
+      setSearchPlaceholder(placeholders[i]);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -133,7 +156,7 @@ const Header = () => {
                         <input
                           autoFocus
                           className="w-full px-3 py-3 text-sm font-body bg-transparent focus:outline-none text-foreground"
-                          placeholder="Search jewelry..."
+                          placeholder={searchPlaceholder}
                           value={searchQuery}
                           onChange={e => setSearchQuery(e.target.value)}
                         />
@@ -169,7 +192,15 @@ const Header = () => {
               {/* User Menu */}
               <div ref={userMenuRef} className="relative">
                 <button
-                  onClick={() => user ? setShowUserMenu(!showUserMenu) : navigate("/login")}
+                  onClick={() => {
+                    if (user) {
+                      setShowUserMenu(!showUserMenu);
+                    } else if (onOpenLogin) {
+                      onOpenLogin();
+                    } else {
+                      navigate("/login");
+                    }
+                  }}
                   className={`p-2 hover:text-primary transition-colors flex items-center gap-1 ${isScrolled ? "text-foreground" : "text-secondary-foreground"}`}
                 >
                   <User className="w-5 h-5" />
@@ -315,6 +346,4 @@ const Header = () => {
       </AnimatePresence>
     </>
   );
-};
-
-export default Header;
+}

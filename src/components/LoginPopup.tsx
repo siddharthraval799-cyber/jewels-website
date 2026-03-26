@@ -5,31 +5,20 @@ import { api } from "@/lib/api";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 
-const LoginPopup = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface LoginPopupProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const LoginPopup = ({ isOpen, onClose }: LoginPopupProps) => {
   const [step, setStep] = useState<"phone" | "otp">("phone");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const { whatsappLogin } = useAuth();
 
-  useEffect(() => {
-    // Check if the user has already seen the popup in this session
-    const hasSeenPopup = sessionStorage.getItem("hasSeenLoginPopup");
-    const token = localStorage.getItem("aurum_token");
-    
-    // Do not show popup if already logged in or already seen
-    if (!hasSeenPopup && !token) {
-      // Delay it slightly to match preloader
-      const timer = setTimeout(() => {
-        setIsOpen(true);
-      }, 5500);
-      return () => clearTimeout(timer);
-    }
-  }, []);
-
   const handleClose = () => {
-    setIsOpen(false);
+    onClose();
     sessionStorage.setItem("hasSeenLoginPopup", "true");
   };
 
@@ -93,28 +82,35 @@ const LoginPopup = () => {
               <X className="w-5 h-5" />
             </button>
 
-            {/* Left Side - Brandy/Gold Theme */}
-            <div className="w-full md:w-1/2 bg-[#8B6E4E] relative overflow-hidden flex items-center justify-center p-8 min-h-[200px] md:min-h-full">
+            {/* Left Side - Brandy/Gold Theme with Texture */}
+            <div className="w-full md:w-1/2 bg-[#5d4037] relative overflow-hidden flex items-center justify-center p-8 min-h-[200px] md:min-h-full">
+              {/* Wooden/Leather Texture Overlay */}
               <div 
-                className="absolute inset-0 opacity-20"
+                className="absolute inset-0 opacity-40 mix-blend-overlay"
                 style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E")`
+                  backgroundImage: `url("https://www.transparenttextures.com/patterns/leather.png")`,
+                  backgroundColor: "#5d4037"
                 }}
               />
+              <div className="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent" />
+              
               <div className="relative z-10 text-center flex flex-col items-center">
-                 <div className="w-24 h-24 border border-white/30 rounded flex items-center justify-center mb-4">
+                 <div className="w-24 h-24 border border-white/20 rounded flex items-center justify-center mb-6 backdrop-blur-sm bg-white/5">
                     <span className="text-white font-display text-4xl font-bold tracking-widest">A<span className="text-primary">J</span></span>
                  </div>
-                 <h2 className="text-white font-display text-2xl tracking-wider uppercase mb-2">Aurum Jewels</h2>
-                 <p className="text-white/70 font-body text-xs uppercase tracking-widest">Heritage & Luxury</p>
+                 <h2 className="text-white font-display text-2xl tracking-[0.2em] uppercase mb-2 font-semibold">Aurum Jewels</h2>
+                 <div className="w-12 h-px bg-primary/50 mb-4" />
+                 <p className="text-white/80 font-body text-[10px] uppercase tracking-[0.4em] font-medium">Heritage & Luxury</p>
               </div>
             </div>
 
             {/* Right Side - Login Form */}
-            <div className="w-full md:w-1/2 bg-white flex flex-col justify-center items-center p-8 md:p-12 text-center relative overflow-hidden">
-              <h3 className="text-xl md:text-2xl font-display text-secondary-foreground mb-2 font-semibold">
-                Welcome to Rushabh Jewels -<br/> Where Elegance Shines!
-              </h3>
+            <div className="w-full md:w-1/2 bg-white flex flex-col justify-center items-center p-8 md:p-12 text-center relative">
+              <div className="w-full max-w-sm">
+                <h3 className="text-xl md:text-2xl font-display text-secondary-foreground mb-3 font-semibold leading-tight">
+                  Welcome to Aurum Jewels -<br/>
+                  <span className="text-primary italic font-serif text-lg md:text-xl">Where Elegance Shines!</span>
+                </h3>
               
               <AnimatePresence mode="wait">
                 {step === "phone" ? (
@@ -213,10 +209,10 @@ const LoginPopup = () => {
                    </motion.div>
                 )}
               </AnimatePresence>
-
             </div>
-          </motion.div>
+          </div>
         </motion.div>
+      </motion.div>
       )}
     </AnimatePresence>
   );

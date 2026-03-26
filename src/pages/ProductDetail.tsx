@@ -7,7 +7,8 @@ import { useGoldRates } from "@/contexts/GoldRateContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useRef } from "react";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,6 +16,21 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const { rates } = useGoldRates();
   const [quantity, setQuantity] = useState(1);
+  const [showStickyBar, setShowStickyBar] = useState(false);
+  const mainCtaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const shouldShow = window.scrollY > 400;
+      if (shouldShow !== showStickyBar) {
+        setShowStickyBar(shouldShow);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Initial check
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [showStickyBar]);
 
   if (!product) {
     return (
@@ -151,7 +167,7 @@ const ProductDetail = () => {
             </div>
 
             {/* Actions */}
-            <div className="flex flex-col gap-3">
+            <div ref={mainCtaRef} className="flex flex-col gap-3">
               <div className="flex gap-3">
                 <button
                   onClick={() => { for (let i = 0; i < quantity; i++) addToCart(product); }}
@@ -174,9 +190,65 @@ const ProductDetail = () => {
                 <MessageCircle className="w-4 h-4" /> Buy via WhatsApp
               </button>
             </div>
+
+            {/* Trust Badges */}
+            <div className="mt-12 pt-8 border-t border-border grid grid-cols-2 sm:grid-cols-4 gap-6">
+              {[
+                { label: "BIS Hallmarked", icon: "🏅" },
+                { label: "100% Certified", icon: "📜" },
+                { label: "Secure Payment", icon: "🔒" },
+                { label: "Buyback Policy", icon: "🔄" },
+              ].map((badge) => (
+                <div key={badge.label} className="flex flex-col items-center text-center gap-2">
+                  <span className="text-2xl">{badge.icon}</span>
+                  <span className="text-[10px] uppercase tracking-wider font-body font-semibold text-muted-foreground leading-tight">
+                    {badge.label}
+                  </span>
+                </div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </div>
+
+      {/* Sticky Bottom Bar */}
+      <AnimatePresence>
+        {showStickyBar && (
+          <motion.div
+            initial={{ y: 100 }}
+            animate={{ y: 0 }}
+            exit={{ y: 100 }}
+            className="fixed bottom-0 left-0 right-0 z-[1001] bg-white border-t border-border shadow-[0_-4px_20px_rgba(0,0,0,0.05)] py-3 px-4 md:py-4"
+          >
+            <div className="container mx-auto flex items-center justify-between gap-4">
+              <div className="hidden sm:flex items-center gap-4">
+                <div className="w-12 h-12 bg-cream flex items-center justify-center border border-border/50 rounded-sm">
+                  <span className="text-xl">
+                    {product.category === "rings" ? "💍" : "💎"}
+                  </span>
+                </div>
+                <div>
+                  <h4 className="text-sm font-semibold text-foreground truncate max-w-[200px]">{product.name}</h4>
+                  <p className="text-xs text-primary font-bold">₹{price.total.toLocaleString("en-IN")}</p>
+                </div>
+              </div>
+              
+              <div className="flex-1 sm:flex-initial flex items-center gap-3">
+                <div className="text-center sm:hidden">
+                   <p className="text-[10px] text-muted-foreground uppercase font-semibold">Total Price</p>
+                   <p className="text-sm text-primary font-bold">₹{price.total.toLocaleString("en-IN")}</p>
+                </div>
+                <button
+                  onClick={() => addToCart(product)}
+                  className="flex-1 sm:w-48 bg-primary text-primary-foreground h-11 text-[10px] tracking-[0.2em] uppercase font-body font-semibold flex items-center justify-center gap-2 hover:bg-gold-dark transition-colors rounded-sm"
+                >
+                  <ShoppingBag className="w-4 h-4" /> Add to Cart
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Footer />
     </div>
