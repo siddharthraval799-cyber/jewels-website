@@ -238,6 +238,10 @@ export const api = {
 
   // ─── Uploads ─────────────────────────────────────────────
   upload: (file: File) => {
+    if (IS_STATIC_HOST) {
+      console.log("[Static Mode] Mocking file upload with local preview URL");
+      return Promise.resolve({ url: URL.createObjectURL(file) });
+    }
     const formData = new FormData();
     formData.append("file", file);
     return request<{ url: string }>("/upload", {
