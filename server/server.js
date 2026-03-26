@@ -16,6 +16,11 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const JWT_SECRET = process.env.JWT_SECRET || "aurum_jewels_secret_key_2025";
 
+console.log("🚀 Server starting...");
+console.log("📂 __dirname:", __dirname);
+console.log("🌐 PORT:", PORT);
+console.log("🔧 NODE_ENV:", process.env.NODE_ENV);
+
 // ─── Middleware ────────────────────────────────────────────
 app.use(cors());
 app.use(express.json({ limit: "50mb" })); // Increased for potential base64 images
@@ -36,6 +41,8 @@ app.post("/api/upload", upload.single("file"), (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
   res.json({ url: `/api/uploads/${req.file.filename}` });
 });
+
+app.get("/health", (req, res) => res.json({ status: "ok", time: new Date() }));
 
 // ─── Auth Helpers ──────────────────────────────────────────
 function generateToken(user) {
