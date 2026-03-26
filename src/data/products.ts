@@ -159,6 +159,7 @@ const generateProducts = (): Product[] => {
           "https://api.rushabhjewel.com/img/2026/1/1/8/1767263550417-real-diamond.jpg"
         ] : [img],
         videoUrl: category === "necklaces" && i === 0 ? "https://www.w3schools.com/html/mov_bbb.mp4" : undefined,
+        price: i === 0 ? 75000 : undefined, // Sample direct price for demonstration
         featured: i < 2,
         bestSeller: i >= 2 && i < 4,
         newArrival: i >= 4 && i < 6,

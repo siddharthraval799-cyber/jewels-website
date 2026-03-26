@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { ShoppingBag, Heart, Share2, Minus, Plus, ChevronRight, MessageCircle, Loader2, X } from "lucide-react";
-import { calculatePrice } from "@/data/products";
+import { calculatePrice, getProductById } from "@/data/products";
 import { api } from "@/lib/api";
 import type { Product } from "@/lib/api";
 import { useCart } from "@/contexts/CartContext";
@@ -29,8 +29,10 @@ const ProductDetail = () => {
        api.products.get(id)
          .then(res => setProduct(res.product))
          .catch(err => {
-            console.error("Failed to load product:", err);
-            setProduct(null);
+            console.error("API failed, falling back to static data:", err);
+            const staticProduct = getProductById(id);
+            if (staticProduct) setProduct(staticProduct as Product);
+            else setProduct(null);
          })
          .finally(() => setLoading(false));
     }
