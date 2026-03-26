@@ -800,7 +800,7 @@ if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "productio
   app.use(express.static(path.join(__dirname, "..", "dist")));
   
   // Serve Admin Panel for /admin routes
-  app.get("/admin*", (req, res) => {
+  app.get(/\/admin.*/, (req, res) => {
     res.sendFile(path.join(__dirname, "..", "dist", "admin.html"));
   });
 
