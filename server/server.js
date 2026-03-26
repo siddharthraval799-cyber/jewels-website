@@ -799,6 +799,12 @@ app.get("/api/admin/products", authMiddleware, adminMiddleware, (req, res) => {
 if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "production_simulation") {
   app.use(express.static(path.join(__dirname, "..", "dist")));
   
+  // Serve Admin Panel for /admin routes
+  app.get("/admin*", (req, res) => {
+    res.sendFile(path.join(__dirname, "..", "dist", "admin.html"));
+  });
+
+  // Serve Storefront for all other routes
   app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
   });
