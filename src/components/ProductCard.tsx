@@ -8,7 +8,9 @@ import { motion } from "framer-motion";
 const ProductCard = ({ product, index = 0, onExplore }: { product: Product; index?: number; onExplore?: (product: Product) => void }) => {
   const { addToCart } = useCart();
   const { rates } = useGoldRates();
-  const price = calculatePrice(product.weight, product.makingCharges, rates.gold22k);
+  const price = product.price 
+    ? { metalCost: 0, makingCharges: 0, gst: 0, total: product.price }
+    : calculatePrice(product.weight, product.makingCharges, rates.gold22k);
 
   return (
     <motion.div

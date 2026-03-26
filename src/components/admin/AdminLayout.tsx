@@ -6,15 +6,15 @@ import {
 } from "lucide-react";
 
 const nav = [
-  { to: "/admin", icon: LayoutDashboard, label: "Dashboard", end: true },
-  { to: "/admin/products", icon: Package, label: "Products" },
-  { to: "/admin/orders", icon: ShoppingCart, label: "Orders" },
-  { to: "/admin/customers", icon: Users, label: "Customers" },
-  { to: "/admin/messages", icon: MessageSquare, label: "Messages" },
-  { to: "/admin/reviews", icon: MessageSquare, label: "Reviews" },
-  { to: "/admin/videos", icon: LayoutDashboard, label: "Videos" },
-  { to: "/admin/creator-reels", icon: Play, label: "Creator Reels" },
-  { to: "/admin/settings", icon: Settings, label: "Settings" },
+  { to: "/", icon: LayoutDashboard, label: "Dashboard", end: true },
+  { to: "/products", icon: Package, label: "Products" },
+  { to: "/orders", icon: ShoppingCart, label: "Orders" },
+  { to: "/customers", icon: Users, label: "Customers" },
+  { to: "/messages", icon: MessageSquare, label: "Messages" },
+  { to: "/reviews", icon: MessageSquare, label: "Reviews" },
+  { to: "/videos", icon: LayoutDashboard, label: "Videos" },
+  { to: "/creator-reels", icon: Play, label: "Creator Reels" },
+  { to: "/settings", icon: Settings, label: "Settings" },
 ];
 
 const AdminLayout = () => {

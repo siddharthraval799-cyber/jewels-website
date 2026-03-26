@@ -334,6 +334,8 @@ export type Product = {
   newArrival: number | boolean;
   active: number | boolean;
   attributes?: Record<string, string[]>;
+  videoUrl?: string;
+  price?: number;
   created_at?: string;
   updated_at?: string;
 };

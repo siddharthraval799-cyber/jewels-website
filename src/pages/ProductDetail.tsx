@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ShoppingBag, Heart, Share2, Minus, Plus, ChevronRight, MessageCircle } from "lucide-react";
-import { getProductById, calculatePrice } from "@/data/products";
+import { ShoppingBag, Heart, Share2, Minus, Plus, ChevronRight, MessageCircle, Loader2, X } from "lucide-react";
+import { calculatePrice } from "@/data/products";
+import { api } from "@/lib/api";
+import type { Product } from "@/lib/api";
 import { useCart } from "@/contexts/CartContext";
 import { useGoldRates } from "@/contexts/GoldRateContext";
 import Header from "@/components/Header";
@@ -12,12 +14,27 @@ import { useEffect, useRef } from "react";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const product = getProductById(id || "");
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
   const { rates } = useGoldRates();
+  const [selectedMedia, setSelectedMedia] = useState<{ url: string, type: 'image' | 'video' } | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [showStickyBar, setShowStickyBar] = useState(false);
   const mainCtaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (id) {
+       setLoading(true);
+       api.products.get(id)
+         .then(res => setProduct(res.product))
+         .catch(err => {
+            console.error("Failed to load product:", err);
+            setProduct(null);
+         })
+         .finally(() => setLoading(false));
+    }
+  }, [id]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,6 +48,14 @@ const ProductDetail = () => {
     handleScroll(); // Initial check
     return () => window.removeEventListener("scroll", handleScroll);
   }, [showStickyBar]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -49,7 +74,9 @@ const ProductDetail = () => {
     );
   }
 
-  const price = calculatePrice(product.weight, product.makingCharges, rates.gold22k);
+  const price = product.price 
+    ? { metalCost: 0, makingCharges: 0, gst: 0, total: product.price }
+    : calculatePrice(product.weight, product.makingCharges, rates.gold22k);
 
   const handleWhatsAppBuy = () => {
     const msg = `Hi, I'm interested in buying "${product.name}" (${product.weight}g, ₹${price.total.toLocaleString("en-IN")}). Please share more details.`;
@@ -78,27 +105,62 @@ const ProductDetail = () => {
 
       <div className="container mx-auto px-4 py-8 md:py-12">
         <div className="grid md:grid-cols-2 gap-8 md:gap-12">
-          {/* Image */}
+          {/* Media Section: 2x2 Grid (3 Photos + 1 Video) */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
+            className="grid grid-cols-2 gap-3 md:gap-4"
           >
-            <div className="aspect-square bg-cream flex items-center justify-center border border-border/50">
-              <div className="text-center">
-                <span className="text-8xl opacity-20">
-                  {product.category === "rings" ? "💍" :
-                   product.category === "earrings" ? "✨" :
-                   product.category === "necklaces" ? "📿" :
-                   product.category === "bangles" ? "⭕" :
-                   product.category === "bracelets" ? "🔗" :
-                   product.category === "chains" ? "⛓️" : "💎"}
-                </span>
-                <p className="text-muted-foreground/40 text-xs font-body mt-4 tracking-wider uppercase">
-                  Product Image
-                </p>
-              </div>
+            {/* Slot 1: Video (Primary) */}
+            <div 
+              className="aspect-square bg-cream border border-border/50 overflow-hidden relative group rounded-xl shadow-sm cursor-zoom-in"
+              onClick={() => {
+                if (product.videoUrl) setSelectedMedia({ url: product.videoUrl, type: 'video' });
+                else if (product.images?.[0]) setSelectedMedia({ url: product.images[0], type: 'image' });
+              }}
+            >
+               {product.videoUrl ? (
+                 <video 
+                   src={product.videoUrl} 
+                   className="w-full h-full object-cover" 
+                   autoPlay muted loop playsInline
+                 />
+               ) : product.images?.[0] ? (
+                 <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
+               ) : (
+                  <div className="w-full h-full flex items-center justify-center text-5xl opacity-10">💎</div>
+               )}
+               {product.videoUrl && (
+                 <div className="absolute top-3 left-3">
+                   <span className="bg-black/40 backdrop-blur-md text-white text-[8px] px-2 py-0.5 rounded font-bold uppercase tracking-widest">Live View</span>
+                 </div>
+               )}
             </div>
+
+            {/* Slots 2-4: Photos */}
+            {[0, 1, 2].map((idx) => {
+              // If video is in slot 1, these take images 0, 1, 2.
+              // If NO video, slot 1 takes image 0, so these take images 1, 2, 3.
+              const imgIdx = product.videoUrl ? idx : idx + 1;
+              const img = product.images?.[imgIdx];
+
+              return (
+                <div 
+                  key={idx} 
+                  className="aspect-square bg-white border border-border/50 overflow-hidden relative rounded-xl shadow-sm hover:border-primary/30 transition-colors cursor-zoom-in"
+                  onClick={() => img && setSelectedMedia({ url: img, type: 'image' })}
+                >
+                   {img ? (
+                     <img src={img} alt={`${product.name} view ${idx + 2}`} className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
+                   ) : (
+                     <div className="w-full h-full flex items-center justify-center opacity-10 grayscale bg-muted/20 text-3xl font-light">
+                        {idx === 0 ? "✨" : idx === 1 ? "📿" : "💍"}
+                     </div>
+                   )}
+                </div>
+              );
+            })}
           </motion.div>
 
           {/* Details */}
@@ -246,6 +308,49 @@ const ProductDetail = () => {
                 </button>
               </div>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {selectedMedia && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[1100] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 md:p-8"
+            onClick={() => setSelectedMedia(null)}
+          >
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors p-2 rounded-full border border-white/10 z-[1101]"
+              onClick={() => setSelectedMedia(null)}
+            >
+              <X className="w-6 h-6" />
+            </motion.button>
+            
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="w-full h-full flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {selectedMedia.type === 'video' ? (
+                <video 
+                  src={selectedMedia.url} 
+                  className="max-h-[90vh] max-w-full rounded-lg shadow-2xl" 
+                  controls autoPlay
+                />
+              ) : (
+                <img 
+                  src={selectedMedia.url} 
+                  alt="Full preview" 
+                  className="max-h-[90vh] max-w-full object-contain rounded-lg shadow-2xl" 
+                />
+              )}
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

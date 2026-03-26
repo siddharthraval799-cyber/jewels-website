@@ -6,7 +6,8 @@ import { toast } from "sonner";
 
 const emptyProduct = {
   name: "", category: "", weight: 0, purity: "22K", makingCharges: 0,
-  description: "", images: [] as string[], featured: false, bestSeller: false, newArrival: false,
+  description: "", images: [] as string[], videoUrl: "", price: undefined as number | undefined,
+  featured: false, bestSeller: false, newArrival: false,
   attributes: {} as Record<string, string[]>
 };
 
@@ -23,21 +24,27 @@ const AdminProducts = () => {
   const [attrKey, setAttrKey] = useState("");
   const [attrVals, setAttrVals] = useState("");
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, type: 'image' | 'video' = 'image') => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
     setIsUploading(true);
     try {
-      const newImageUrls = [...form.images];
-      for (let i = 0; i < files.length; i++) {
-        const res = await api.upload(files[i]);
-        newImageUrls.push(res.url);
+      if (type === 'image') {
+        const newImageUrls = [...form.images];
+        for (let i = 0; i < files.length; i++) {
+          const res = await api.upload(files[i]);
+          newImageUrls.push(res.url);
+        }
+        setForm({ ...form, images: newImageUrls });
+        toast.success("Images uploaded successfully");
+      } else {
+        const res = await api.upload(files[0]);
+        setForm({ ...form, videoUrl: res.url });
+        toast.success("Video uploaded successfully");
       }
-      setForm({ ...form, images: newImageUrls });
-      toast.success("Images uploaded successfully");
     } catch (err: any) {
-      toast.error(err.message || "Failed to upload images");
+      toast.error(err.message || `Failed to upload ${type}`);
     } finally {
       setIsUploading(false);
       e.target.value = "";
@@ -58,8 +65,8 @@ const AdminProducts = () => {
   useEffect(load, []);
 
   const filtered = products.filter(p =>
-    p.name.toLowerCase().includes(search.toLowerCase()) ||
-    p.category.toLowerCase().includes(search.toLowerCase())
+    (p.name?.toLowerCase() || "").includes(search.toLowerCase()) ||
+    (p.category?.toLowerCase() || "").includes(search.toLowerCase())
   );
 
   const handleSave = async () => {
@@ -88,6 +95,8 @@ const AdminProducts = () => {
     setForm({
       name: p.name, category: p.category, weight: p.weight, purity: p.purity || "22K",
       makingCharges: p.makingCharges, description: p.description, images: p.images || [],
+      videoUrl: p.videoUrl || "",
+      price: p.price,
       featured: !!p.featured, bestSeller: !!p.bestSeller, newArrival: !!p.newArrival,
       attributes: p.attributes || {}
     });
@@ -185,10 +194,58 @@ const AdminProducts = () => {
                      <option value="18K">18K</option>
                    </select>
                  </div>
-                 <div>
-                   <label className="text-xs font-body uppercase tracking-wider text-muted-foreground mb-1 block">Making Charges (₹)</label>
-                   <input type="number" className={inputClass} value={form.makingCharges} onChange={e => setForm({ ...form, makingCharges: parseInt(e.target.value) || 0 })} />
-                 </div>
+                  <div>
+                    <label className="text-xs font-body uppercase tracking-wider text-muted-foreground mb-1 block">Making Charges (₹)</label>
+                    <input type="number" className={inputClass} value={form.makingCharges} onChange={e => setForm({ ...form, makingCharges: parseInt(e.target.value) || 0 })} />
+                  </div>
+                  <div>
+                    <label className="text-xs font-body uppercase tracking-wider text-muted-foreground mb-1 block">Direct Price (₹) - Overrides Calc</label>
+                    <input type="number" className={inputClass} value={form.price || ""} onChange={e => setForm({ ...form, price: parseInt(e.target.value) || undefined })} />
+                  </div>
+              </div>
+              
+              {/* Video Upload Section */}
+              <div className="bg-muted/10 p-4 border border-border border-dashed mt-4 rounded">
+                <label className="text-xs font-body uppercase tracking-wider text-muted-foreground mb-3 flex items-center justify-between">
+                  <span>Product Video</span>
+                  {form.videoUrl && <span className="text-[10px] normal-case bg-green-500/10 text-green-600 px-2 py-0.5 rounded-full">Uploaded</span>}
+                </label>
+                
+                <div className="flex items-center gap-4">
+                  {form.videoUrl ? (
+                    <div className="relative w-32 aspect-video border border-border rounded overflow-hidden shadow-sm bg-black flex items-center justify-center">
+                       <video src={form.videoUrl} className="w-full h-full object-cover" />
+                       <button 
+                        onClick={() => setForm({ ...form, videoUrl: "" })}
+                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 shadow-md"
+                        title="Remove Video"
+                      >
+                        <XCircle className="w-3 h-3" />
+                      </button>
+                    </div>
+                  ) : (
+                    <label className="w-32 aspect-video border-2 border-dashed border-border/80 bg-white flex flex-col items-center justify-center cursor-pointer hover:bg-primary/5 hover:border-primary/50 transition-colors text-muted-foreground rounded group">
+                      {isUploading ? (
+                        <Loader2 className="w-5 h-5 animate-spin text-primary" />
+                      ) : (
+                        <>
+                          <Upload className="w-5 h-5 mb-1.5 text-muted-foreground group-hover:text-primary transition-colors" />
+                          <span className="text-[10px] uppercase font-body font-medium group-hover:text-primary transition-colors">Add Video</span>
+                        </>
+                      )}
+                      <input type="file" accept="video/*" className="hidden" onChange={(e) => handleFileUpload(e, 'video')} disabled={isUploading} />
+                    </label>
+                  )}
+                  <div className="flex-1">
+                    <p className="text-[10px] text-muted-foreground">Upload a high-quality video of the product to show details and sparkle.</p>
+                    <input 
+                      placeholder="Or paste video URL..." 
+                      className="mt-2 w-full text-[10px] border border-border px-2 py-1 focus:outline-none"
+                      value={form.videoUrl}
+                      onChange={e => setForm({ ...form, videoUrl: e.target.value })}
+                    />
+                  </div>
+                </div>
               </div>
               
               {/* Product Images (Moved to top for visibility) */}
@@ -220,7 +277,7 @@ const AdminProducts = () => {
                         <span className="text-[10px] uppercase font-body font-medium group-hover:text-primary transition-colors">Add Photos</span>
                       </>
                     )}
-                    <input type="file" accept="image/*" multiple className="hidden" onChange={handleFileUpload} disabled={isUploading} />
+                    <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => handleFileUpload(e, 'image')} disabled={isUploading} />
                   </label>
                 </div>
                 {form.images.length === 0 && <p className="text-[10px] text-muted-foreground mt-2 text-center w-full">Upload multiple high-quality photos to showcase this product.</p>}
@@ -308,10 +365,10 @@ const AdminProducts = () => {
               <tr key={p.id} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
                 <td className="px-5 py-3 flex items-center gap-3">
                   <div className="w-10 h-10 rounded border border-border overflow-hidden bg-cream shrink-0">
-                     {p.images && p.images[0] ? <img src={p.images[0]} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-muted"></div>}
+                     {Array.isArray(p.images) && p.images[0] ? <img src={p.images[0]} className="w-full h-full object-cover" /> : <div className="w-full h-full bg-muted"></div>}
                   </div>
                   <div>
-                    <p className="font-semibold text-foreground line-clamp-1 max-w-[200px]">{p.name}</p>
+                    <p className="font-semibold text-foreground line-clamp-1 max-w-[200px]">{p.name || "Unnamed Product"}</p>
                     <p className="text-[10px] text-muted-foreground">{p.id}</p>
                   </div>
                 </td>
@@ -320,7 +377,7 @@ const AdminProducts = () => {
                 <td className="px-5 py-3">₹{p.makingCharges.toLocaleString("en-IN")}</td>
                 <td className="px-5 py-3">
                   <div className="flex flex-col gap-1 text-[10px]">
-                     {p.attributes && Object.keys(p.attributes).length > 0 ? (
+                     {p.attributes && typeof p.attributes === 'object' && Object.keys(p.attributes).length > 0 ? (
                        <span className="text-primary font-medium">{Object.keys(p.attributes).length} Categories</span>
                      ) : <span className="text-muted-foreground">None</span>}
                   </div>

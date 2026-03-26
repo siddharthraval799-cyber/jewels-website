@@ -35,6 +35,8 @@ db.exec(`
     newArrival INTEGER DEFAULT 0,
     active INTEGER DEFAULT 1,
     attributes TEXT DEFAULT '{}',
+    price REAL DEFAULT NULL,
+    videoUrl TEXT DEFAULT NULL,
     created_at TEXT DEFAULT (datetime('now')),
     updated_at TEXT DEFAULT (datetime('now')),
     FOREIGN KEY (category) REFERENCES categories(id)
@@ -141,9 +143,13 @@ db.exec(`
 // Safely attempt to add the new attributes column for existing users
 try {
   db.exec("ALTER TABLE products ADD COLUMN attributes TEXT DEFAULT '{}'");
-} catch(e) {
-  // Column already exists or error ignored
-}
+} catch(e) {}
+try {
+  db.exec("ALTER TABLE products ADD COLUMN price REAL DEFAULT NULL");
+} catch(e) {}
+try {
+  db.exec("ALTER TABLE products ADD COLUMN videoUrl TEXT DEFAULT NULL");
+} catch(e) {}
 
 // ═══════════════════════════════════════════════════════════
 // SEED DATA — runs only if tables are empty

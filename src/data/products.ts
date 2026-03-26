@@ -6,9 +6,11 @@ export type Product = {
   makingCharges: number;
   description: string;
   images: string[];
-  featured?: boolean;
-  bestSeller?: boolean;
-  newArrival?: boolean;
+  featured?: number | boolean;
+  bestSeller?: number | boolean;
+  newArrival?: number | boolean;
+  videoUrl?: string;
+  price?: number;
 };
 
 export const categories = [
@@ -151,7 +153,12 @@ const generateProducts = (): Product[] => {
         weight: parseFloat(weight.toFixed(2)),
         makingCharges: Math.round((500 + Math.random() * 4500) / 100) * 100,
         description: descriptions[category],
-        images: [img],
+        images: category === "necklaces" && i === 0 ? [
+          "https://api.rushabhjewel.com/img/2026/1/1/8/1767263529329-polki.jpg",
+          "https://api.rushabhjewel.com/img/2026/1/1/8/1767263540092-victorian.jpg",
+          "https://api.rushabhjewel.com/img/2026/1/1/8/1767263550417-real-diamond.jpg"
+        ] : [img],
+        videoUrl: category === "necklaces" && i === 0 ? "https://www.w3schools.com/html/mov_bbb.mp4" : undefined,
         featured: i < 2,
         bestSeller: i >= 2 && i < 4,
         newArrival: i >= 4 && i < 6,

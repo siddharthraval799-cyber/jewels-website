@@ -60,6 +60,9 @@ const Footer = () => {
               <Link to="/policies/terms" className="text-secondary-foreground/60 text-xs font-body tracking-wide hover:text-primary transition-colors">
                 Terms & Conditions
               </Link>
+              <Link to="/admin" className="text-primary font-bold text-xs font-body tracking-widest uppercase mt-4 hover:underline">
+                Admin Panel (Always Visible)
+              </Link>
             </nav>
           </div>
 

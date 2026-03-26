@@ -45,6 +45,7 @@ const weightRanges = [
 
 // Helper to determine calculated price (re-implemented from static data file)
 const getPrice = (p: Product, goldRate: number) => {
+  if (p.price) return p.price;
   const goldValue = p.weight * goldRate;
   return goldValue + p.makingCharges;
 };

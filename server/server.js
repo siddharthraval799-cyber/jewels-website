@@ -368,18 +368,19 @@ app.get("/api/products/:id", (req, res) => {
 // Admin: Create product
 app.post("/api/products", authMiddleware, adminMiddleware, (req, res) => {
   try {
-    const { name, category, weight, purity, makingCharges, description, images, featured, bestSeller, newArrival, active, attributes } = req.body;
+    const { name, category, weight, purity, makingCharges, description, images, featured, bestSeller, newArrival, active, attributes, price, videoUrl } = req.body;
     const id = `prod-${Date.now()}`;
     const stmt = db.prepare(`
-      INSERT INTO products (id, name, category, weight, purity, makingCharges, description, images, featured, bestSeller, newArrival, active, attributes)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO products (id, name, category, weight, purity, makingCharges, description, images, featured, bestSeller, newArrival, active, attributes, price, videoUrl)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
     
     stmt.run(
       id, name, category, weight, purity, makingCharges, description,
       JSON.stringify(images || []),
       featured ? 1 : 0, bestSeller ? 1 : 0, newArrival ? 1 : 0, active !== false ? 1 : 0,
-      JSON.stringify(attributes || {})
+      JSON.stringify(attributes || {}),
+      price || null, videoUrl || null
     );
     
     res.status(201).json({ success: true, id });
@@ -391,11 +392,11 @@ app.post("/api/products", authMiddleware, adminMiddleware, (req, res) => {
 // Admin: Update product
 app.put("/api/products/:id", authMiddleware, adminMiddleware, (req, res) => {
   try {
-    const { name, category, weight, purity, makingCharges, description, images, featured, bestSeller, newArrival, active, attributes } = req.body;
+    const { name, category, weight, purity, makingCharges, description, images, featured, bestSeller, newArrival, active, attributes, price, videoUrl } = req.body;
     const stmt = db.prepare(`
       UPDATE products 
       SET name = ?, category = ?, weight = ?, purity = ?, makingCharges = ?, description = ?, images = ?, 
-          featured = ?, bestSeller = ?, newArrival = ?, active = ?, attributes = ?, updated_at = datetime('now')
+          featured = ?, bestSeller = ?, newArrival = ?, active = ?, attributes = ?, price = ?, videoUrl = ?, updated_at = datetime('now')
       WHERE id = ?
     `);
     
@@ -404,6 +405,7 @@ app.put("/api/products/:id", authMiddleware, adminMiddleware, (req, res) => {
       JSON.stringify(images || []),
       featured ? 1 : 0, bestSeller ? 1 : 0, newArrival ? 1 : 0, active !== false ? 1 : 0,
       JSON.stringify(attributes || {}),
+      price || null, videoUrl || null,
       req.params.id
     );
     

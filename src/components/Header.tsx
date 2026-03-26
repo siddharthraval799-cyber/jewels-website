@@ -222,11 +222,9 @@ export default function Header({ onOpenLogin }: HeaderProps) {
                         <Link to="/account" onClick={() => setShowUserMenu(false)} className="flex items-center gap-2 px-4 py-2.5 text-xs font-body text-foreground/70 hover:text-primary hover:bg-muted/50 transition-colors">
                           <Package className="w-4 h-4" /> My Orders
                         </Link>
-                        {isAdmin && (
-                          <Link to="/admin" onClick={() => setShowUserMenu(false)} className="flex items-center gap-2 px-4 py-2.5 text-xs font-body text-foreground/70 hover:text-primary hover:bg-muted/50 transition-colors">
-                            <Settings className="w-4 h-4" /> Admin Panel
-                          </Link>
-                        )}
+                        <Link to="/admin" onClick={() => setShowUserMenu(false)} className="flex items-center gap-2 px-4 py-2.5 text-xs font-body text-foreground/70 hover:text-primary hover:bg-muted/50 transition-colors bg-primary/5">
+                          <Settings className="w-4 h-4" /> Admin Panel (Always Visible)
+                        </Link>
                         <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2.5 text-xs font-body text-foreground/70 hover:text-destructive hover:bg-muted/50 transition-colors w-full text-left">
                           <LogOut className="w-4 h-4" /> Logout
                         </button>
@@ -328,11 +326,9 @@ export default function Header({ onOpenLogin }: HeaderProps) {
                     <Link to="/account" onClick={() => setIsMobileMenuOpen(false)} className="px-3 py-3 text-sm tracking-widest uppercase text-secondary-foreground/80 hover:text-primary hover:bg-noir-light/50 transition-colors font-body border-b border-muted-foreground/10">
                       My Account
                     </Link>
-                    {isAdmin && (
-                      <Link to="/admin" onClick={() => setIsMobileMenuOpen(false)} className="px-3 py-3 text-sm tracking-widest uppercase text-primary hover:bg-noir-light/50 transition-colors font-body border-b border-muted-foreground/10">
-                        Admin Panel
-                      </Link>
-                    )}
+                    <Link to="/admin" onClick={() => setIsMobileMenuOpen(false)} className="px-3 py-3 text-sm tracking-widest uppercase text-primary hover:bg-noir-light/50 transition-colors font-body border-b border-muted-foreground/10 bg-primary/5">
+                      Admin Panel (Always Visible)
+                    </Link>
                   </>
                 ) : (
                   <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="px-3 py-3 text-sm tracking-widest uppercase text-secondary-foreground/80 hover:text-primary hover:bg-noir-light/50 transition-colors font-body border-b border-muted-foreground/10">
