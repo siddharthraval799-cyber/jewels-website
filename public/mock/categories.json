@@ -1,1 +1,112 @@
-{"categories":[{"id":"rings","name":"Rings","slug":"rings","icon":"💍","image":"","displayOrder":1,"created_at":"2026-03-19 07:47:49"},{"id":"earrings","name":"Earrings","slug":"earrings","icon":"✨","image":"","displayOrder":2,"created_at":"2026-03-19 07:47:49"},{"id":"necklaces","name":"Necklaces","slug":"necklaces","icon":"📿","image":"","displayOrder":3,"created_at":"2026-03-19 07:47:49"},{"id":"bangles","name":"Bangles","slug":"bangles","icon":"⭕","image":"","displayOrder":4,"created_at":"2026-03-19 07:47:49"},{"id":"bracelets","name":"Bracelets","slug":"bracelets","icon":"🔗","image":"","displayOrder":5,"created_at":"2026-03-19 07:47:49"},{"id":"chains","name":"Chains","slug":"chains","icon":"⛓️","image":"","displayOrder":6,"created_at":"2026-03-19 07:47:49"},{"id":"pendants","name":"Pendants","slug":"pendants","icon":"💎","image":"","displayOrder":7,"created_at":"2026-03-19 07:47:49"},{"id":"mangalsutra","name":"Mangalsutra","slug":"mangalsutra","icon":"📿","image":"","displayOrder":8,"created_at":"2026-03-20 11:22:15"}]}
+{
+  "categories": [
+    {
+      "id": "rings",
+      "name": "Rings",
+      "slug": "rings",
+      "icon": "💍",
+      "image": "",
+      "displayOrder": 1,
+      "created_at": "2026-03-19 07:47:49"
+    },
+    {
+      "id": "earrings",
+      "name": "Earrings",
+      "slug": "earrings",
+      "icon": "✨",
+      "image": "",
+      "displayOrder": 2,
+      "created_at": "2026-03-19 07:47:49"
+    },
+    {
+      "id": "necklaces",
+      "name": "Necklaces",
+      "slug": "necklaces",
+      "icon": "📿",
+      "image": "",
+      "displayOrder": 3,
+      "created_at": "2026-03-19 07:47:49"
+    },
+    {
+      "id": "bangles",
+      "name": "Bangles",
+      "slug": "bangles",
+      "icon": "⭕",
+      "image": "",
+      "displayOrder": 4,
+      "created_at": "2026-03-19 07:47:49"
+    },
+    {
+      "id": "bracelets",
+      "name": "Bracelets",
+      "slug": "bracelets",
+      "icon": "🔗",
+      "image": "",
+      "displayOrder": 5,
+      "created_at": "2026-03-19 07:47:49"
+    },
+    {
+      "id": "chains",
+      "name": "Chains",
+      "slug": "chains",
+      "icon": "⛓️",
+      "image": "",
+      "displayOrder": 6,
+      "created_at": "2026-03-19 07:47:49"
+    },
+    {
+      "id": "pendants",
+      "name": "Pendants",
+      "slug": "pendants",
+      "icon": "💎",
+      "image": "",
+      "displayOrder": 7,
+      "created_at": "2026-03-19 07:47:49"
+    },
+    {
+      "id": "mangalsutra",
+      "name": "Mangalsutra",
+      "slug": "mangalsutra",
+      "icon": "📿",
+      "image": "",
+      "displayOrder": 8,
+      "created_at": "2026-03-20 11:22:15"
+    },
+    {
+      "id": "kids-collections",
+      "name": "Kids Collections",
+      "slug": "kids-collections",
+      "icon": "",
+      "image": "",
+      "displayOrder": 0,
+      "created_at": "2026-03-31 08:35:17"
+    },
+    {
+      "id": "mens-jewellery",
+      "name": "Mens Jewellery",
+      "slug": "mens-jewellery",
+      "icon": "",
+      "image": "",
+      "displayOrder": 0,
+      "created_at": "2026-03-31 08:35:17"
+    },
+    {
+      "id": "collections",
+      "name": "Collections",
+      "slug": "collections",
+      "icon": "",
+      "image": "",
+      "displayOrder": 0,
+      "created_at": "2026-03-31 08:35:17"
+    },
+    {
+      "id": "more-jewellery",
+      "name": "More Jewellery",
+      "slug": "more-jewellery",
+      "icon": "",
+      "image": "",
+      "displayOrder": 0,
+      "created_at": "2026-03-31 08:35:17"
+    }
+  ]
+}

@@ -1,1 +1,31 @@
-{"reviews":[{"id":1,"userId":null,"userName":"Prince Patel","rating":5,"text":"I recently purchased this stunning gold necklace, and I couldn't be happier! The craftsmanship is exceptional, and it has such a timeless design that works well with both casual and formal outfits. The chain feels sturdy yet delicate, and the pendant is the perfect size—not too flashy, but just enough to catch the eye. I've received so many compliments every time I wear it.","status":"approved","created_at":"2026-03-19 18:48:23"},{"id":2,"userId":null,"userName":"Meet Shah","rating":5,"text":"The way they treat the customers are really great... they have lots of choices too for gold chain and ring. I came through reference and now i am pretty confident that I can also give references to people as well.","status":"approved","created_at":"2026-03-19 18:48:23"},{"id":3,"userId":null,"userName":"Maurvi Devda","rating":5,"text":"We had a really amazing experience and salesperson Amitbhai attended us very well and showed us some really amazing collections suitable for every wedding occasion, making it easy to find exactly what we were looking for.","status":"approved","created_at":"2026-03-19 18:48:23"}],"videos":[{"id":1,"videoUrl":"https://www.w3schools.com/html/mov_bbb.mp4","thumbnailUrl":"/placeholder.svg","caption":"CRAFTED FOR MOMENTS THAT LAST FOREVER.","displayOrder":1,"created_at":"2026-03-19 18:48:23"},{"id":2,"videoUrl":"https://www.w3schools.com/html/mov_bbb.mp4","thumbnailUrl":"/placeholder.svg","caption":"CELEBRATED DAYS, CLASSIC WAYS.","displayOrder":2,"created_at":"2026-03-19 18:48:23"},{"id":3,"videoUrl":"https://www.w3schools.com/html/mov_bbb.mp4","thumbnailUrl":"/placeholder.svg","caption":"CAPTURE THE GLOW.","displayOrder":3,"created_at":"2026-03-19 18:48:23"}]}
+{
+  "reviews": [
+    {
+      "id": 1,
+      "userId": null,
+      "userName": "Prince Patel",
+      "rating": 5,
+      "text": "I recently purchased this stunning gold necklace, and I couldn't be happier! The craftsmanship is exceptional, and it has such a timeless design that works well with both casual and formal outfits. The chain feels sturdy yet delicate, and the pendant is the perfect size—not too flashy, but just enough to catch the eye. I've received so many compliments every time I wear it.",
+      "status": "approved",
+      "created_at": "2026-03-19 18:48:23"
+    },
+    {
+      "id": 2,
+      "userId": null,
+      "userName": "Meet Shah",
+      "rating": 5,
+      "text": "The way they treat the customers are really great... they have lots of choices too for gold chain and ring. I came through reference and now i am pretty confident that I can also give references to people as well.",
+      "status": "approved",
+      "created_at": "2026-03-19 18:48:23"
+    },
+    {
+      "id": 3,
+      "userId": null,
+      "userName": "Maurvi Devda",
+      "rating": 5,
+      "text": "We had a really amazing experience and salesperson Amitbhai attended us very well and showed us some really amazing collections suitable for every wedding occasion, making it easy to find exactly what we were looking for.",
+      "status": "approved",
+      "created_at": "2026-03-19 18:48:23"
+    }
+  ]
+}

@@ -62,8 +62,14 @@ async function request<T = unknown>(
          let data = await mockRes.json();
          // Recursively prepend baseUrl to any string starting with /uploads/
          const fixUrls = (obj: any): any => {
-            if (typeof obj === "string" && obj.startsWith("/uploads/")) {
-               return `${baseUrl}${obj.slice(1)}`;
+            if (typeof obj === "string") {
+               if (obj.startsWith("/api/uploads/")) {
+                  return `${baseUrl}server/uploads/${obj.slice(13)}`;
+               }
+               if (obj.startsWith("/uploads/")) {
+                  return `${baseUrl}server/uploads/${obj.slice(9)}`;
+               }
+               return obj;
             }
             if (Array.isArray(obj)) return obj.map(fixUrls);
             if (obj && typeof obj === "object") {
