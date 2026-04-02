@@ -6,6 +6,7 @@ import LatestCollection from "@/components/LatestCollection";
 import SignatureStyles from "@/components/SignatureStyles";
 import ProductCarousel from "@/components/ProductCarousel";
 import GiftedWithLove from "@/components/GiftedWithLove";
+import InDemandBanner from "@/components/InDemandBanner";
 import CreatorReels from "@/components/CreatorReels";
 import ElegantCollections from "@/components/ElegantCollections";
 import InvestmentBanner from "@/components/InvestmentBanner";
@@ -15,6 +16,7 @@ import CartDrawer from "@/components/CartDrawer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
 import BudgetShortcuts from "@/components/BudgetShortcuts";
 import Testimonials from "@/components/Testimonials";
+import InstagramSocialFeed from "@/components/InstagramSocialFeed";
 
 interface IndexProps {
   onOpenLogin?: () => void;
@@ -32,6 +34,7 @@ export default function Index({ onOpenLogin }: IndexProps) {
         <PromoBanners />
         <LatestCollection />
         <SignatureStyles />
+        <InDemandBanner />
         <GiftedWithLove />
         <ElegantCollections />
         <BudgetShortcuts />
@@ -40,6 +43,7 @@ export default function Index({ onOpenLogin }: IndexProps) {
         <CreatorReels />
         <InvestmentBanner />
         <Testimonials />
+        <InstagramSocialFeed />
       </main>
       <Footer />
     </div>

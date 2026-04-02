@@ -40,15 +40,21 @@ const reviews = [
 const videos = [
   {
     title: "CRAFTED FOR MOMENTS THAT LAST FOREVER.",
-    thumbnail: "https://cdn.rushabhjewel.com/img/2025/11/26/11/1764136049453-testimonial.png",
+    subtitle: "A jewel that tells my story ✨",
+    customerName: "Priya Sharma",
+    thumbnail: "/-my-gem-websit/images/happy-customer-2.jpg",
   },
   {
     title: "CELEBRATED DAYS, CLASSIC WAYS.",
-    thumbnail: "https://cdn.rushabhjewel.com/img/2025/11/26/11/1764136049453-testimonial.png", // Reusing for demo
+    subtitle: "My wedding look was perfect! 💍",
+    customerName: "Anita Patel",
+    thumbnail: "/-my-gem-websit/images/nav/kids/baby_nazariya.png",
   },
   {
     title: "CAPTURE THE GLOW.",
-    thumbnail: "https://cdn.rushabhjewel.com/img/2025/11/26/11/1764136049453-testimonial.png", // Reusing for demo
+    subtitle: "Gold that shines like my happiness 🌟",
+    customerName: "Meera Joshi",
+    thumbnail: "/-my-gem-websit/images/nav/pendant-set/antique.png",
   }
 ];
 
@@ -148,41 +154,51 @@ const Testimonials = () => {
                >
                  {videos.map((video, idx) => (
                    <div key={idx} className="min-w-full md:min-w-[33.33%] px-2">
-                     <div className="bg-[#4a1d1d] rounded-[30px] py-10 px-4 flex flex-col items-center shadow-xl h-full">
-                       {/* Logo Area */}
-                       <div className="mb-6">
-                         <div className="flex items-center gap-2">
-                            {/* Simple representation of Rushabh logo */}
-                            <div className="w-6 h-4 bg-white/20 rounded-sm" />
-                            <span className="text-white text-[10px] tracking-[0.2em] font-bold uppercase whitespace-nowrap">
-                              Rushabh Jewels
-                            </span>
-                         </div>
+                     <div className="bg-[#4a1d1d] rounded-[30px] py-8 px-4 flex flex-col items-center shadow-xl h-full">
+
+                       {/* Mohen Jewellers Logo Area */}
+                       <div className="mb-5 flex items-center gap-2">
+                         {/* Lotus icon in white */}
+                         <svg viewBox="0 0 40 36" className="w-6 h-5 fill-white/80" xmlns="http://www.w3.org/2000/svg">
+                           <path d="M20 2C20 2 14 9 14 15c0 3.3 2.7 6 6 6s6-2.7 6-6C26 9 20 2 20 2z" fillOpacity="0.7"/>
+                           <path d="M20 4C20 4 9 11 9 18c0 4.4 4.9 8 11 8s11-3.6 11-8C31 11 20 4 20 4z"/>
+                           <rect x="19" y="30" width="2" height="5" rx="1"/>
+                           <rect x="10" y="34" width="20" height="2" rx="1"/>
+                         </svg>
+                         <span className="text-white text-[10px] tracking-[0.2em] font-bold uppercase whitespace-nowrap">
+                           Mohen Jewellers
+                         </span>
                        </div>
 
-                       {/* Inner Video Frame */}
+                       {/* Inner Video Frame — portrait phone style */}
                        <div className="w-full aspect-[9/14] bg-white rounded-2xl p-1 overflow-hidden relative shadow-inner">
                          <div className="w-full h-full rounded-xl overflow-hidden relative">
-                           <img 
-                             src={video.thumbnail} 
-                             alt={video.title}
+                           <img
+                             src={video.thumbnail}
+                             alt={video.customerName}
                              className="w-full h-full object-cover"
                            />
-                           <div className="absolute inset-0 bg-black/10" />
-                           
+                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+
+                           {/* Customer name badge at bottom */}
+                           <div className="absolute bottom-3 left-3 right-3">
+                             <p className="text-white text-[11px] font-bold drop-shadow-md">{video.customerName}</p>
+                             <p className="text-white/80 text-[9px] mt-0.5">{video.subtitle}</p>
+                           </div>
+
                            {/* Play Button */}
                            <div className="absolute inset-0 flex items-center justify-center">
-                             <div className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:scale-110 transition-transform cursor-pointer">
-                               <Play className="w-5 h-5 text-white fill-white" />
+                             <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 hover:bg-white/30 hover:scale-110 transition-all cursor-pointer">
+                               <Play className="w-5 h-5 text-white fill-white ml-0.5" />
                              </div>
                            </div>
                          </div>
                        </div>
 
-                       {/* Caption Area */}
-                       <div className="mt-8 text-center px-1">
-                         <p className="text-white text-[10px] font-bold tracking-[0.15em] leading-[1.6] uppercase">
-                            {video.title}
+                       {/* Caption */}
+                       <div className="mt-6 text-center px-2">
+                         <p className="text-white text-[9px] font-bold tracking-[0.15em] leading-[1.7] uppercase">
+                           {video.title}
                          </p>
                        </div>
                      </div>

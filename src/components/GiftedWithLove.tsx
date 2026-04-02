@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Gift } from "lucide-react";
 
 const giftingCategories = [
-  { id: 1, title: "For Wife", image: "https://cdn.rushabhjewel.com/img/2026/3/23/1/1774251641908-for-wife.jpg", link: "/products?occasion=wife" },
-  { id: 2, title: "For Daughter", image: "https://cdn.rushabhjewel.com/img/2026/3/23/1/1774251629712-for-daughter.jpg", link: "/products?occasion=daughter" },
-  { id: 3, title: "For Mother", image: "https://cdn.rushabhjewel.com/img/2026/3/23/1/1774251616751-for-mother.jpg", link: "/products?occasion=mother" },
-  { id: 4, title: "For Kids", image: "https://cdn.rushabhjewel.com/img/2026/3/23/1/1774251588391-for-kids.jpg", link: "/products?category=kids-collections" },
-  { id: 5, title: "Wedding Gift", image: "https://cdn.rushabhjewel.com/img/2026/3/23/1/1774251677994-fow-wedding-gift.jpg", link: "/products?occasion=wedding" },
+  { id: 1, title: "For Wife", image: "/-my-gem-websit/images/gifting/for-wife.jpg", link: "/products?occasion=wife" },
+  { id: 2, title: "For Daughter", image: "/-my-gem-websit/images/gifting/for-daughter.jpg", link: "/products?occasion=daughter" },
+  { id: 3, title: "For Mother", image: "/-my-gem-websit/images/gifting/for-mother.jpg", link: "/products?occasion=mother" },
+  { id: 4, title: "For Kids", image: "/-my-gem-websit/images/gifting/for-kids.jpg", link: "/products?category=kids-collections" },
+  { id: 5, title: "Wedding Gift", image: "/-my-gem-websit/images/gifting/for-wedding.jpg", link: "/products?occasion=wedding" },
 ];
 
 const GiftedWithLove = () => {

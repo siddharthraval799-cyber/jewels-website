@@ -530,6 +530,26 @@ app.post("/api/contact", (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════════
+// CUSTOM INQUIRIES
+// ═══════════════════════════════════════════════════════════
+
+app.post("/api/custom-inquiries", (req, res) => {
+  try {
+    const { name, email, phone, budget, message, imageUrl } = req.body;
+    if (!name || !phone || !message) {
+      return res.status(400).json({ error: "Name, phone, and message are required" });
+    }
+    db.prepare(
+      "INSERT INTO custom_inquiries (name, email, phone, budget, message, imageUrl) VALUES (?, ?, ?, ?, ?, ?)"
+    ).run(name, email || "", phone, budget || "", message, imageUrl || "");
+    res.status(201).json({ success: true });
+  } catch (err) {
+    console.error("Custom inquiry error:", err);
+    res.status(500).json({ error: "Failed to submit custom inquiry" });
+  }
+});
+
+// ═══════════════════════════════════════════════════════════
 // SETTINGS ROUTES
 // ═══════════════════════════════════════════════════════════
 
@@ -782,6 +802,21 @@ app.put("/api/admin/messages/:id/read", authMiddleware, adminMiddleware, (req, r
 
 app.delete("/api/admin/messages/:id", authMiddleware, adminMiddleware, (req, res) => {
   db.prepare("DELETE FROM contact_messages WHERE id = ?").run(req.params.id);
+  res.json({ success: true });
+});
+
+app.get("/api/admin/custom-inquiries", authMiddleware, adminMiddleware, (req, res) => {
+  const inquiries = db.prepare("SELECT * FROM custom_inquiries ORDER BY created_at DESC").all();
+  res.json({ inquiries });
+});
+
+app.put("/api/admin/custom-inquiries/:id/read", authMiddleware, adminMiddleware, (req, res) => {
+  db.prepare("UPDATE custom_inquiries SET read = 1 WHERE id = ?").run(req.params.id);
+  res.json({ success: true });
+});
+
+app.delete("/api/admin/custom-inquiries/:id", authMiddleware, adminMiddleware, (req, res) => {
+  db.prepare("DELETE FROM custom_inquiries WHERE id = ?").run(req.params.id);
   res.json({ success: true });
 });
 

@@ -245,7 +245,7 @@ const Products = () => {
          </div>
 
          {/* Left Sidebar Filter Container */}
-         <div className={`fixed inset-0 z-50 bg-white md:bg-transparent md:static md:block md:w-64 lg:w-72 md:shrink-0 ${mobileFilterOpen ? 'block overflow-y-auto w-full p-4' : 'hidden'}`}>
+         <div className={`fixed inset-0 z-40 bg-white md:bg-transparent md:static md:block md:w-64 lg:w-72 md:shrink-0 ${mobileFilterOpen ? 'block overflow-y-auto w-full p-4' : 'hidden'}`}>
              
              <div className="flex items-center justify-between mb-8">
                  <h2 className="font-display text-lg tracking-widest font-semibold flex items-center gap-2">

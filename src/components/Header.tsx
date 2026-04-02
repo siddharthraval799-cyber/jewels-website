@@ -125,13 +125,12 @@ export default function Header({ onOpenLogin }: HeaderProps) {
             </button>
 
             <Link to="/" className="flex-1 text-center lg:text-left">
-              <h1 className="font-display text-2xl md:text-3xl tracking-wider">
-                <span className="gold-text font-bold">AURUM</span>
-                <span className={`font-light ml-1 ${isScrolled ? "text-foreground" : "text-secondary-foreground"}`}>JEWELS</span>
-              </h1>
-              <p className="text-[9px] tracking-[0.3em] text-muted-foreground uppercase font-body">
-                Heritage & Luxury Since 1985
-              </p>
+              <img
+                src="/-my-gem-websit/logo.png"
+                alt="Mohen Jewellers"
+                className="h-14 md:h-16 w-auto mx-auto lg:mx-0 object-contain"
+                style={{ filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.08))" }}
+              />
             </Link>
 
             <div className="flex items-center gap-3">
@@ -273,7 +272,7 @@ export default function Header({ onOpenLogin }: HeaderProps) {
               className="fixed left-0 top-0 bottom-0 w-72 bg-secondary z-50 p-6"
             >
               <div className="flex items-center justify-between mb-8">
-                <span className="font-display text-xl gold-text font-bold">AURUM</span>
+                <img src="/-my-gem-websit/logo.png" alt="Mohen Jewellers" className="h-10 w-auto object-contain" />
                 <button onClick={() => setIsMobileMenuOpen(false)} className="text-secondary-foreground">
                   <X className="w-6 h-6" />
                 </button>

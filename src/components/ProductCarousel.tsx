@@ -15,7 +15,17 @@ const inDemandProducts: Product[] = [
   { id: "p6", name: "Kanika Vilas Mangalsutra 22KT", weight: 28.55, makingCharges: 14000, category: "mangalsutra", images: ["https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80"], description: "" },
 ];
 
-const ProductCarousel = () => {
+interface ProductCarouselProps {
+  title?: string;
+  subtitle?: string;
+  products?: Product[];
+}
+
+const ProductCarousel = ({ 
+  title = "In-Demand Favorites", 
+  subtitle = "Loved by many, made for you. Find out what's trending today.",
+  products = inDemandProducts 
+}: ProductCarouselProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -33,7 +43,7 @@ const ProductCarousel = () => {
     checkScroll();
     window.addEventListener("resize", checkScroll);
     return () => window.removeEventListener("resize", checkScroll);
-  }, []);
+  }, [products]); // Re-check when products change
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -48,10 +58,10 @@ const ProductCarousel = () => {
   };
 
   return (
-    <section className="py-24 bg-background relative">
+    <section className="py-24 bg-background relative overflow-hidden">
       <div className="container mx-auto px-4 max-w-[1400px]">
         
-        {/* Banner container designed mapping Image 1 */}
+        {/* Banner container */}
         <div className="relative w-full rounded-[40px] bg-[#DBCAC0]/40 overflow-visible pt-16 pb-20 md:pb-8">
            
            <div className="flex flex-col xl:flex-row gap-8 xl:gap-0">
@@ -62,9 +72,9 @@ const ProductCarousel = () => {
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="font-display text-4xl md:text-5xl font-black tracking-widest uppercase text-[#1a1a1a] mb-4"
+                  className="font-display text-3xl md:text-4xl font-black tracking-widest uppercase text-[#1a1a1a] mb-4 leading-tight whitespace-pre-line"
                 >
-                  In-Demand<br/>Favorites
+                  {title}
                 </motion.h2>
                 <motion.p 
                   initial={{ opacity: 0, y: 20 }}
@@ -73,11 +83,10 @@ const ProductCarousel = () => {
                   transition={{ delay: 0.1 }}
                   className="font-body text-base font-semibold text-[#1a1a1a]/80"
                 >
-                  Loved by many, made for you.<br/>
-                  Find out what's trending today.
+                  {subtitle}
                 </motion.p>
 
-                {/* Desktop Explore Button - aligned visually within the banner area */}
+                {/* Desktop Explore Button */}
                 <motion.button 
                    whileHover={{ scale: 1.05 }} 
                    whileTap={{ scale: 0.95 }}
@@ -109,20 +118,20 @@ const ProductCarousel = () => {
                   </button>
                 </div>
 
-                {/* Carousel Track containing perfectly matched Product Cards */}
+                {/* Carousel Track */}
                 <div 
                   ref={scrollRef}
                   onScroll={checkScroll}
                   className="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-8 px-8 xl:px-0"
                 >
-                   {inDemandProducts.map((product, index) => (
+                   {products.map((product, index) => (
                      <div key={product.id} className="snap-start shrink-0 w-[260px] md:w-[300px]">
                         <ProductCard product={product} index={index} />
                      </div>
                    ))}
                 </div>
 
-                {/* Mobile/Tablet Explore Button - right aligned below carousel */}
+                {/* Mobile/Tablet Explore Button */}
                 <div className="xl:hidden flex justify-end px-8 mt-4">
                   <motion.button 
                      whileHover={{ scale: 1.05 }} 

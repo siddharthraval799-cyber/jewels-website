@@ -6,9 +6,10 @@ import { toast } from "@/components/ui/use-toast";
 interface VideoCallModalProps {
   isOpen: boolean;
   onClose: () => void;
+  productName?: string;
 }
 
-const VideoCallModal = ({ isOpen, onClose }: VideoCallModalProps) => {
+const VideoCallModal = ({ isOpen, onClose, productName }: VideoCallModalProps) => {
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
@@ -18,14 +19,35 @@ const VideoCallModal = ({ isOpen, onClose }: VideoCallModalProps) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!formData.name || !formData.mobile) {
+      toast({
+        title: "Error",
+        description: "Name and Mobile number are required.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     
-    // Simulate real-time work
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    const businessNumber = "916356647453";
+    const text = `*New Video Call Request*%0A%0A` +
+      `*Product:* ${productName || "Not Specified"}%0A` +
+      `*Name:* ${formData.name}%0A` +
+      `*Mobile:* ${formData.mobile}%0A` +
+      `*Pincode:* ${formData.pincode || "Not Specified"}%0A%0A` +
+      `_Sent from Aurum Jewels_`;
+
+    const whatsappUrl = `https://wa.me/${businessNumber}?text=${text}`;
+    
+    // Simulate a small delay for feedback
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    
+    window.open(whatsappUrl, "_blank");
     
     toast({
-      title: "Video Call Scheduled!",
-      description: "Our team will contact you on WhatsApp shortly.",
+      title: "Redirecting...",
+      description: "Opening WhatsApp to schedule your call.",
     });
     
     setIsSubmitting(false);

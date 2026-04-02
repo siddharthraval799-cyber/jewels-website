@@ -5,11 +5,9 @@ const Preloader = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    // Hide the preloader after exactly 5 seconds
     const timer = setTimeout(() => {
       setIsVisible(false);
     }, 5000);
-
     return () => clearTimeout(timer);
   }, []);
 
@@ -29,16 +27,16 @@ const Preloader = () => {
             className="text-center relative"
           >
             {/* Logo Text Animation */}
-            <motion.h1 
+            <motion.h1
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 1 }}
               className="font-display text-4xl md:text-6xl tracking-widest mb-6"
             >
-              <span className="gold-text font-bold">AURUM</span>
-              <span className="font-light text-secondary-foreground ml-3">JEWELS</span>
+              <span className="gold-text font-bold">MOHEN</span>
+              <span className="font-light text-secondary-foreground ml-3">JEWELLERS</span>
             </motion.h1>
-            
+
             {/* Animated Underline Progress */}
             <div className="w-[120%] -ml-[10%] h-[1px] bg-border relative overflow-hidden">
                <motion.div
@@ -48,7 +46,7 @@ const Preloader = () => {
                  className="absolute inset-0 bg-primary"
                />
             </div>
-            
+
             {/* Subtext Animation */}
             <motion.p
               initial={{ opacity: 0, y: 10 }}
@@ -56,7 +54,7 @@ const Preloader = () => {
               transition={{ delay: 1.5, duration: 1 }}
               className="text-xs md:text-sm tracking-[0.4em] text-muted-foreground uppercase font-body mt-6"
             >
-              Heritage & Luxury Since 1985
+              Heritage &amp; Luxury Since 1985
             </motion.p>
           </motion.div>
         </motion.div>

@@ -59,7 +59,7 @@ const DesktopNav = ({ isScrolled }: DesktopNavProps) => {
                       {/* LAYOUT 1: KIDS COLLECTIONS (Image Cards Only) */}
                       {isKids && (
                         <div className="col-span-12">
-                          <div className="grid grid-cols-7 gap-4 xl:gap-6">
+                          <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
                             {link.megaMenu!.exclusiveDesigns.map((design) => (
                               <Link key={design.label} to={design.href} className="group flex flex-col rounded-md overflow-hidden bg-white hover:shadow-md transition-shadow border border-border/40">
                                 <div className="aspect-square bg-cream overflow-hidden">

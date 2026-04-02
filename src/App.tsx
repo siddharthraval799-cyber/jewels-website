@@ -22,6 +22,7 @@ import OrderConfirmation from "./pages/OrderConfirmation";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Policies from "./pages/Policies";
+import CustomJewellery from "./pages/CustomJewellery";
 import NotFound from "./pages/NotFound";
 
 // Admin pages
@@ -74,6 +75,7 @@ const App = () => {
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/policies/:type" element={<Policies />} />
+                <Route path="/custom-jewellery" element={<CustomJewellery />} />
 
                 {/* Admin routes */}
                 <Route path="/admin" element={<AdminLayout />}>

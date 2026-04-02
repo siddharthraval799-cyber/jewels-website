@@ -21,7 +21,7 @@ const PromoBanners = () => {
             <Link to="/custom-jewellery" className="group block relative overflow-hidden h-56 md:h-[300px] rounded-[24px] shadow-sm">
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                style={{ backgroundImage: `url('https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2024%2F1%2F12%2F5%2F1715494295325-sketch-to-sparkle.jpg&w=1200&q=75')` }}
+                style={{ backgroundImage: `url('https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fcdn.rushabhjewel.com%2Fimg%2F2025%2F11%2F27%2F18%2F1764570414025-1200-_-375.jpg&w=3840&q=75')` }}
               />
               <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-colors duration-300" />
               <div className="relative z-10 h-full flex flex-col justify-center p-6 md:p-10">
@@ -55,7 +55,7 @@ const PromoBanners = () => {
             >
               <div
                 className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                style={{ backgroundImage: `url('https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2024%2F1%2F22%2F11%2F1715492429415-live-video-call-v1.jpg&w=1200&q=75')` }}
+                style={{ backgroundImage: `url('https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fcdn.rushabhjewel.com%2Fimg%2F2026%2F1%2F8%2F15%2F1767869852637-1200-_-375-2.jpg&w=3840&q=75')` }}
               />
               <div className="absolute inset-0 bg-black/10 group-hover:bg-black/5 transition-colors duration-300" />
               <div className="relative z-10 h-full flex flex-col justify-center items-end text-right p-6 md:p-10">

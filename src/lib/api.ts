@@ -340,6 +340,7 @@ export type Product = {
   attributes?: Record<string, string[]>;
   videoUrl?: string;
   price?: number;
+  oldPrice?: number;
   created_at?: string;
   updated_at?: string;
 };

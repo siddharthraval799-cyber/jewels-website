@@ -141,6 +141,18 @@ db.exec(`
     active INTEGER DEFAULT 1,
     created_at TEXT DEFAULT (datetime('now'))
   );
+
+  CREATE TABLE IF NOT EXISTS custom_inquiries (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT DEFAULT '',
+    phone TEXT NOT NULL,
+    budget TEXT DEFAULT '',
+    message TEXT NOT NULL,
+    imageUrl TEXT DEFAULT '',
+    read INTEGER DEFAULT 0,
+    created_at TEXT DEFAULT (datetime('now'))
+  );
 `);
 
 // Safely attempt to add the new attributes column for existing users
