@@ -27,4 +27,3 @@ dist-ssr
 server/*.sqlite
 server/*.db-shm
 server/*.db-wal
-server/uploads/
