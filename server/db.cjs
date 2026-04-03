@@ -2,7 +2,7 @@ const Database = require("better-sqlite3");
 const bcrypt = require("bcryptjs");
 const path = require("path");
 
-const DB_PATH = path.join(__dirname, "aurum.db");
+const DB_PATH = process.env.VERCEL ? path.join(process.cwd(), "server", "aurum.db") : path.join(__dirname, "aurum.db");
 const db = new Database(DB_PATH);
 console.log("💾 Database connected at:", DB_PATH);
 

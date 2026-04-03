@@ -28,6 +28,7 @@ app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
 
 const multer = require("multer");
 const fs = require("fs");
+const DB_PATH = process.env.VERCEL ? path.join(process.cwd(), "server", "aurum.db") : path.join(__dirname, "aurum.db");
 const uploadDir = path.join(__dirname, "uploads");
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
@@ -855,9 +856,15 @@ if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "productio
 // ─── Start Server ──────────────────────────────────────────
 console.log("📡 Attempting to bind to PORT:", PORT);
 
-const server = app.listen(PORT, "0.0.0.0", () => {
-  console.log(`✅ Aurum Jewels API is LIVE and listening on 0.0.0.0:${PORT}`);
-});
+// On Vercel, we export the app. On local, we listen.
+if (process.env.NODE_ENV !== 'production' || require.main === module) {
+  const PORT = process.env.PORT || 3001;
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server running at http://0.0.0.0:${PORT}`);
+  });
+}
+
+module.exports = app;
 
 server.on('error', (err) => {
   console.error("❌ SERVER BINDING ERROR:", err);
