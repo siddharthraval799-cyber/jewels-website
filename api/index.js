@@ -1,1 +1,2 @@
-import app from "../server/server.cjs";`nexport default app;
+import app from "../server/server.cjs";
+export default app;
