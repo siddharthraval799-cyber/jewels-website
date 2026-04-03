@@ -10,7 +10,7 @@
     }
   ],
   "functions": {
-    "api/index.cjs": {
+    "api/index.js": {
       "excludeFiles": "{public/**,dist/**,node_modules/**/.git/**}"
     }
   }
