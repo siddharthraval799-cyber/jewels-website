@@ -6,10 +6,7 @@ const path = require("path");
 const crypto = require("crypto");
 
 // Load env
-// Load env
-if (process.env.NODE_ENV !== 'production') {
-  require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
-}
+require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 
 const db = require("./db.cjs");
 
@@ -841,33 +838,30 @@ app.get("/api/admin/products", authMiddleware, adminMiddleware, (req, res) => {
 // PRODUCTION SETUP (SERVE FRONTEND)
 // ═══════════════════════════════════════════════════════════
 
-if ((process.env.NODE_ENV === "production" || process.env.NODE_ENV === "production_simulation") && !process.env.VERCEL) {
+if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "production_simulation") {
   app.use(express.static(path.join(__dirname, "..", "dist")));
   
   // Serve Admin Panel for /admin routes
   app.get(/\/admin.*/, (req, res) => {
     res.sendFile(path.join(__dirname, "..", "dist", "admin.html"));
   });
-// Serve Storefront for all other routes
+
+  // Serve Storefront for all other routes
   app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
   });
 }
 
-// ─── Start Server (Local Only) ──────────────────────────────
-if (require.main === module) {
-  console.log("📡 Attempting to bind to PORT:", PORT);
-  const server = app.listen(PORT, "0.0.0.0", () => {
-    console.log(`✅ Aurum Jewels API is LIVE and listening on 0.0.0.0:${PORT}`);
-  });
+// ─── Start Server ──────────────────────────────────────────
+console.log("📡 Attempting to bind to PORT:", PORT);
 
-  server.on('error', (err) => {
-    console.error("❌ SERVER BINDING ERROR:", err);
-  });
-}
+const server = app.listen(PORT, "0.0.0.0", () => {
+  console.log(`✅ Aurum Jewels API is LIVE and listening on 0.0.0.0:${PORT}`);
+});
 
-// Export for Vercel
-module.exports = app;
+server.on('error', (err) => {
+  console.error("❌ SERVER BINDING ERROR:", err);
+});
 
 process.on('uncaughtException', (err) => {
   console.error("❌ UNCAUGHT EXCEPTION:", err);
