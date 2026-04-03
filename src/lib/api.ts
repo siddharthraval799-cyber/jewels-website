@@ -3,8 +3,7 @@ const IS_STATIC_HOST =
   typeof window !== "undefined" && 
   (window.location.hostname.endsWith("github.io") || 
    window.location.hostname.includes("stackblitz") || 
-   window.location.hostname.includes("netlify") ||
-   window.location.hostname.includes("vercel.app"));
+   window.location.hostname.includes("netlify"));
 
 const API_BASE = "/api";
 

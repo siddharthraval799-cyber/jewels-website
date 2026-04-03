@@ -5,7 +5,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: process.env.VERCEL ? "/" : "/-my-gem-websit/",   // 🔥 IMPORTANT (repo name)
+  base: "/-my-gem-websit/",   // GitHub Pages base path
 
   server: {
     host: "::",
