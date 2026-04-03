@@ -3,17 +3,41 @@ const bcrypt = require("bcryptjs");
 const path = require("path");
 
 const fs = require("fs");
-const DB_SOURCE = path.join(process.cwd(), "server", "aurum.db");
-const DB_PATH = process.env.VERCEL ? path.join("/tmp", "aurum.db") : path.join(__dirname, "aurum.db");
+const DB_NAME = "aurum.db";
+const POSSIBLE_SOURCES = [
+  path.join(process.cwd(), "server", DB_NAME),
+  path.join(__dirname, DB_NAME),
+  path.join(__dirname, "..", "server", DB_NAME),
+  path.join("/var/task/server", DB_NAME)
+];
 
-// On Vercel, the filesystem is read-only. We must copy the DB to /tmp to allow writes.
+const DB_PATH = process.env.VERCEL ? path.join("/tmp", DB_NAME) : path.join(__dirname, DB_NAME);
+
 if (process.env.VERCEL && !fs.existsSync(DB_PATH)) {
-  console.log("🚚 Vercel detected. Copying database to /tmp for write access...");
-  fs.copyFileSync(DB_SOURCE, DB_PATH);
+  let copied = false;
+  for (const src of POSSIBLE_SOURCES) {
+    if (fs.existsSync(src)) {
+      console.log(`🚚 Found DB at ${src}. Copying to /tmp...`);
+      fs.copyFileSync(src, DB_PATH);
+      copied = true;
+      break;
+    }
+  }
+  if (!copied) {
+    console.error("❌ CRITICAL: Could not find aurum.db in any source path. Fallback to :memory: might happen.");
+  }
 }
 
-const db = new Database(DB_PATH);
-console.log("💾 Database connected at:", DB_PATH);
+// Final connection
+let db;
+try {
+  db = new Database(DB_PATH);
+  console.log("💾 Database connected at:", DB_PATH);
+} catch (err) {
+  console.error("❌ FAILED TO OPEN DB AT:", DB_PATH, err);
+  console.log("🔄 Falling back to in-memory database for stability...");
+  db = new Database(':memory:');
+}
 
 // Enable WAL mode for better concurrent performance (works in /tmp)
 db.pragma("journal_mode = WAL");
