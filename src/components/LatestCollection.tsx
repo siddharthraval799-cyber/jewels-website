@@ -7,7 +7,7 @@ const latestProducts = [
     id: 1, 
     name: "Amulya Heritage Gajara 22KT",
     price: "₹12,65,726", 
-    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2025%2F1%2F10%2F15%2F1736502220496-heritage-gajara.jpg&w=1200&q=75",
+    image: "/placeholder.svg",
     weight: "72.08 gm",
     karat: "22KT"
   },
@@ -15,7 +15,7 @@ const latestProducts = [
     id: 2, 
     name: "Ratnāvartā Rāgamālā Gajara 22KT",
     price: "₹7,47,169", 
-    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2025%2F1%2F10%2F17%2F1736509935406-ratnavarta-ragamala.jpg&w=1200&q=75",
+    image: "/placeholder.svg",
     weight: "43.75 gm",
     karat: "22KT"
   },
@@ -23,7 +23,7 @@ const latestProducts = [
     id: 3, 
     name: "Heritage Lotus Blossom Gajara 22KT",
     price: "₹13,61,523", 
-    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2025%2F1%2F10%2F15%2F1736502202685-heritage-lotus-blossom.jpg&w=1200&q=75",
+    image: "/placeholder.svg",
     weight: "78.5 gm",
     karat: "22KT"
   },
@@ -31,7 +31,7 @@ const latestProducts = [
     id: 4, 
     name: "Svarapushpa Gajara 22KT",
     price: "₹7,00,572", 
-    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2025%2F1%2F10%2F16%2F1736504938642-svarapushpa.jpg&w=1200&q=75",
+    image: "/placeholder.svg",
     weight: "40.66 gm",
     karat: "22KT"
   },
@@ -39,7 +39,7 @@ const latestProducts = [
     id: 5, 
     name: "Pushparang Antique Gajara 22KT",
     price: "₹10,16,941", 
-    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2025%2F1%2F10%2F17%2F1736511116244-pushparang-antique.jpg&w=1200&q=75",
+    image: "/placeholder.svg",
     weight: "60.78 gm",
     karat: "22KT"
   },
@@ -47,7 +47,7 @@ const latestProducts = [
     id: 6, 
     name: "Kanakāvalli Rūpantara Gajara 22KT",
     price: "₹8,25,236", 
-    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2025%2F1%2F10%2F16%2F1736505370243-kanakavalli-rupantara.jpg&w=1200&q=75",
+    image: "/placeholder.svg",
     weight: "49.1 gm",
     karat: "22KT"
   },

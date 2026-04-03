@@ -6,61 +6,61 @@ const collections = [
   { 
     id: "mangalsutra",
     title: "Mangalsutra", 
-    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F8%2F1767257972124-stylish-black-beaded-chain.jpg&w=1200&q=75", 
+    image: "/placeholder.svg", 
     className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-4" 
   },
   { 
     id: "bangles",
     title: "Bangles", 
-    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F7%2F1767252836991-antique-bangles.jpg&w=1200&q=75", 
+    image: "/placeholder.svg", 
     className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-5" 
   },
   { 
     id: "pendants",
     title: "Pendants", 
-    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F8%2F1767256652580-pendant.jpg&w=1200&q=75", 
+    image: "/placeholder.svg", 
     className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-4" 
   },
   { 
     id: "earrings",
     title: "Earrings", 
-    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F8%2F1767257724851-studs.jpg&w=1200&q=75", 
+    image: "/placeholder.svg", 
     className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-5" 
   },
   { 
     id: "bracelet",
     title: "Bracelet", 
-    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F8%2F1767256672137-bracelet.jpg&w=1200&q=75", 
+    image: "/placeholder.svg", 
     className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-5" 
   },
   { 
     id: "chains",
     title: "Chains", 
-    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F8%2F1767256683316-chain.jpg&w=1200&q=75", 
+    image: "/placeholder.svg", 
     className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-4" 
   },
   { 
     id: "kada",
     title: "Kada", 
-    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F11%2F1767268733396-kada.jpg&w=1200&q=75", 
+    image: "/placeholder.svg", 
     className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-4" 
   },
   { 
     id: "necklace",
     title: "Necklace", 
-    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F7%2F1767252592142-heritage.jpg&w=1200&q=75", 
+    image: "/placeholder.svg", 
     className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-5" 
   },
   { 
     id: "rings",
     title: "Rings", 
-    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F8%2F1767257130048-solitaire.jpg&w=1200&q=75", 
+    image: "/placeholder.svg", 
     className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-4" 
   },
   { 
     id: "pendant-set",
     title: "Pendant Set", 
-    image: "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fapi.rushabhjewel.com%2Fimg%2F2026%2F1%2F1%2F8%2F1767257963820-pendants-with-earrings.jpg&w=1200&q=75", 
+    image: "/placeholder.svg", 
     className: "col-span-1 aspect-square lg:aspect-auto lg:col-span-1 lg:row-span-5" 
   }
 ];
