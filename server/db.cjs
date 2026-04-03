@@ -2,11 +2,20 @@ const Database = require("better-sqlite3");
 const bcrypt = require("bcryptjs");
 const path = require("path");
 
-const DB_PATH = process.env.VERCEL ? path.join(process.cwd(), "server", "aurum.db") : path.join(__dirname, "aurum.db");
+const fs = require("fs");
+const DB_SOURCE = path.join(process.cwd(), "server", "aurum.db");
+const DB_PATH = process.env.VERCEL ? path.join("/tmp", "aurum.db") : path.join(__dirname, "aurum.db");
+
+// On Vercel, the filesystem is read-only. We must copy the DB to /tmp to allow writes.
+if (process.env.VERCEL && !fs.existsSync(DB_PATH)) {
+  console.log("🚚 Vercel detected. Copying database to /tmp for write access...");
+  fs.copyFileSync(DB_SOURCE, DB_PATH);
+}
+
 const db = new Database(DB_PATH);
 console.log("💾 Database connected at:", DB_PATH);
 
-// Enable WAL mode for better concurrent performance
+// Enable WAL mode for better concurrent performance (works in /tmp)
 db.pragma("journal_mode = WAL");
 db.pragma("foreign_keys = ON");
 
