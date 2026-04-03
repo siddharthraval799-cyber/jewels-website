@@ -63,11 +63,10 @@ async function request<T = unknown>(
          // Recursively prepend baseUrl to any string starting with /uploads/
          const fixUrls = (obj: any): any => {
             if (typeof obj === "string") {
-               if (obj.startsWith("/api/uploads/")) {
-                  return `${baseUrl}server/uploads/${obj.slice(13)}`;
-               }
                if (obj.startsWith("/uploads/")) {
-                  return `${baseUrl}server/uploads/${obj.slice(9)}`;
+                  // Ensure we don't double up on slashes if baseUrl ends with one or obj starts with one
+                  const base = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+                  return `${base}${obj}`;
                }
                return obj;
             }
