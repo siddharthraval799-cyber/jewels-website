@@ -3,18 +3,18 @@ import { motion } from "framer-motion";
 const artisanImage = "/-my-gem-websit/images/artisan-master.jpg";
 
 const col1Images = [
-  "/placeholder.svg",
-  "/placeholder.svg",
+  "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fcdn.rushabhjewel.com%2Fimg%2F2026%2F1%2F21%2F1%2F1768998617531-ag22-767---g-82.460----n-76.360----42310-rjp.jpg&w=1080&q=75",
+  "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fcdn.rushabhjewel.com%2Fimg%2F2026%2F1%2F17%2F1%2F1768660639385-akd22-59---g-34.290-----n-31.640----9885-rjp.jpg&w=1080&q=75",
 ];
 
 const col2Images = [
-  "/placeholder.svg",
-  "/placeholder.svg",
+  "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fcdn.rushabhjewel.com%2Fimg%2F2026%2F2%2F2%2F1%2F1770028654820-ansn22-2125----g-126.830----n-101.160----87990----anst22-2125----g-34.710----n-26.380----27315-rjp.jpg&w=1080&q=75",
+  "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fcdn.rushabhjewel.com%2Fimg%2F2026%2F2%2F2%2F1%2F1770021099924-ansn22-990----g-145.800-----n-118.900-----55380-rjp.jpg&w=1080&q=75",
 ];
 
 const col3Images = [
-  "/placeholder.svg",
-  "/placeholder.svg",
+  "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fcdn.rushabhjewel.com%2Fimg%2F2026%2F2%2F2%2F15%2F1770030769700-ansn22-2255---g-97.770--n-62.040--120825---anst22-2255--g-28.380--n-22.370--37655-rjp.jpg&w=1080&q=75",
+  "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fcdn.rushabhjewel.com%2Fimg%2F2026%2F2%2F2%2F15%2F1770029211978-ansn22-2251----g-61.140-----n-54.230------11340-----anst22-2251---g-22.740----n-19.460------4995-rjp.jpg&w=1080&q=75",
 ];
 
 // Duplicate items twice to create a seamless infinite scroll
