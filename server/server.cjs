@@ -25,6 +25,7 @@ console.log("🔧 NODE_ENV:", process.env.NODE_ENV);
 app.use(cors());
 app.use(express.json({ limit: "50mb" })); // Increased for potential base64 images
 app.use("/api/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/api/uploads", express.static(path.join(__dirname, "../public/uploads")));
 
 const multer = require("multer");
 const fs = require("fs");
@@ -348,7 +349,7 @@ app.get("/api/products", (req, res) => {
 
     const products = db.prepare(query).all(...params);
     products.forEach(p => {
-      p.images = JSON.parse(p.images);
+      try { p.images = JSON.parse(p.images || "[]"); } catch(e) { p.images = ["/placeholder.svg"]; }
       try { p.attributes = JSON.parse(p.attributes || "{}"); } catch(e) { p.attributes = {}; }
     });
     
@@ -364,7 +365,7 @@ app.get("/api/products/:id", (req, res) => {
     const product = db.prepare("SELECT * FROM products WHERE id = ?").get(req.params.id);
     if (!product) return res.status(404).json({ error: "Product not found" });
     
-    product.images = JSON.parse(product.images);
+    try { product.images = JSON.parse(product.images || "[]"); } catch(e) { product.images = ["/placeholder.svg"]; }
     try { product.attributes = JSON.parse(product.attributes || "{}"); } catch(e) { product.attributes = {}; }
     
     res.json({ product });
@@ -857,9 +858,10 @@ if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "productio
 console.log("📡 Attempting to bind to PORT:", PORT);
 
 // On Vercel, we export the app. On local, we listen.
+let server;
 if (process.env.NODE_ENV !== 'production' || require.main === module) {
   const PORT = process.env.PORT || 3001;
-  app.listen(PORT, '0.0.0.0', () => {
+  server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running at http://0.0.0.0:${PORT}`);
   });
 }
