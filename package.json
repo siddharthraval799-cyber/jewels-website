@@ -7,11 +7,11 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "start": "node server/server.cjs",
-    "dev": "concurrently \"vite\" \"node server/server.cjs\"",
+    "start": "node api/server.cjs",
+    "dev": "concurrently \"vite\" \"node api/server.cjs\"",
     "dev:ui": "vite",
-    "server": "node server/server.cjs",
-    "dev:full": "concurrently \"vite\" \"node server/server.cjs\"",
+    "server": "node api/server.cjs",
+    "dev:full": "concurrently \"vite\" \"node api/server.cjs\"",
     "build": "vite build && node scripts/fix-spa.mjs",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
