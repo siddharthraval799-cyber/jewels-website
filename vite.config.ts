@@ -5,7 +5,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: mode === "production" ? "./" : "/",   // Adjusted for mobile/generic compatibility
+  base: "/", // Changed from "./" to fix Vercel blank screen for SPA routes
 
   server: {
     host: "::",
