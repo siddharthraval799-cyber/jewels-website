@@ -1,29 +1,23 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "builds": [
-    {
-      "src": "server/server.cjs",
-      "use": "@vercel/node"
-    },
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build"
+  "functions": {
+    "server/server.cjs": {
+      "maxDuration": 10
     }
-  ],
-  "routes": [
-    { "handle": "filesystem" },
+  },
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "/server/server.cjs"
+      "source": "/api/(.*)",
+      "destination": "/server/server.cjs"
     },
     {
-      "src": "/admin(.*)",
-      "dest": "/admin.html"
+      "source": "/admin(.*)",
+      "destination": "/admin.html"
     },
     {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
