@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-const artisanImage = "/-my-gem-websit/images/artisan-master.jpg";
+const artisanImage = "/images/artisan-master.jpg";
 
 const col1Images = [
   "https://www.rushabhjewel.com/_next/image?url=https%3A%2F%2Fcdn.rushabhjewel.com%2Fimg%2F2026%2F1%2F21%2F1%2F1768998617531-ag22-767---g-82.460----n-76.360----42310-rjp.jpg&w=1080&q=75",

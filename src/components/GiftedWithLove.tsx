@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Gift } from "lucide-react";
 
 const giftingCategories = [
-  { id: 1, title: "For Wife", image: "/-my-gem-websit/images/gifting/for-wife.jpg", link: "/products?occasion=wife" },
-  { id: 2, title: "For Daughter", image: "/-my-gem-websit/images/gifting/for-daughter.jpg", link: "/products?occasion=daughter" },
-  { id: 3, title: "For Mother", image: "/-my-gem-websit/images/gifting/for-mother.jpg", link: "/products?occasion=mother" },
-  { id: 4, title: "For Kids", image: "/-my-gem-websit/images/gifting/for-kids.jpg", link: "/products?category=kids-collections" },
-  { id: 5, title: "Wedding Gift", image: "/-my-gem-websit/images/gifting/for-wedding.jpg", link: "/products?occasion=wedding" },
+  { id: 1, title: "For Wife", image: "/images/gifting/for-wife.jpg", link: "/products?occasion=wife" },
+  { id: 2, title: "For Daughter", image: "/images/gifting/for-daughter.jpg", link: "/products?occasion=daughter" },
+  { id: 3, title: "For Mother", image: "/images/gifting/for-mother.jpg", link: "/products?occasion=mother" },
+  { id: 4, title: "For Kids", image: "/images/gifting/for-kids.jpg", link: "/products?category=kids-collections" },
+  { id: 5, title: "Wedding Gift", image: "/images/gifting/for-wedding.jpg", link: "/products?occasion=wedding" },
 ];
 
 const GiftedWithLove = () => {

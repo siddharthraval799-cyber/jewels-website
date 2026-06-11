@@ -5,7 +5,7 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  base: "/-my-gem-websit/",   // GitHub Pages base path
+  base: mode === "production" ? "./" : "/",   // Adjusted for mobile/generic compatibility
 
   server: {
     host: "::",

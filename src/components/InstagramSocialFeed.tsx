@@ -5,16 +5,16 @@ import { cn } from "@/lib/utils";
 // ONLY dark-background images used — all paths verified to exist in public/images/nav/
 // These all have dark brown velvet backgrounds and show clearly on any card color
 const allImages = [
-  "/-my-gem-websit/images/nav/kids/baby_kadli.png",
-  "/-my-gem-websit/images/nav/mens/mens_rings.png",
-  "/-my-gem-websit/images/nav/pendant-set/antique.png",
-  "/-my-gem-websit/images/nav/kids/baby_nazariya.png",
-  "/-my-gem-websit/images/nav/mens/mens_bracelets.png",
-  "/-my-gem-websit/images/nav/pendant-set/heritage.png",
-  "/-my-gem-websit/images/nav/kids/baby_pendent.png",
-  "/-my-gem-websit/images/nav/mens/mens_chains.png",
-  "/-my-gem-websit/images/nav/pendant-set/monzonaite.png",
-  "/-my-gem-websit/images/nav/more/explore_all.png",
+  "/images/nav/kids/baby_kadli.png",
+  "/images/nav/mens/mens_rings.png",
+  "/images/nav/pendant-set/antique.png",
+  "/images/nav/kids/baby_nazariya.png",
+  "/images/nav/mens/mens_bracelets.png",
+  "/images/nav/pendant-set/heritage.png",
+  "/images/nav/kids/baby_pendent.png",
+  "/images/nav/mens/mens_chains.png",
+  "/images/nav/pendant-set/monzonaite.png",
+  "/images/nav/more/explore_all.png",
 ];
 
 const columnA = [

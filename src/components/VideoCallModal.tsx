@@ -84,7 +84,7 @@ const VideoCallModal = ({ isOpen, onClose, productName }: VideoCallModalProps) =
             <div className="w-full md:w-1/2 p-6 md:p-8 flex items-center justify-center">
               <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-md">
                 <img
-                  src="/-my-gem-websit/images/video-call-thumb.png"
+                  src="/images/video-call-thumb.png"
                   alt="Video Call"
                   className="w-full h-full object-cover"
                 />

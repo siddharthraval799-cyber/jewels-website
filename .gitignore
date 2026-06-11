@@ -27,3 +27,14 @@ dist-ssr
 server/*.sqlite
 server/*.db-shm
 server/*.db-wal
+**/*.db
+**/*.db-shm
+**/*.db-wal
+
+# Build and deploy artifacts
+deploy.zip
+deploy/
+**/build/
+.gradle/
+**/local.properties
+

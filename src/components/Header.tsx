@@ -82,33 +82,35 @@ export default function Header({ onOpenLogin }: HeaderProps) {
   return (
     <>
       {/* Live Rate Ticker */}
-      <div className="bg-secondary text-secondary-foreground text-xs py-1.5 font-body">
+      <div className="bg-secondary text-secondary-foreground text-[10px] md:text-xs py-1.5 font-body border-b border-muted-foreground/10">
         <div className="container mx-auto flex items-center justify-between px-4">
           <div className="flex items-center gap-4">
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-1.5">
               <Phone className="w-3 h-3 text-primary" />
-              <span>+91 63566 47453</span>
+              <span className="font-medium">+91 63566 47453</span>
             </span>
           </div>
-          <div className="hidden md:flex items-center gap-6 text-xs tracking-wider">
+          <div className="hidden lg:flex items-center gap-6 text-[11px] tracking-wider uppercase">
             <span>
               Gold 24K: <span className="text-primary font-semibold">₹{rates.gold24k.toLocaleString("en-IN")}/g</span>
             </span>
-            <span className="text-muted-foreground">|</span>
+            <span className="text-muted-foreground/30">|</span>
             <span>
               Gold 22K: <span className="text-primary font-semibold">₹{rates.gold22k.toLocaleString("en-IN")}/g</span>
             </span>
-            <span className="text-muted-foreground">|</span>
+            <span className="text-muted-foreground/30">|</span>
             <span>
               Silver: <span className="text-primary font-semibold">₹{rates.silver}/g</span>
             </span>
           </div>
-          <div className="hidden sm:flex items-center gap-2">
-            <span className={`w-1.5 h-1.5 rounded-full ${rates.isLive ? "bg-green-500" : rates.isLoading ? "bg-yellow-500 animate-pulse" : "bg-red-400"}`} />
-            <span className="text-muted-foreground text-[10px]">
-              {rates.isLive ? "Live" : rates.isLoading ? "Updating..." : "Offline"} · {rates.lastUpdated}
-            </span>
-            <button onClick={refreshRates} className="ml-1 text-muted-foreground hover:text-primary transition-colors" title="Refresh rates">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <span className={`w-1.5 h-1.5 rounded-full ${rates.isLive ? "bg-green-500" : rates.isLoading ? "bg-yellow-500 animate-pulse" : "bg-red-400"}`} />
+              <span className="text-muted-foreground text-[10px] hidden xs:inline">
+                {rates.isLive ? "Live" : rates.isLoading ? "Updating..." : "Offline"}
+              </span>
+            </div>
+            <button onClick={refreshRates} className="text-muted-foreground hover:text-primary transition-colors p-1" title="Refresh rates">
               <RefreshCw className={`w-3 h-3 ${rates.isLoading ? "animate-spin" : ""}`} />
             </button>
           </div>
@@ -119,16 +121,24 @@ export default function Header({ onOpenLogin }: HeaderProps) {
       <header className={`sticky top-0 z-50 transition-all duration-500 ${isScrolled ? "bg-background/95 backdrop-blur-md shadow-lg border-b border-border/50" : "bg-secondary"}`}>
         <div className="container mx-auto px-4">
           {/* Logo Row */}
-          <div className="flex items-center justify-between py-4">
-            <button onClick={() => setIsMobileMenuOpen(true)} className={`lg:hidden ${isScrolled ? "text-foreground" : "text-secondary-foreground"}`}>
-              <Menu className="w-6 h-6" />
-            </button>
+          <div className="flex items-center justify-between py-3 md:py-4">
+            <div className="flex items-center lg:hidden">
+              <button onClick={() => setIsMobileMenuOpen(true)} className={`p-2 -ml-2 ${isScrolled ? "text-foreground" : "text-secondary-foreground"}`}>
+                <Menu className="w-6 h-6" />
+              </button>
+              <button 
+                onClick={() => { setShowSearch(!showSearch); setSearchQuery(""); }}
+                className={`md:hidden p-2 ${isScrolled ? "text-foreground" : "text-secondary-foreground"}`}
+              >
+                <Search className="w-5 h-5" />
+              </button>
+            </div>
 
-            <Link to="/" className="flex-1 text-center lg:text-left">
+            <Link to="/" className="flex-1 flex justify-center lg:justify-start">
               <img
-                src="/-my-gem-websit/logo.png"
+                src="/logo.png"
                 alt="Mohen Jewellers"
-                className="h-14 md:h-16 w-auto mx-auto lg:mx-0 object-contain"
+                className="h-10 md:h-14 lg:h-16 w-auto object-contain"
                 style={{ filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.08))" }}
               />
             </Link>
@@ -272,7 +282,7 @@ export default function Header({ onOpenLogin }: HeaderProps) {
               className="fixed left-0 top-0 bottom-0 w-72 bg-secondary z-50 p-6"
             >
               <div className="flex items-center justify-between mb-8">
-                <img src="/-my-gem-websit/logo.png" alt="Mohen Jewellers" className="h-10 w-auto object-contain" />
+                <img src="/logo.png" alt="Mohen Jewellers" className="h-10 w-auto object-contain" />
                 <button onClick={() => setIsMobileMenuOpen(false)} className="text-secondary-foreground">
                   <X className="w-6 h-6" />
                 </button>

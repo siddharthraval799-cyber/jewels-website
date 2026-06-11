@@ -177,9 +177,9 @@ export const navigationData: MainNavItem[] = [
         { label: "Women", href: productLink("pendant-set", "for", "women") },
       ],
       exclusiveDesigns: [
-        { label: "Antique", image: "/-my-gem-websit/images/nav/pendant-set/antique.png", href: productLink("pendant-set", "collection", "antique") },
-        { label: "Heritage", image: "/-my-gem-websit/images/nav/pendant-set/heritage.png", href: productLink("pendant-set", "collection", "heritage") },
-        { label: "Monzonaite", image: "/-my-gem-websit/images/nav/pendant-set/monzonaite.png", href: productLink("pendant-set", "collection", "monzonaite") },
+        { label: "Antique", image: "/images/nav/pendant-set/antique.png", href: productLink("pendant-set", "collection", "antique") },
+        { label: "Heritage", image: "/images/nav/pendant-set/heritage.png", href: productLink("pendant-set", "collection", "heritage") },
+        { label: "Monzonaite", image: "/images/nav/pendant-set/monzonaite.png", href: productLink("pendant-set", "collection", "monzonaite") },
       ]
     }
   },
@@ -308,9 +308,9 @@ export const navigationData: MainNavItem[] = [
     megaMenu: {
       // Only cards here!
       exclusiveDesigns: [
-        { label: "Baby Nazariya", image: "/-my-gem-websit/images/nav/kids/baby_nazariya.png", href: productLink("kids-collections", "type", "nazariya") },
-        { label: "Baby Kadli", image: "/-my-gem-websit/images/nav/kids/baby_kadli.png", href: productLink("kids-collections", "type", "kadli") },
-        { label: "Baby Pendent", image: "/-my-gem-websit/images/nav/kids/baby_pendent.png", href: productLink("kids-collections", "type", "pendent") },
+        { label: "Baby Nazariya", image: "/images/nav/kids/baby_nazariya.png", href: productLink("kids-collections", "type", "nazariya") },
+        { label: "Baby Kadli", image: "/images/nav/kids/baby_kadli.png", href: productLink("kids-collections", "type", "kadli") },
+        { label: "Baby Pendent", image: "/images/nav/kids/baby_pendent.png", href: productLink("kids-collections", "type", "pendent") },
       ]
     }
   },
@@ -329,9 +329,9 @@ export const navigationData: MainNavItem[] = [
         { label: "Real Diamond", href: productLink("mens-jewellery", "style", "real-diamond") },
       ],
       exclusiveDesigns: [
-        { label: "Rings", image: "/-my-gem-websit/images/nav/mens/mens_rings.png", href: productLink("mens-jewellery", "type", "rings") },
-        { label: "Bracelets & Bangles", image: "/-my-gem-websit/images/nav/mens/mens_bracelets.png", href: productLink("mens-jewellery", "type", "bracelets") },
-        { label: "Chains", image: "/-my-gem-websit/images/nav/mens/mens_chains.png", href: productLink("mens-jewellery", "type", "chains") },
+        { label: "Rings", image: "/images/nav/mens/mens_rings.png", href: productLink("mens-jewellery", "type", "rings") },
+        { label: "Bracelets & Bangles", image: "/images/nav/mens/mens_bracelets.png", href: productLink("mens-jewellery", "type", "bracelets") },
+        { label: "Chains", image: "/images/nav/mens/mens_chains.png", href: productLink("mens-jewellery", "type", "chains") },
       ]
     }
   },
@@ -368,17 +368,17 @@ export const navigationData: MainNavItem[] = [
     megaMenu: {
       stylesTitle: "",
       styles: [
-        { label: "Hath Panja", icon: "/-my-gem-websit/images/nav/more/hath_panja.png", href: productLink("more-jewellery", "style", "hath-panja") },
-        { label: "Kada", icon: "/-my-gem-websit/images/nav/more/kada.png", href: productLink("more-jewellery", "style", "kada") },
-        { label: "Mang Tika", icon: "/-my-gem-websit/images/nav/more/mang_tika.png", href: productLink("more-jewellery", "style", "mang-tika") },
-        { label: "Gajara", icon: "/-my-gem-websit/images/nav/more/gajara.png", href: productLink("more-jewellery", "style", "gajara") },
-        { label: "Watch", icon: "/-my-gem-websit/images/nav/more/watch.png", href: productLink("more-jewellery", "style", "watch") },
-        { label: "Kanser", icon: "/-my-gem-websit/images/nav/more/kanser.png", href: productLink("more-jewellery", "style", "kanser") },
-        { label: "Pendants", icon: "/-my-gem-websit/images/nav/more/pendants.png", href: productLink("more-jewellery", "style", "pendants") },
-        { label: "Letter Pendant", icon: "/-my-gem-websit/images/nav/more/letter_pendant.png", href: productLink("more-jewellery", "style", "letter-pendant") },
+        { label: "Hath Panja", icon: "/images/nav/more/hath_panja.png", href: productLink("more-jewellery", "style", "hath-panja") },
+        { label: "Kada", icon: "/images/nav/more/kada.png", href: productLink("more-jewellery", "style", "kada") },
+        { label: "Mang Tika", icon: "/images/nav/more/mang_tika.png", href: productLink("more-jewellery", "style", "mang-tika") },
+        { label: "Gajara", icon: "/images/nav/more/gajara.png", href: productLink("more-jewellery", "style", "gajara") },
+        { label: "Watch", icon: "/images/nav/more/watch.png", href: productLink("more-jewellery", "style", "watch") },
+        { label: "Kanser", icon: "/images/nav/more/kanser.png", href: productLink("more-jewellery", "style", "kanser") },
+        { label: "Pendants", icon: "/images/nav/more/pendants.png", href: productLink("more-jewellery", "style", "pendants") },
+        { label: "Letter Pendant", icon: "/images/nav/more/letter_pendant.png", href: productLink("more-jewellery", "style", "letter-pendant") },
       ],
       exclusiveDesigns: [
-        { label: "EXPLORE ALL", image: "/-my-gem-websit/images/nav/more/explore_all.png", href: "/products?category=more-jewellery", large: true },
+        { label: "EXPLORE ALL", image: "/images/nav/more/explore_all.png", href: "/products?category=more-jewellery", large: true },
       ]
     }
   },

@@ -42,19 +42,19 @@ const videos = [
     title: "CRAFTED FOR MOMENTS THAT LAST FOREVER.",
     subtitle: "A jewel that tells my story ✨",
     customerName: "Priya Sharma",
-    thumbnail: "/-my-gem-websit/images/happy-customer-2.jpg",
+    thumbnail: "/images/happy-customer-2.jpg",
   },
   {
     title: "CELEBRATED DAYS, CLASSIC WAYS.",
     subtitle: "My wedding look was perfect! 💍",
     customerName: "Anita Patel",
-    thumbnail: "/-my-gem-websit/images/nav/kids/baby_nazariya.png",
+    thumbnail: "/images/nav/kids/baby_nazariya.png",
   },
   {
     title: "CAPTURE THE GLOW.",
     subtitle: "Gold that shines like my happiness 🌟",
     customerName: "Meera Joshi",
-    thumbnail: "/-my-gem-websit/images/nav/pendant-set/antique.png",
+    thumbnail: "/images/nav/pendant-set/antique.png",
   }
 ];
 

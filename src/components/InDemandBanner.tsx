@@ -11,7 +11,7 @@ export default function InDemandBanner() {
         aria-label="Shop In-Demand Favorites"
       >
         <img
-          src="/-my-gem-websit/images/in-demand-banner.jpg"
+          src="/images/in-demand-banner.jpg"
           alt="IN-DEMAND FAVORITES – Loved by many, made for you."
           className="w-full h-full object-cover"
           loading="lazy"

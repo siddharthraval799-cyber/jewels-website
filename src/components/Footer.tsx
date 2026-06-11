@@ -148,7 +148,7 @@ const Footer = () => {
               {/* Logo */}
               <div className="flex items-center gap-3">
                 <img
-                  src="/-my-gem-websit/logo.png"
+                  src="/logo.png"
                   alt="Mohen Jewellers"
                   className="h-16 w-auto object-contain"
                 />

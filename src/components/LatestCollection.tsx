@@ -147,7 +147,7 @@ const LatestCollection = () => {
             className="absolute -right-10 md:right-6 -top-8 md:-top-20 w-40 md:w-64 pointer-events-none z-20 drop-shadow-[0_20px_20px_rgba(0,0,0,0.4)]"
           >
             <img 
-              src="/-my-gem-websit/images/floating-bangles.png" 
+              src="/images/floating-bangles.png" 
               alt="Floating Bangle" 
               className="w-full h-auto brightness-110" 
             />

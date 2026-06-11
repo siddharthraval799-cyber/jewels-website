@@ -104,18 +104,18 @@ const HeroSlider = () => {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="max-w-xl"
             >
-              <span className="text-primary text-xs md:text-sm tracking-[0.3em] uppercase font-body font-medium">
+              <span className="text-primary text-[10px] md:text-xs tracking-[0.3em] uppercase font-body font-medium">
                 {slide.subtitle}
               </span>
-              <h2 className="font-display text-4xl md:text-6xl lg:text-7xl text-secondary-foreground mt-3 mb-4 leading-tight">
+              <h2 className="font-display text-3xl md:text-6xl lg:text-7xl text-secondary-foreground mt-2 md:mt-3 mb-3 md:mb-4 leading-tight">
                 {slide.title}
               </h2>
-              <p className="text-secondary-foreground/70 font-body text-sm md:text-base mb-8 max-w-md">
+              <p className="text-secondary-foreground/70 font-body text-xs md:text-base mb-6 md:mb-8 max-w-md line-clamp-2 md:line-clamp-none">
                 {slide.description}
               </p>
               <Link
                 to={slide.link}
-                className="inline-block border border-primary text-primary px-8 py-3 text-xs tracking-[0.2em] uppercase font-body font-medium hover:bg-primary hover:text-primary-foreground transition-all duration-500"
+                className="inline-block border border-primary text-primary px-6 md:px-8 py-2.5 md:py-3 text-[10px] md:text-xs tracking-[0.2em] uppercase font-body font-medium hover:bg-primary hover:text-primary-foreground transition-all duration-500"
               >
                 {slide.cta}
               </Link>

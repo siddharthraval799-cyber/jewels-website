@@ -5,7 +5,7 @@ const budgetItems = [
   {
     label: "Under ₹30,000",
     price: "under-30000",
-    image: "/-my-gem-websit/images/budget/under-30k.jpg",
+    image: "/images/budget/under-30k.jpg",
     size: "small",
     floatDelay: 0,
     floatDuration: 3.2,
@@ -13,7 +13,7 @@ const budgetItems = [
   {
     label: "Under ₹1,00,000",
     price: "under-100000",
-    image: "/-my-gem-websit/images/budget/under-100k.jpg",
+    image: "/images/budget/under-100k.jpg",
     size: "large",
     floatDelay: 0.8,
     floatDuration: 3.8,
@@ -21,7 +21,7 @@ const budgetItems = [
   {
     label: "Under ₹50,000",
     price: "under-50000",
-    image: "/-my-gem-websit/images/budget/under-50k.jpg",
+    image: "/images/budget/under-50k.jpg",
     size: "small",
     floatDelay: 1.5,
     floatDuration: 3.5,

@@ -1,11 +1,17 @@
+import { Capacitor } from "@capacitor/core";
+
 // ─── Centralized API Client ────────────────────────────────
-const IS_STATIC_HOST = 
+const IS_STATIC_HOST =
   typeof window !== "undefined" && 
   (window.location.hostname.endsWith("github.io") || 
    window.location.hostname.includes("stackblitz") || 
    window.location.hostname.includes("netlify"));
 
-const API_BASE = "/api";
+// On Mobile (Capacitor), we must use the full URL of the server.
+// On Web, we can use relative /api which is proxied or served by the same host.
+const API_BASE = Capacitor.isNativePlatform()
+  ? "http://10.164.67.138:3001/api"
+  : "/api";
 
 function getToken(): string | null {
   return localStorage.getItem("aurum_token");
