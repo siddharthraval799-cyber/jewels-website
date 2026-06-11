@@ -8,7 +8,19 @@ const crypto = require("crypto");
 // Load env
 require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
 
-const db = require("./db.cjs");
+const db = require("./db-wrapper.cjs");
+const cloudinary = require('cloudinary').v2;
+const multer = require('multer');
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+// Use multer with memory storage so we can buffer and upload to Cloudinary
+const upload = multer({ storage: multer.memoryStorage() });
 
 const otpStore = new Map(); // Store OTPs in memory for WhatsApp Login
 
@@ -170,7 +182,7 @@ app.post("/api/auth/whatsapp-otp/send", async (req, res) => {
   }
 });
 
-app.post("/api/auth/whatsapp-otp/verify", (req, res) => {
+app.post("/api/auth/whatsapp-otp/verify", async (req, res) => {
   try {
     const { phone, otp } = req.body;
     if (!phone || !otp) return res.status(400).json({ error: "Phone and OTP required" });
@@ -182,7 +194,7 @@ app.post("/api/auth/whatsapp-otp/verify", (req, res) => {
 
     otpStore.delete(phone); // Burn OTP after use
 
-    let user = db.prepare("SELECT * FROM users WHERE phone = ?").get(phone);
+    let user = await db.prepare("SELECT * FROM users WHERE phone = ?").get(phone);
     if (!user) {
       // Missing user: Register via WhatsApp
       const id = crypto.randomUUID();
@@ -191,7 +203,7 @@ app.post("/api/auth/whatsapp-otp/verify", (req, res) => {
       db.prepare(
         "INSERT INTO users (id, name, email, phone, passwordHash, role) VALUES (?, ?, ?, ?, ?, ?)"
       ).run(id, "WhatsApp User", placeholderEmail, phone, passwordHash, "customer");
-      user = db.prepare("SELECT * FROM users WHERE id = ?").get(id);
+      user = await db.prepare("SELECT * FROM users WHERE id = ?").get(id);
     }
 
     const token = generateToken(user);
@@ -204,13 +216,13 @@ app.post("/api/auth/whatsapp-otp/verify", (req, res) => {
   }
 });
 
-app.post("/api/auth/register", (req, res) => {
+app.post("/api/auth/register", async (req, res) => {
   try {
     const { name, email, password, phone } = req.body;
     if (!name || !email || !password) {
       return res.status(400).json({ error: "Name, email, and password are required" });
     }
-    const existing = db.prepare("SELECT id FROM users WHERE email = ?").get(email);
+    const existing = await db.prepare("SELECT id FROM users WHERE email = ?").get(email);
     if (existing) {
       return res.status(409).json({ error: "Email already registered" });
     }
@@ -229,13 +241,13 @@ app.post("/api/auth/register", (req, res) => {
   }
 });
 
-app.post("/api/auth/login", (req, res) => {
+app.post("/api/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
       return res.status(400).json({ error: "Email and password are required" });
     }
-    const user = db.prepare("SELECT * FROM users WHERE email = ?").get(email);
+    const user = await db.prepare("SELECT * FROM users WHERE email = ?").get(email);
     if (!user || !bcrypt.compareSync(password, user.passwordHash)) {
       return res.status(401).json({ error: "Invalid email or password" });
     }
@@ -250,14 +262,14 @@ app.post("/api/auth/login", (req, res) => {
   }
 });
 
-app.get("/api/auth/me", authMiddleware, (req, res) => {
-  const user = db.prepare("SELECT id, name, email, phone, role, addresses, created_at FROM users WHERE id = ?").get(req.user.id);
+app.get("/api/auth/me", authMiddleware, async (req, res) => {
+  const user = await db.prepare("SELECT id, name, email, phone, role, addresses, created_at FROM users WHERE id = ?").get(req.user.id);
   if (!user) return res.status(404).json({ error: "User not found" });
   user.addresses = JSON.parse(user.addresses || "[]");
   res.json({ user });
 });
 
-app.put("/api/auth/profile", authMiddleware, (req, res) => {
+app.put("/api/auth/profile", authMiddleware, async (req, res) => {
   try {
     const { name, phone, addresses } = req.body;
     const updates = [];
@@ -268,7 +280,7 @@ app.put("/api/auth/profile", authMiddleware, (req, res) => {
     if (updates.length === 0) return res.status(400).json({ error: "Nothing to update" });
     params.push(req.user.id);
     db.prepare(`UPDATE users SET ${updates.join(", ")} WHERE id = ?`).run(...params);
-    const user = db.prepare("SELECT id, name, email, phone, role, addresses FROM users WHERE id = ?").get(req.user.id);
+    const user = await db.prepare("SELECT id, name, email, phone, role, addresses FROM users WHERE id = ?").get(req.user.id);
     user.addresses = JSON.parse(user.addresses || "[]");
     res.json({ user });
   } catch (err) {
@@ -281,12 +293,12 @@ app.put("/api/auth/profile", authMiddleware, (req, res) => {
 // CATEGORIES ROUTES
 // ═══════════════════════════════════════════════════════════
 
-app.get("/api/categories", (req, res) => {
-  const cats = db.prepare("SELECT * FROM categories ORDER BY displayOrder ASC").all();
+app.get("/api/categories", async (req, res) => {
+  const cats = await db.prepare("SELECT * FROM categories ORDER BY displayOrder ASC").all();
   res.json({ categories: cats });
 });
 
-app.post("/api/categories", authMiddleware, adminMiddleware, (req, res) => {
+app.post("/api/categories", authMiddleware, adminMiddleware, async (req, res) => {
   try {
     const { name, slug, icon, image, displayOrder } = req.body;
     if (!name || !slug) return res.status(400).json({ error: "Name and slug are required" });
@@ -301,7 +313,7 @@ app.post("/api/categories", authMiddleware, adminMiddleware, (req, res) => {
   }
 });
 
-app.put("/api/categories/:id", authMiddleware, adminMiddleware, (req, res) => {
+app.put("/api/categories/:id", authMiddleware, adminMiddleware, async (req, res) => {
   try {
     const { name, icon, image, displayOrder } = req.body;
     db.prepare(
@@ -313,9 +325,9 @@ app.put("/api/categories/:id", authMiddleware, adminMiddleware, (req, res) => {
   }
 });
 
-app.delete("/api/categories/:id", authMiddleware, adminMiddleware, (req, res) => {
+app.delete("/api/categories/:id", authMiddleware, adminMiddleware, async (req, res) => {
   try {
-    db.prepare("DELETE FROM categories WHERE id = ?").run(req.params.id);
+    await db.prepare("DELETE FROM categories WHERE id = ?").run(req.params.id);
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: "Failed to delete category" });
@@ -327,7 +339,7 @@ app.delete("/api/categories/:id", authMiddleware, adminMiddleware, (req, res) =>
 // ═══════════════════════════════════════════════════════════
 
 // Public: Get all products with optional filters
-app.get("/api/products", (req, res) => {
+app.get("/api/products", async (req, res) => {
   try {
     const { category, featured, bestSeller, newArrival, q } = req.query;
     let query = "SELECT * FROM products WHERE active = 1";
@@ -347,7 +359,7 @@ app.get("/api/products", (req, res) => {
 
     query += " ORDER BY created_at DESC";
 
-    const products = db.prepare(query).all(...params);
+    const products = await db.prepare(query).all(...params);
     products.forEach(p => {
       try { p.images = JSON.parse(p.images || "[]"); } catch(e) { p.images = ["/placeholder.svg"]; }
       try { p.attributes = JSON.parse(p.attributes || "{}"); } catch(e) { p.attributes = {}; }
@@ -360,9 +372,9 @@ app.get("/api/products", (req, res) => {
 });
 
 // Public: Get single product
-app.get("/api/products/:id", (req, res) => {
+app.get("/api/products/:id", async (req, res) => {
   try {
-    const product = db.prepare("SELECT * FROM products WHERE id = ?").get(req.params.id);
+    const product = await db.prepare("SELECT * FROM products WHERE id = ?").get(req.params.id);
     if (!product) return res.status(404).json({ error: "Product not found" });
     
     try { product.images = JSON.parse(product.images || "[]"); } catch(e) { product.images = ["/placeholder.svg"]; }
@@ -375,7 +387,7 @@ app.get("/api/products/:id", (req, res) => {
 });
 
 // Admin: Create product
-app.post("/api/products", authMiddleware, adminMiddleware, (req, res) => {
+app.post("/api/products", authMiddleware, adminMiddleware, async (req, res) => {
   try {
     const { name, category, weight, purity, makingCharges, description, images, featured, bestSeller, newArrival, active, attributes, price, videoUrl } = req.body;
     const id = `prod-${Date.now()}`;
@@ -399,7 +411,7 @@ app.post("/api/products", authMiddleware, adminMiddleware, (req, res) => {
 });
 
 // Admin: Update product
-app.put("/api/products/:id", authMiddleware, adminMiddleware, (req, res) => {
+app.put("/api/products/:id", authMiddleware, adminMiddleware, async (req, res) => {
   try {
     const { name, category, weight, purity, makingCharges, description, images, featured, bestSeller, newArrival, active, attributes, price, videoUrl } = req.body;
     const stmt = db.prepare(`
@@ -424,9 +436,9 @@ app.put("/api/products/:id", authMiddleware, adminMiddleware, (req, res) => {
   }
 });
 
-app.delete("/api/products/:id", authMiddleware, adminMiddleware, (req, res) => {
+app.delete("/api/products/:id", authMiddleware, adminMiddleware, async (req, res) => {
   try {
-    db.prepare("DELETE FROM products WHERE id = ?").run(req.params.id);
+    await db.prepare("DELETE FROM products WHERE id = ?").run(req.params.id);
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: "Failed to delete product" });
@@ -437,7 +449,7 @@ app.delete("/api/products/:id", authMiddleware, adminMiddleware, (req, res) => {
 // ORDERS ROUTES
 // ═══════════════════════════════════════════════════════════
 
-app.post("/api/orders", (req, res) => {
+app.post("/api/orders", async (req, res) => {
   try {
     const { items, subtotal, shipping, tax, total, shippingAddress, contactInfo, paymentMethod, userId } = req.body;
     if (!items || !items.length) return res.status(400).json({ error: "No items in order" });
@@ -463,8 +475,8 @@ app.post("/api/orders", (req, res) => {
   }
 });
 
-app.get("/api/orders", authMiddleware, (req, res) => {
-  const orders = db.prepare("SELECT * FROM orders WHERE userId = ? ORDER BY created_at DESC").all(req.user.id);
+app.get("/api/orders", authMiddleware, async (req, res) => {
+  const orders = await db.prepare("SELECT * FROM orders WHERE userId = ? ORDER BY created_at DESC").all(req.user.id);
   orders.forEach(o => {
     o.items = JSON.parse(o.items || "[]");
     o.shippingAddress = JSON.parse(o.shippingAddress || "{}");
@@ -473,8 +485,8 @@ app.get("/api/orders", authMiddleware, (req, res) => {
   res.json({ orders });
 });
 
-app.get("/api/orders/:id", authMiddleware, (req, res) => {
-  const order = db.prepare("SELECT * FROM orders WHERE id = ? OR orderNumber = ?").get(req.params.id, req.params.id);
+app.get("/api/orders/:id", authMiddleware, async (req, res) => {
+  const order = await db.prepare("SELECT * FROM orders WHERE id = ? OR orderNumber = ?").get(req.params.id, req.params.id);
   if (!order) return res.status(404).json({ error: "Order not found" });
   if (req.user.role !== "admin" && order.userId !== req.user.id) {
     return res.status(403).json({ error: "Access denied" });
@@ -485,12 +497,35 @@ app.get("/api/orders/:id", authMiddleware, (req, res) => {
   res.json({ order });
 });
 
+// Admin Upload Route
+app.post("/api/admin/upload", authMiddleware, adminMiddleware, upload.single('image'), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No image provided" });
+    }
+    
+    // Convert buffer to Base64 to upload to Cloudinary
+    const b64 = Buffer.from(req.file.buffer).toString("base64");
+    const dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+    
+    const uploadRes = await cloudinary.uploader.upload(dataURI, {
+      resource_type: "auto",
+      folder: "aurum"
+    });
+    
+    res.json({ url: uploadRes.secure_url });
+  } catch (err) {
+    console.error("Cloudinary upload error:", err);
+    res.status(500).json({ error: "Image upload failed" });
+  }
+});
+
 // ═══════════════════════════════════════════════════════════
 // WISHLIST ROUTES
 // ═══════════════════════════════════════════════════════════
 
-app.get("/api/wishlist", authMiddleware, (req, res) => {
-  const items = db.prepare(
+app.get("/api/wishlist", authMiddleware, async (req, res) => {
+  const items = await db.prepare(
     `SELECT w.*, p.name, p.category, p.weight, p.makingCharges, p.images, p.purity
      FROM wishlist w JOIN products p ON w.productId = p.id WHERE w.userId = ?`
   ).all(req.user.id);
@@ -498,7 +533,7 @@ app.get("/api/wishlist", authMiddleware, (req, res) => {
   res.json({ wishlist: items });
 });
 
-app.post("/api/wishlist", authMiddleware, (req, res) => {
+app.post("/api/wishlist", authMiddleware, async (req, res) => {
   try {
     const { productId } = req.body;
     if (!productId) return res.status(400).json({ error: "Product ID required" });
@@ -509,8 +544,8 @@ app.post("/api/wishlist", authMiddleware, (req, res) => {
   }
 });
 
-app.delete("/api/wishlist/:productId", authMiddleware, (req, res) => {
-  db.prepare("DELETE FROM wishlist WHERE userId = ? AND productId = ?").run(req.user.id, req.params.productId);
+app.delete("/api/wishlist/:productId", authMiddleware, async (req, res) => {
+  await db.prepare("DELETE FROM wishlist WHERE userId = ? AND productId = ?").run(req.user.id, req.params.productId);
   res.json({ success: true });
 });
 
@@ -518,7 +553,7 @@ app.delete("/api/wishlist/:productId", authMiddleware, (req, res) => {
 // CONTACT ROUTES
 // ═══════════════════════════════════════════════════════════
 
-app.post("/api/contact", (req, res) => {
+app.post("/api/contact", async (req, res) => {
   try {
     const { name, email, phone, subject, message } = req.body;
     if (!name || !message) return res.status(400).json({ error: "Name and message are required" });
@@ -535,7 +570,7 @@ app.post("/api/contact", (req, res) => {
 // CUSTOM INQUIRIES
 // ═══════════════════════════════════════════════════════════
 
-app.post("/api/custom-inquiries", (req, res) => {
+app.post("/api/custom-inquiries", async (req, res) => {
   try {
     const { name, email, phone, budget, message, imageUrl } = req.body;
     if (!name || !phone || !message) {
@@ -555,14 +590,14 @@ app.post("/api/custom-inquiries", (req, res) => {
 // SETTINGS ROUTES
 // ═══════════════════════════════════════════════════════════
 
-app.get("/api/settings", (req, res) => {
-  const rows = db.prepare("SELECT key, value FROM settings").all();
+app.get("/api/settings", async (req, res) => {
+  const rows = await db.prepare("SELECT key, value FROM settings").all();
   const settings = {};
   rows.forEach(r => { settings[r.key] = r.value; });
   res.json({ settings });
 });
 
-app.put("/api/settings", authMiddleware, adminMiddleware, (req, res) => {
+app.put("/api/settings", authMiddleware, adminMiddleware, async (req, res) => {
   try {
     const { settings } = req.body;
     const upsert = db.prepare(
@@ -584,7 +619,7 @@ app.put("/api/settings", authMiddleware, adminMiddleware, (req, res) => {
 // SEARCH
 // ═══════════════════════════════════════════════════════════
 
-app.get("/api/search", (req, res) => {
+app.get("/api/search", async (req, res) => {
   const { q } = req.query;
   if (!q || q.length < 2) return res.json({ products: [] });
   const products = db.prepare(
@@ -598,13 +633,13 @@ app.get("/api/search", (req, res) => {
 // TESTIMONIALS & REVIEWS
 // ═══════════════════════════════════════════════════════════
 
-app.get("/api/testimonials", (req, res) => {
-  const reviews = db.prepare("SELECT * FROM reviews WHERE status = 'approved' ORDER BY created_at DESC").all();
-  const videos = db.prepare("SELECT * FROM feedback_videos ORDER BY displayOrder ASC, created_at DESC").all();
+app.get("/api/testimonials", async (req, res) => {
+  const reviews = await db.prepare("SELECT * FROM reviews WHERE status = 'approved' ORDER BY created_at DESC").all();
+  const videos = await db.prepare("SELECT * FROM feedback_videos ORDER BY displayOrder ASC, created_at DESC").all();
   res.json({ reviews, videos });
 });
 
-app.post("/api/reviews", authMiddleware, (req, res) => {
+app.post("/api/reviews", authMiddleware, async (req, res) => {
   try {
     const { rating, text } = req.body;
     if (!rating || !text) return res.status(400).json({ error: "Rating and text are required" });
@@ -624,8 +659,8 @@ app.post("/api/reviews", authMiddleware, (req, res) => {
 // GALLERY
 // ═══════════════════════════════════════════════════════════
 
-app.get("/api/gallery", (req, res) => {
-  const photos = db.prepare("SELECT * FROM gallery ORDER BY displayOrder ASC, created_at DESC").all();
+app.get("/api/gallery", async (req, res) => {
+  const photos = await db.prepare("SELECT * FROM gallery ORDER BY displayOrder ASC, created_at DESC").all();
   res.json({ photos });
 });
 
@@ -634,23 +669,23 @@ app.get("/api/gallery", (req, res) => {
 // ═══════════════════════════════════════════════════════════
 
 // Admin Reviews
-app.get("/api/admin/reviews", authMiddleware, adminMiddleware, (req, res) => {
-  const reviews = db.prepare("SELECT * FROM reviews ORDER BY created_at DESC").all();
+app.get("/api/admin/reviews", authMiddleware, adminMiddleware, async (req, res) => {
+  const reviews = await db.prepare("SELECT * FROM reviews ORDER BY created_at DESC").all();
   res.json({ reviews });
 });
 
-app.put("/api/admin/reviews/:id", authMiddleware, adminMiddleware, (req, res) => {
-  db.prepare("UPDATE reviews SET status = ? WHERE id = ?").run(req.body.status, req.params.id);
+app.put("/api/admin/reviews/:id", authMiddleware, adminMiddleware, async (req, res) => {
+  await db.prepare("UPDATE reviews SET status = ? WHERE id = ?").run(req.body.status, req.params.id);
   res.json({ success: true });
 });
 
-app.delete("/api/admin/reviews/:id", authMiddleware, adminMiddleware, (req, res) => {
-  db.prepare("DELETE FROM reviews WHERE id = ?").run(req.params.id);
+app.delete("/api/admin/reviews/:id", authMiddleware, adminMiddleware, async (req, res) => {
+  await db.prepare("DELETE FROM reviews WHERE id = ?").run(req.params.id);
   res.json({ success: true });
 });
 
 // Admin Videos
-app.post("/api/admin/videos", authMiddleware, adminMiddleware, (req, res) => {
+app.post("/api/admin/videos", authMiddleware, adminMiddleware, async (req, res) => {
   const { videoUrl, thumbnailUrl, caption, displayOrder } = req.body;
   if (!videoUrl) return res.status(400).json({ error: "Video URL required" });
   db.prepare("INSERT INTO feedback_videos (videoUrl, thumbnailUrl, caption, displayOrder) VALUES (?, ?, ?, ?)").run(
@@ -659,13 +694,13 @@ app.post("/api/admin/videos", authMiddleware, adminMiddleware, (req, res) => {
   res.status(201).json({ success: true });
 });
 
-app.delete("/api/admin/videos/:id", authMiddleware, adminMiddleware, (req, res) => {
-  db.prepare("DELETE FROM feedback_videos WHERE id = ?").run(req.params.id);
+app.delete("/api/admin/videos/:id", authMiddleware, adminMiddleware, async (req, res) => {
+  await db.prepare("DELETE FROM feedback_videos WHERE id = ?").run(req.params.id);
   res.json({ success: true });
 });
 
 // Admin Gallery
-app.post("/api/admin/gallery", authMiddleware, adminMiddleware, (req, res) => {
+app.post("/api/admin/gallery", authMiddleware, adminMiddleware, async (req, res) => {
   const { imageUrl, jewelryName, displayOrder } = req.body;
   if (!imageUrl) return res.status(400).json({ error: "Image URL required" });
   db.prepare("INSERT INTO gallery (imageUrl, jewelryName, displayOrder) VALUES (?, ?, ?)").run(
@@ -674,8 +709,8 @@ app.post("/api/admin/gallery", authMiddleware, adminMiddleware, (req, res) => {
   res.status(201).json({ success: true });
 });
 
-app.delete("/api/admin/gallery/:id", authMiddleware, adminMiddleware, (req, res) => {
-  db.prepare("DELETE FROM gallery WHERE id = ?").run(req.params.id);
+app.delete("/api/admin/gallery/:id", authMiddleware, adminMiddleware, async (req, res) => {
+  await db.prepare("DELETE FROM gallery WHERE id = ?").run(req.params.id);
   res.json({ success: true });
 });
 
@@ -683,18 +718,18 @@ app.delete("/api/admin/gallery/:id", authMiddleware, adminMiddleware, (req, res)
 // CREATOR REELS
 // ═══════════════════════════════════════════════════════════
 
-app.get("/api/creator-reels", (req, res) => {
-  const reels = db.prepare("SELECT * FROM creator_reels WHERE active = 1 ORDER BY displayOrder ASC, created_at DESC").all();
+app.get("/api/creator-reels", async (req, res) => {
+  const reels = await db.prepare("SELECT * FROM creator_reels WHERE active = 1 ORDER BY displayOrder ASC, created_at DESC").all();
   res.json({ reels });
 });
 
 // Admin Creator Reels
-app.get("/api/admin/creator-reels", authMiddleware, adminMiddleware, (req, res) => {
-  const reels = db.prepare("SELECT * FROM creator_reels ORDER BY displayOrder ASC, created_at DESC").all();
+app.get("/api/admin/creator-reels", authMiddleware, adminMiddleware, async (req, res) => {
+  const reels = await db.prepare("SELECT * FROM creator_reels ORDER BY displayOrder ASC, created_at DESC").all();
   res.json({ reels });
 });
 
-app.post("/api/admin/creator-reels", authMiddleware, adminMiddleware, (req, res) => {
+app.post("/api/admin/creator-reels", authMiddleware, adminMiddleware, async (req, res) => {
   const { videoUrl, thumbnailUrl, caption, displayOrder, active } = req.body;
   if (!videoUrl) return res.status(400).json({ error: "Video URL required" });
   db.prepare("INSERT INTO creator_reels (videoUrl, thumbnailUrl, caption, displayOrder, active) VALUES (?, ?, ?, ?, ?)").run(
@@ -703,7 +738,7 @@ app.post("/api/admin/creator-reels", authMiddleware, adminMiddleware, (req, res)
   res.status(201).json({ success: true });
 });
 
-app.put("/api/admin/creator-reels/:id", authMiddleware, adminMiddleware, (req, res) => {
+app.put("/api/admin/creator-reels/:id", authMiddleware, adminMiddleware, async (req, res) => {
   const { caption, displayOrder, active } = req.body;
   const sets = [];
   const params = [];
@@ -718,8 +753,8 @@ app.put("/api/admin/creator-reels/:id", authMiddleware, adminMiddleware, (req, r
   res.json({ success: true });
 });
 
-app.delete("/api/admin/creator-reels/:id", authMiddleware, adminMiddleware, (req, res) => {
-  db.prepare("DELETE FROM creator_reels WHERE id = ?").run(req.params.id);
+app.delete("/api/admin/creator-reels/:id", authMiddleware, adminMiddleware, async (req, res) => {
+  await db.prepare("DELETE FROM creator_reels WHERE id = ?").run(req.params.id);
   res.json({ success: true });
 });
 
@@ -727,17 +762,17 @@ app.delete("/api/admin/creator-reels/:id", authMiddleware, adminMiddleware, (req
 // BANNERS
 // ═══════════════════════════════════════════════════════════
 
-app.get("/api/banners", (req, res) => {
-  const banners = db.prepare("SELECT * FROM banners ORDER BY displayOrder ASC").all();
+app.get("/api/banners", async (req, res) => {
+  const banners = await db.prepare("SELECT * FROM banners ORDER BY displayOrder ASC").all();
   res.json({ banners });
 });
 
-app.get("/api/admin/banners", authMiddleware, adminMiddleware, (req, res) => {
-  const banners = db.prepare("SELECT * FROM banners ORDER BY displayOrder ASC").all();
+app.get("/api/admin/banners", authMiddleware, adminMiddleware, async (req, res) => {
+  const banners = await db.prepare("SELECT * FROM banners ORDER BY displayOrder ASC").all();
   res.json({ banners });
 });
 
-app.post("/api/admin/banners", authMiddleware, adminMiddleware, (req, res) => {
+app.post("/api/admin/banners", authMiddleware, adminMiddleware, async (req, res) => {
   const { imageUrl, subtitle, title, description, cta, link, displayOrder } = req.body;
   if (!imageUrl || !title) return res.status(400).json({ error: "Image URL and title required" });
   db.prepare("INSERT INTO banners (imageUrl, subtitle, title, description, cta, link, displayOrder) VALUES (?, ?, ?, ?, ?, ?, ?)").run(
@@ -746,7 +781,7 @@ app.post("/api/admin/banners", authMiddleware, adminMiddleware, (req, res) => {
   res.status(201).json({ success: true });
 });
 
-app.put("/api/admin/banners/:id", authMiddleware, adminMiddleware, (req, res) => {
+app.put("/api/admin/banners/:id", authMiddleware, adminMiddleware, async (req, res) => {
   const { imageUrl, subtitle, title, description, cta, link, displayOrder } = req.body;
   const sets = [];
   const params = [];
@@ -765,12 +800,12 @@ app.put("/api/admin/banners/:id", authMiddleware, adminMiddleware, (req, res) =>
   res.json({ success: true });
 });
 
-app.delete("/api/admin/banners/:id", authMiddleware, adminMiddleware, (req, res) => {
-  db.prepare("DELETE FROM banners WHERE id = ?").run(req.params.id);
+app.delete("/api/admin/banners/:id", authMiddleware, adminMiddleware, async (req, res) => {
+  await db.prepare("DELETE FROM banners WHERE id = ?").run(req.params.id);
   res.json({ success: true });
 });
 
-app.get("/api/admin/dashboard", authMiddleware, adminMiddleware, (req, res) => {
+app.get("/api/admin/dashboard", authMiddleware, adminMiddleware, async (req, res) => {
   try {
     const totalProducts = db.prepare("SELECT COUNT(*) as count FROM products WHERE active = 1").get().count;
     const totalOrders = db.prepare("SELECT COUNT(*) as count FROM orders").get().count;
@@ -779,7 +814,7 @@ app.get("/api/admin/dashboard", authMiddleware, adminMiddleware, (req, res) => {
     const pendingOrders = db.prepare("SELECT COUNT(*) as count FROM orders WHERE status = 'pending'").get().count;
     const unreadMessages = db.prepare("SELECT COUNT(*) as count FROM contact_messages WHERE read = 0").get().count;
 
-    const recentOrders = db.prepare(
+    const recentOrders = await db.prepare(
       "SELECT id, orderNumber, total, status, contactInfo, created_at FROM orders ORDER BY created_at DESC LIMIT 10"
     ).all();
     recentOrders.forEach(o => { o.contactInfo = JSON.parse(o.contactInfo || "{}"); });
@@ -794,7 +829,7 @@ app.get("/api/admin/dashboard", authMiddleware, adminMiddleware, (req, res) => {
   }
 });
 
-app.get("/api/admin/orders", authMiddleware, adminMiddleware, (req, res) => {
+app.get("/api/admin/orders", authMiddleware, adminMiddleware, async (req, res) => {
   const { status, limit, offset } = req.query;
   let sql = "SELECT * FROM orders";
   const params = [];
@@ -803,7 +838,7 @@ app.get("/api/admin/orders", authMiddleware, adminMiddleware, (req, res) => {
   if (limit) { sql += " LIMIT ?"; params.push(Number(limit)); }
   if (offset) { sql += " OFFSET ?"; params.push(Number(offset)); }
 
-  const orders = db.prepare(sql).all(...params);
+  const orders = await db.prepare(sql).all(...params);
   orders.forEach(o => {
     o.items = JSON.parse(o.items || "[]");
     o.shippingAddress = JSON.parse(o.shippingAddress || "{}");
@@ -812,7 +847,7 @@ app.get("/api/admin/orders", authMiddleware, adminMiddleware, (req, res) => {
   res.json({ orders });
 });
 
-app.put("/api/admin/orders/:id", authMiddleware, adminMiddleware, (req, res) => {
+app.put("/api/admin/orders/:id", authMiddleware, adminMiddleware, async (req, res) => {
   try {
     const { status, trackingNumber, notes, paymentStatus } = req.body;
     const sets = ["updated_at = datetime('now')"];
@@ -829,7 +864,7 @@ app.put("/api/admin/orders/:id", authMiddleware, adminMiddleware, (req, res) => 
   }
 });
 
-app.get("/api/admin/customers", authMiddleware, adminMiddleware, (req, res) => {
+app.get("/api/admin/customers", authMiddleware, adminMiddleware, async (req, res) => {
   const customers = db.prepare(
     `SELECT u.id, u.name, u.email, u.phone, u.created_at,
       (SELECT COUNT(*) FROM orders WHERE userId = u.id) as orderCount,
@@ -839,40 +874,40 @@ app.get("/api/admin/customers", authMiddleware, adminMiddleware, (req, res) => {
   res.json({ customers });
 });
 
-app.get("/api/admin/messages", authMiddleware, adminMiddleware, (req, res) => {
-  const messages = db.prepare("SELECT * FROM contact_messages ORDER BY created_at DESC").all();
+app.get("/api/admin/messages", authMiddleware, adminMiddleware, async (req, res) => {
+  const messages = await db.prepare("SELECT * FROM contact_messages ORDER BY created_at DESC").all();
   res.json({ messages });
 });
 
-app.put("/api/admin/messages/:id/read", authMiddleware, adminMiddleware, (req, res) => {
-  db.prepare("UPDATE contact_messages SET read = 1 WHERE id = ?").run(req.params.id);
+app.put("/api/admin/messages/:id/read", authMiddleware, adminMiddleware, async (req, res) => {
+  await db.prepare("UPDATE contact_messages SET read = 1 WHERE id = ?").run(req.params.id);
   res.json({ success: true });
 });
 
-app.delete("/api/admin/messages/:id", authMiddleware, adminMiddleware, (req, res) => {
-  db.prepare("DELETE FROM contact_messages WHERE id = ?").run(req.params.id);
+app.delete("/api/admin/messages/:id", authMiddleware, adminMiddleware, async (req, res) => {
+  await db.prepare("DELETE FROM contact_messages WHERE id = ?").run(req.params.id);
   res.json({ success: true });
 });
 
-app.get("/api/admin/custom-inquiries", authMiddleware, adminMiddleware, (req, res) => {
-  const inquiries = db.prepare("SELECT * FROM custom_inquiries ORDER BY created_at DESC").all();
+app.get("/api/admin/custom-inquiries", authMiddleware, adminMiddleware, async (req, res) => {
+  const inquiries = await db.prepare("SELECT * FROM custom_inquiries ORDER BY created_at DESC").all();
   res.json({ inquiries });
 });
 
-app.put("/api/admin/custom-inquiries/:id/read", authMiddleware, adminMiddleware, (req, res) => {
-  db.prepare("UPDATE custom_inquiries SET read = 1 WHERE id = ?").run(req.params.id);
+app.put("/api/admin/custom-inquiries/:id/read", authMiddleware, adminMiddleware, async (req, res) => {
+  await db.prepare("UPDATE custom_inquiries SET read = 1 WHERE id = ?").run(req.params.id);
   res.json({ success: true });
 });
 
-app.delete("/api/admin/custom-inquiries/:id", authMiddleware, adminMiddleware, (req, res) => {
-  db.prepare("DELETE FROM custom_inquiries WHERE id = ?").run(req.params.id);
+app.delete("/api/admin/custom-inquiries/:id", authMiddleware, adminMiddleware, async (req, res) => {
+  await db.prepare("DELETE FROM custom_inquiries WHERE id = ?").run(req.params.id);
   res.json({ success: true });
 });
 
 // Admin: Get all products
-app.get("/api/admin/products", authMiddleware, adminMiddleware, (req, res) => {
+app.get("/api/admin/products", authMiddleware, adminMiddleware, async (req, res) => {
   try {
-    const products = db.prepare("SELECT * FROM products ORDER BY created_at DESC").all();
+    const products = await db.prepare("SELECT * FROM products ORDER BY created_at DESC").all();
     products.forEach(p => {
       p.images = JSON.parse(p.images);
       try { p.attributes = JSON.parse(p.attributes || "{}"); } catch(e) { p.attributes = {}; }
@@ -896,7 +931,7 @@ if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "productio
   });
 
   // Serve Storefront for all other routes
-  app.get("(.*)", (req, res) => {
+  app.get("(.*)", async (req, res) => {
     res.sendFile(path.join(__dirname, "..", "dist", "index.html"));
   });
 }

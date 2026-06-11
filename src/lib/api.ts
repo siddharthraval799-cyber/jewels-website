@@ -5,8 +5,7 @@ const IS_STATIC_HOST =
   typeof window !== "undefined" && 
   (window.location.hostname.endsWith("github.io") || 
    window.location.hostname.includes("stackblitz") || 
-   window.location.hostname.includes("netlify") || 
-   window.location.hostname.includes("vercel.app"));
+   window.location.hostname.includes("netlify"));
 
 // On Mobile (Capacitor), we must use the full URL of the server.
 // On Web, we can use relative /api which is proxied or served by the same host.
@@ -151,6 +150,16 @@ async function request<T = unknown>(
 
 // ─── Auth ──────────────────────────────────────────────────
 export const api = {
+  // Add global upload endpoint
+  upload: async (file: File) => {
+    const formData = new FormData();
+    formData.append("image", file);
+    return request<{ url: string }>("/admin/upload", {
+      method: "POST",
+      body: formData,
+    });
+  },
+
   auth: {
     login: (email: string, password: string) =>
       request<{ user: User; token: string }>("/auth/login", {
