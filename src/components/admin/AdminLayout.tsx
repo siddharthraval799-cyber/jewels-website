@@ -7,6 +7,7 @@ import {
 
 const nav = [
   { to: "/", icon: LayoutDashboard, label: "Dashboard", end: true },
+  { to: "/banners", icon: LayoutDashboard, label: "Banners" },
   { to: "/products", icon: Package, label: "Products" },
   { to: "/orders", icon: ShoppingCart, label: "Orders" },
   { to: "/customers", icon: Users, label: "Customers" },

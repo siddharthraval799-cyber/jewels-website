@@ -186,6 +186,18 @@ db.exec(`
     read INTEGER DEFAULT 0,
     created_at TEXT DEFAULT (datetime('now'))
   );
+
+  CREATE TABLE IF NOT EXISTS banners (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    imageUrl TEXT NOT NULL,
+    subtitle TEXT DEFAULT '',
+    title TEXT NOT NULL,
+    description TEXT DEFAULT '',
+    cta TEXT DEFAULT 'Shop Now',
+    link TEXT DEFAULT '/products',
+    displayOrder INTEGER DEFAULT 0,
+    created_at TEXT DEFAULT (datetime('now'))
+  );
 `);
 
 // Safely attempt to add the new attributes column for existing users
@@ -404,6 +416,17 @@ if (reelsCount === 0) {
   insertReel.run(sampleVideo, "https://images.unsplash.com/photo-1543294001-f7cd5d7fb516?auto=format&fit=crop&q=80", "Modern Minimalist Rings", 3);
   insertReel.run(sampleVideo, "https://images.unsplash.com/photo-1599643478524-fb5244dc1c97?auto=format&fit=crop&q=80", "Festive Bangles", 4);
   insertReel.run(sampleVideo, "https://images.unsplash.com/photo-1629224316810-9d8805b95e76?auto=format&fit=crop&q=80", "Bridal Glow", 5);
+}
+
+const bannersCount = db.prepare("SELECT COUNT(*) as c FROM banners").get().c;
+if (bannersCount === 0) {
+  console.log("🌱 Seeding banners...");
+  const insertBanner = db.prepare("INSERT INTO banners (imageUrl, subtitle, title, description, cta, link, displayOrder) VALUES (?, ?, ?, ?, ?, ?, ?)");
+  insertBanner.run("/assets/hero-1.jpg", "The Heritage Collection", "Timeless Elegance", "Discover masterfully crafted pieces that celebrate centuries of artistry", "Explore Collection", "/products?category=necklaces", 1);
+  insertBanner.run("/assets/hero-2.jpg", "Bridal Luxuries", "Your Special Day", "Exquisite bridal sets handcrafted with love and tradition", "Shop Bridal", "/products?category=necklaces", 2);
+  insertBanner.run("/assets/hero-3.jpg", "New Arrivals", "Modern Classics", "Contemporary designs that blend heritage with modern sophistication", "View New Arrivals", "/products?category=rings", 3);
+  insertBanner.run("/assets/hero-4.jpg", "Handcrafted Bangles", "Tradition Refined", "Each bangle tells a story of artisanal excellence", "Shop Bangles", "/products?category=bangles", 4);
+  insertBanner.run("/assets/hero-5.jpg", "Exclusive Offers", "Festive Season Sale", "Flat 20% off on making charges — limited time only", "Shop Now", "/products", 5);
 }
 
 module.exports = db;

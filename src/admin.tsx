@@ -10,6 +10,7 @@ import { GoldRateProvider } from "@/contexts/GoldRateContext";
 import { CartProvider } from "@/contexts/CartContext";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminBanners from "./pages/admin/AdminBanners";
 import AdminProducts from "./pages/admin/AdminProducts";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminCustomers from "./pages/admin/AdminCustomers";
@@ -36,6 +37,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 <Routes>
                   <Route path="/" element={<AdminLayout />}>
                     <Route index element={<AdminDashboard />} />
+                    <Route path="banners" element={<AdminBanners />} />
                     <Route path="products" element={<AdminProducts />} />
                     <Route path="orders" element={<AdminOrders />} />
                     <Route path="customers" element={<AdminCustomers />} />

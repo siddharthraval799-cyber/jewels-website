@@ -2,13 +2,16 @@ import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/lib/api";
+
 import hero1 from "@/assets/hero-1.jpg";
 import hero2 from "@/assets/hero-2.jpg";
 import hero3 from "@/assets/hero-3.jpg";
 import hero4 from "@/assets/hero-4.jpg";
 import hero5 from "@/assets/hero-5.jpg";
 
-const slides = [
+const defaultSlides = [
   {
     image: hero1,
     subtitle: "The Heritage Collection",
@@ -55,22 +58,38 @@ const HeroSlider = () => {
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
 
+  const { data } = useQuery({
+    queryKey: ["banners"],
+    queryFn: api.banners.list,
+  });
+
+  const activeSlides = data?.banners && data.banners.length > 0 
+    ? data.banners.map(b => ({
+        image: b.imageUrl,
+        subtitle: b.subtitle,
+        title: b.title,
+        description: b.description,
+        cta: b.cta,
+        link: b.link
+      }))
+    : defaultSlides;
+
   const nextSlide = useCallback(() => {
     setDirection(1);
-    setCurrent((prev) => (prev + 1) % slides.length);
-  }, []);
+    setCurrent((prev) => (prev + 1) % activeSlides.length);
+  }, [activeSlides.length]);
 
   const prevSlide = useCallback(() => {
     setDirection(-1);
-    setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
-  }, []);
+    setCurrent((prev) => (prev - 1 + activeSlides.length) % activeSlides.length);
+  }, [activeSlides.length]);
 
   useEffect(() => {
     const timer = setInterval(nextSlide, 6000);
     return () => clearInterval(timer);
   }, [nextSlide]);
 
-  const slide = slides[current];
+  const slide = activeSlides[current];
 
   return (
     <section className="relative h-[60vh] md:h-[85vh] overflow-hidden bg-secondary">
@@ -140,7 +159,7 @@ const HeroSlider = () => {
 
       {/* Dots */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2.5">
-        {slides.map((_, i) => (
+        {activeSlides.map((_, i) => (
           <button
             key={i}
             onClick={() => { setDirection(i > current ? 1 : -1); setCurrent(i); }}

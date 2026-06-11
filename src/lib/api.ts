@@ -5,7 +5,8 @@ const IS_STATIC_HOST =
   typeof window !== "undefined" && 
   (window.location.hostname.endsWith("github.io") || 
    window.location.hostname.includes("stackblitz") || 
-   window.location.hostname.includes("netlify"));
+   window.location.hostname.includes("netlify") || 
+   window.location.hostname.includes("vercel.app"));
 
 // On Mobile (Capacitor), we must use the full URL of the server.
 // On Web, we can use relative /api which is proxied or served by the same host.
@@ -52,7 +53,8 @@ async function request<T = unknown>(
          if (cleanEndpoint === "/admin/products") cleanEndpoint = "/products";
          if (cleanEndpoint === "/admin/categories") cleanEndpoint = "/categories";
          if (cleanEndpoint === "/admin/creator-reels") cleanEndpoint = "/creator-reels";
-         if (cleanEndpoint === "/admin/reviews") cleanEndpoint = "/testimonials"; // reviews list is actually different but we can fall back
+         if (cleanEndpoint === "/admin/reviews") cleanEndpoint = "/testimonials";
+         if (cleanEndpoint === "/admin/banners") cleanEndpoint = "/banners";
          if (cleanEndpoint === "/admin/dashboard") {
             return {
                stats: { totalProducts: 124, totalOrders: 42, totalCustomers: 18, totalRevenue: 125000, pendingOrders: 5, unreadMessages: 3 },
@@ -241,6 +243,11 @@ export const api = {
     get: () => request<{ reels: CreatorReel[] }>("/creator-reels"),
   },
 
+  // ─── Banners ─────────────────────────────────────────────
+  banners: {
+    list: () => request<{ banners: Banner[] }>("/banners"),
+  },
+
   // ─── Gallery ─────────────────────────────────────────────
   gallery: {
     get: () => request<{ photos: GalleryPhoto[] }>("/gallery"),
@@ -311,6 +318,15 @@ export const api = {
       request("/admin/gallery", { method: "POST", body: JSON.stringify(data) }),
     deleteGalleryPhoto: (id: number) =>
       request(`/admin/gallery/${id}`, { method: "DELETE" }),
+
+    // Admin Banners
+    banners: () => request<{ banners: Banner[] }>("/admin/banners"),
+    createBanner: (data: Partial<Banner>) =>
+      request("/admin/banners", { method: "POST", body: JSON.stringify(data) }),
+    updateBanner: (id: number, data: Partial<Banner>) =>
+      request(`/admin/banners/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+    deleteBanner: (id: number) =>
+      request(`/admin/banners/${id}`, { method: "DELETE" }),
   },
 };
 
@@ -485,6 +501,18 @@ export type GalleryPhoto = {
   id: number;
   imageUrl: string;
   jewelryName: string;
+  displayOrder: number;
+  created_at: string;
+};
+
+export type Banner = {
+  id: number;
+  imageUrl: string;
+  subtitle: string;
+  title: string;
+  description: string;
+  cta: string;
+  link: string;
   displayOrder: number;
   created_at: string;
 };

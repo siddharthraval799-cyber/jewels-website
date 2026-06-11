@@ -1,0 +1,54 @@
+{
+  "banners": [
+    {
+      "id": 1,
+      "imageUrl": "/assets/hero-1.jpg",
+      "subtitle": "The Heritage Collection",
+      "title": "Timeless Elegance",
+      "description": "Discover masterfully crafted pieces that celebrate centuries of artistry",
+      "cta": "Explore Collection",
+      "link": "/products?category=necklaces",
+      "displayOrder": 1
+    },
+    {
+      "id": 2,
+      "imageUrl": "/assets/hero-2.jpg",
+      "subtitle": "Bridal Luxuries",
+      "title": "Your Special Day",
+      "description": "Exquisite bridal sets handcrafted with love and tradition",
+      "cta": "Shop Bridal",
+      "link": "/products?category=necklaces",
+      "displayOrder": 2
+    },
+    {
+      "id": 3,
+      "imageUrl": "/assets/hero-3.jpg",
+      "subtitle": "New Arrivals",
+      "title": "Modern Classics",
+      "description": "Contemporary designs that blend heritage with modern sophistication",
+      "cta": "View New Arrivals",
+      "link": "/products?category=rings",
+      "displayOrder": 3
+    },
+    {
+      "id": 4,
+      "imageUrl": "/assets/hero-4.jpg",
+      "subtitle": "Handcrafted Bangles",
+      "title": "Tradition Refined",
+      "description": "Each bangle tells a story of artisanal excellence",
+      "cta": "Shop Bangles",
+      "link": "/products?category=bangles",
+      "displayOrder": 4
+    },
+    {
+      "id": 5,
+      "imageUrl": "/assets/hero-5.jpg",
+      "subtitle": "Exclusive Offers",
+      "title": "Festive Season Sale",
+      "description": "Flat 20% off on making charges — limited time only",
+      "cta": "Shop Now",
+      "link": "/products",
+      "displayOrder": 5
+    }
+  ]
+}

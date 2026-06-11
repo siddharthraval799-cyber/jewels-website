@@ -723,6 +723,53 @@ app.delete("/api/admin/creator-reels/:id", authMiddleware, adminMiddleware, (req
   res.json({ success: true });
 });
 
+// ═══════════════════════════════════════════════════════════
+// BANNERS
+// ═══════════════════════════════════════════════════════════
+
+app.get("/api/banners", (req, res) => {
+  const banners = db.prepare("SELECT * FROM banners ORDER BY displayOrder ASC").all();
+  res.json({ banners });
+});
+
+app.get("/api/admin/banners", authMiddleware, adminMiddleware, (req, res) => {
+  const banners = db.prepare("SELECT * FROM banners ORDER BY displayOrder ASC").all();
+  res.json({ banners });
+});
+
+app.post("/api/admin/banners", authMiddleware, adminMiddleware, (req, res) => {
+  const { imageUrl, subtitle, title, description, cta, link, displayOrder } = req.body;
+  if (!imageUrl || !title) return res.status(400).json({ error: "Image URL and title required" });
+  db.prepare("INSERT INTO banners (imageUrl, subtitle, title, description, cta, link, displayOrder) VALUES (?, ?, ?, ?, ?, ?, ?)").run(
+    imageUrl, subtitle || "", title, description || "", cta || "Shop Now", link || "/products", displayOrder || 0
+  );
+  res.status(201).json({ success: true });
+});
+
+app.put("/api/admin/banners/:id", authMiddleware, adminMiddleware, (req, res) => {
+  const { imageUrl, subtitle, title, description, cta, link, displayOrder } = req.body;
+  const sets = [];
+  const params = [];
+  if (imageUrl !== undefined) { sets.push("imageUrl = ?"); params.push(imageUrl); }
+  if (subtitle !== undefined) { sets.push("subtitle = ?"); params.push(subtitle); }
+  if (title !== undefined) { sets.push("title = ?"); params.push(title); }
+  if (description !== undefined) { sets.push("description = ?"); params.push(description); }
+  if (cta !== undefined) { sets.push("cta = ?"); params.push(cta); }
+  if (link !== undefined) { sets.push("link = ?"); params.push(link); }
+  if (displayOrder !== undefined) { sets.push("displayOrder = ?"); params.push(displayOrder); }
+  
+  if (sets.length > 0) {
+    params.push(req.params.id);
+    db.prepare(`UPDATE banners SET ${sets.join(", ")} WHERE id = ?`).run(...params);
+  }
+  res.json({ success: true });
+});
+
+app.delete("/api/admin/banners/:id", authMiddleware, adminMiddleware, (req, res) => {
+  db.prepare("DELETE FROM banners WHERE id = ?").run(req.params.id);
+  res.json({ success: true });
+});
+
 app.get("/api/admin/dashboard", authMiddleware, adminMiddleware, (req, res) => {
   try {
     const totalProducts = db.prepare("SELECT COUNT(*) as count FROM products WHERE active = 1").get().count;
