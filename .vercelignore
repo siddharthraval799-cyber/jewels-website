@@ -3,7 +3,7 @@ android_legacy/
 ios/
 deploy/
 server/
-scripts/
+
 *.zip
 *.db
 *.db-shm
